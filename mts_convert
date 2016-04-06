@@ -2,17 +2,21 @@
 
 
 VERBOSE=true
+DRY_RUN=false
 INPUT='';
 OUTPUT='';
 CONFIG='';
 
+PASSLOGFILE=''
+
 usage () {
 echo -e "
-$0 [-h]|
+$0 [-h]|-i <v.mp4> [-o <v.mp4>][-c <c.yml>][-v]
 
     -h, --help     shows this test.
-    -i, --input    starts or restarts the node.
-    -o, --output   stops node.
+    -i, --input    name of input video file.
+    -o, --output   prefix of output video file.
+    -c, --config   yaml-config file.
     -v, --verbose  uses verbose mode. It tells about really actions.
 
 ";
@@ -40,7 +44,7 @@ profile:
         video:
             width: 1280
             height:  720
-            bitrate: 2000
+            bitrate: 2000k
             preset: veryslow
             pass1:
                 params: -weightp 2 -bf 3
@@ -49,7 +53,7 @@ profile:
                 level: 3.1
         audio:
             channels: 5.1
-            bitrate: 320
+            bitrate: 320k
             volume: 4
             aac:
                 profile: aac_he
@@ -110,15 +114,14 @@ profile () {
     echo $(get profile ${@});
 }
 
-profile_if_set () {
-    local key=$1;
-    local value=$(get profile ${@:2});
+profile_default () {
+    local default=$1;
+    local value=$(profile ${@:2});
     if [[ -z "${value}" ]] ; then
-        echo '\0';
+        echo "$default";
     else
-        echo "${key} ${value}"
+        echo "${value}"
     fi;
-
 }
 
 
@@ -188,13 +191,15 @@ compute_if_empty (){
 
 log_run (){
     verbose ":: ${@}";
-    #eval "${@}";
+    if [[ "x${DRY_RUN}" = "xfalse" ]]; then
+        eval "${@}";
+    fi;
 }
 
 parse_options (){
 
-    local OPTIONS=$(getopt -o hi:o:c:vq \
-        --long 'help,input:,output:config:,verbose,quiet' \
+    local OPTIONS=$(getopt -o hi:o:c:vqd \
+        --long 'help,input:,output:config:,verbose,quiet,dry-run' \
         -n "$0" -- "${@}");
 
 
@@ -234,6 +239,10 @@ parse_options (){
                 VERBOSE='true';
                 readonly VERBOSE;
                 shift;;
+            -d|--dry-run)
+                DRY_RUN='true';
+                readonly DRY_RUN;
+                shift;;
             -q|--quiet)
                 VERBOSE='false';
                 readonly VERBOSE;
@@ -246,7 +255,7 @@ parse_options (){
 }
 
 handle_video_options(){
-    # DEFAULT_FFMPEG_OPTIONS_VIDEO_265
+    # DEFAULT_video_options_265
     #     -codec:v libx265
     #     -preset veryslow
     #     -b:v 500k
@@ -255,7 +264,7 @@ handle_video_options(){
     #     -vf scale=-1:720
     #
     #
-    # DEFAULT_FFMPEG_OPTIONS_VIDEO_264
+    # DEFAULT_video_options_264
     #     -codec:v libx264
     #     -profile:v high
     #     -preset veryslow
@@ -287,8 +296,8 @@ handle_video_options(){
     echo ${options}
 }
 
-handle_video_audio(){
-    # DEFAULT_FFMPEG_OPTIONS_AUDIO
+handle_audio_options(){
+    # DEFAULT_audio_options
     #     -strict experimental
     #     -codec:a aac
     #     -b:a 320k
@@ -299,88 +308,69 @@ handle_video_audio(){
 
     local codec_options="
         -strict experimental
-        -codec:a aac
-        -profile:v $(profile $name video aac profile)
-    ";
+        -codec:a aac";
 
     local bitrate="$(profile $name audio bitrate)";
     local volume="$(profile $name audio volume)";
 
 
     local common_options="
-        -strict experimental
-        -codec:a aac
         -b:a $bitrate
-        -af volume=${volume}
-    ";
+        -af volume=${volume}";
 
     local options="${codec_options} ${common_options}";
-    verbose "handle_video_audio() -> ${options}"
+    verbose "handle_audio_options() -> ${options}"
     echo ${options}
 }
 
 
 handle_profile(){
+    local name=$1;
 
-    local name=$1
+    local suffix=$(profile_default 'norm' $name suffix);
+    local passes=$(profile_default '1' $name passes);
+    local format=$(profile_default 'mp4' $name format);
+    local output=$(compute_if_empty \
+        "${OUTPUT}" \
+        "${INPUT}" \
+        "${format}" \
+        "$suffix");
+    local log=$(compute_if_empty "${PASSLOGFILE}" \
+        "${INPUT}" \
+        "pass" \
+        "$suffix");
 
-    local suffix=$(profile $name suffix);
-    local pass=$(profile $name pass);
+    verbose "PROFILE ${name}; $suffix $format"
 
+    local common_options="-t ${FFMPEG_TIME} -threads ${FFMPEG_THREADS}"
+    local video_options=$(handle_video_options "$name");
+    local audio_options=$(handle_audio_options "$name");
 
-    verbose "PROFILE ${name}; $suffix"
-
-    local OUTPUT=$(compute_if_empty "${OUTPUT}" "${INPUT}" 'mp4' $suffix);
-
-    local OUTPUT_PASS1=$(compute_if_empty "${OUTPUT_1PASS}" "${INPUT}" 'pass.mp4' $suffix);
-
-    local PASSLOGFILE=$(compute_if_empty "${PASSLOGFILE}" "${INPUT}" 'pass' $suffix);
-
-
-    FFMPEG_OPTIONS_COMMON="-t ${FFMPEG_TIME} -threads ${FFMPEG_THREADS}"
-
-
-
-    local FFMPEG_OPTIONS_VIDEO=$(handle_video_options "$name");
-
-    local FFMPEG_OPTIONS_AUDIO=$(handle_video_options "$name");
-
-
-
-#     log_run ${FFMPEG_BIN} \
-#         ${FFMPEG_OPTIONS_COMMON} \
-#         -i ${INPUT}  \
-#         ${FFMPEG_OPTIONS_VIDEO} \
-#         ${FFMPEG_OPTIONS_AUDIO} \
-#         ${OUTPUT};
-
-    log_run ${FFMPEG_BIN} \
-        ${FFMPEG_OPTIONS_COMMON} \
-        -i ${INPUT} \
-        ${FFMPEG_OPTIONS_VIDEO} \
-        -pass 1 -passlogfile  ${PASSLOGFILE} \
-        ${FFMPEG_OPTIONS_AUDIO} -f mp4 ${OUTPUT_PASS1} ;
-
-    log_run ${FFMPEG_BIN} \
-        ${FFMPEG_OPTIONS_COMMON} \
-        -i ${INPUT} \
-        ${FFMPEG_OPTIONS_VIDEO} \
-        -pass 2 -passlogfile  ${PASSLOGFILE} \
-        ${FFMPEG_OPTIONS_AUDIO} -f mp4 ${OUTPUT} ;
+    for pass in $(seq 1 ${passes}); do
+        local pass_options="";
+        if [[ ${passes} > 1 ]]; then
+            pass_options="-pass ${pass} -passlogfile  ${log}";
+        fi;
+        log_run ${FFMPEG_BIN} \
+            ${common_options} \
+            -i ${INPUT} \
+            ${video_options} \
+            ${pass_options} \
+            ${audio_options} \
+            -f ${format} -y ${output} ;
+    done
 }
 
+main(){
+    parse_options "${@}";
+    configure "${CONFIG}";
+    assert_not_empty "${INPUT}" 'empty input file (-i)';
+    for profile in "${!PROFILE_MAP[@]}"; do
+        handle_profile $profile
+    done
+}
 
-
-parse_options "${@}";
-
-configure "${CONFIG}";
-
-assert_not_empty "${INPUT}" 'empty input file (-i)';
-
-for profile in "${!PROFILE_MAP[@]}"; do
-    handle_profile $profile
-done
-
+main "${@}";
 
 #
 # ffmpeg -i inputfile.avi

@@ -3,22 +3,22 @@ ffmpeg:
     threads: 0
     time: 10
 profile:
-    hd1:
+    high:
         suffix: high
         passes: 2
         video:
             width: 1280
             height:  720
-            bitrate: 2000
+            bitrate: 2000k
             preset: veryslow
             pass1:
                 params: -weightp 2 -bf 3
             h264:
-                profile: main
+                profile: high
                 level: 3.1
         audio:
             channels: 5.1
-            bitrate: 320
+            bitrate: 320k
             volume: 4
             aac:
                 profile: aac_he
