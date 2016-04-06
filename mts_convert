@@ -254,6 +254,33 @@ parse_options (){
     done;
 }
 
+
+handle_video_codec_options(){
+    local name=$1;
+
+    local codec_name=$(profile_default 'libx264' $name video codec name)
+
+    local codec_options="-codec:v ${codec_name}";
+
+    if [[ "$codec_name" == "libx264" ]]; then
+        codec_options+=$(handle_video_h264_options $name);
+    fi;
+
+    echo "${codec_options}"
+}
+
+handle_video_h264_options(){
+    # -profile:v = baseline, main, high, high10, high422, high444
+
+    local name=$1;
+
+    local codec_options="
+        -profile:v $(profile_default 'baseline' $name video codec profile)
+        -level:v $(profile_default '3.1' $name video codec level)";
+
+    echo "${codec_options}"
+}
+
 handle_video_options(){
     # DEFAULT_video_options_265
     #     -codec:v libx265
@@ -266,20 +293,17 @@ handle_video_options(){
     #
     # DEFAULT_video_options_264
     #     -codec:v libx264
-    #     -profile:v high
     #     -preset veryslow
     #     -b:v 500k
     #     -maxrate 500k
     #     -bufsize 1000k
     #     -vf scale=-1:720
+    #     -profile:v high
 
 
     local name=$1;
 
-    local codec_options="
-        -codec:v libx264
-        -profile:v $(profile $name video h264 profile)
-        -level:v $(profile $name video h264 level)";
+    local codec_options=$(handle_video_codec_options $name);
 
     local preset="$(profile $name video preset)";
     local bitrate="$(profile $name video bitrate)";
@@ -296,28 +320,26 @@ handle_video_options(){
     echo ${options}
 }
 
-handle_audio_options(){
-    # DEFAULT_audio_options
-    #     -strict experimental
-    #     -codec:a aac
-    #     -b:a 320k
-    #     -af "volume=4"
-
-
+handle_audio_codec_options(){
     local name=$1;
+
+    local codec_name=$(profile_default 'aac' $name audio codec name)
 
     local codec_options="
         -strict experimental
-        -codec:a aac";
+        -codec:a ${codec_name}";
 
+    echo "${codec_options}"
+}
+
+handle_audio_options(){
+    local name=$1;
     local bitrate="$(profile $name audio bitrate)";
     local volume="$(profile $name audio volume)";
-
-
     local common_options="
         -b:a $bitrate
         -af volume=${volume}";
-
+    local codec_options=$(handle_audio_codec_options $name)
     local options="${codec_options} ${common_options}";
     verbose "handle_audio_options() -> ${options}"
     echo ${options}

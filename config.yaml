@@ -10,18 +10,20 @@ profile:
             width: 1280
             height:  720
             bitrate: 2000k
-            preset: veryslow
-            pass1:
-                params: -weightp 2 -bf 3
-            h264:
+            preset: ultrafast
+            codec:
+                name : libx264
                 profile: high
                 level: 3.1
+            pass1:
+                params: -weightp 2 -bf 3
         audio:
             channels: 5.1
             bitrate: 320k
             volume: 4
-            aac:
-                profile: aac_he
+            codec:
+                name: aac
+
 
 
 
