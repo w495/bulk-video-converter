@@ -1,0 +1,32 @@
+ffmpeg:
+    bin: /usr/bin/ffmpeg
+    threads: 0
+    time: 10
+profile:
+    hd1:
+        suffix: high
+        passes: 2
+        video:
+            width: 1280
+            height:  720
+            bitrate: 2000
+            preset: veryslow
+            pass1:
+                params: -weightp 2 -bf 3
+            h264:
+                profile: main
+                level: 3.1
+        audio:
+            channels: 5.1
+            bitrate: 320
+            volume: 4
+            aac:
+                profile: aac_he
+
+
+
+
+
+
+
+

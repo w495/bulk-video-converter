@@ -1,0 +1,387 @@
+#!/usr/bin/env bash
+
+
+VERBOSE=true
+INPUT='';
+OUTPUT='';
+CONFIG='';
+
+usage () {
+echo -e "
+$0 [-h]|
+
+    -h, --help     shows this test.
+    -i, --input    starts or restarts the node.
+    -o, --output   stops node.
+    -v, --verbose  uses verbose mode. It tells about really actions.
+
+";
+}
+
+configure () {
+    local file_name="$1";
+    if [[ -n "${file_name}" ]]; then
+        eval_config "${file_name}";
+    else
+        eval_default_config;
+    fi;
+}
+
+eval_default_config() {
+    eval_config <<$0CONFIGURE
+
+ffmpeg:
+    bin: /usr/bin/ffmpeg
+    threads: 0
+    time: 10
+profile:
+    default:
+        suffix: hd1
+        video:
+            width: 1280
+            height:  720
+            bitrate: 2000
+            preset: veryslow
+            pass1:
+                params: -weightp 2 -bf 3
+            h264:
+                profile: main
+                level: 3.1
+        audio:
+            channels: 5.1
+            bitrate: 320
+            volume: 4
+            aac:
+                profile: aac_he
+$0CONFIGURE
+}
+
+eval_config() {
+    local config="$@";
+    local res=$(parse_config $config);
+    #[[ "x${VERBOSE}" = "xtrue" ]] && echo -e $res | sed 's/; /;\n/gi';
+    eval $res;
+}
+
+parse_config() {
+    echo -e "$1";
+    local prefix=$2
+    local s='[[:space:]]*' w='[a-zA-Z0-9_]*' fs=$(echo @|tr @ '\034')
+    sed     -ne "s|^\($s\):|\1|" \
+            -e "s|^\($s\)\($w\)$s:$s[\"']\(.*\)[\"']$s\$|\1$fs\2$fs\3|p" \
+            -e "s|^\($s\)\($w\)$s:$s\(.*\)$s\$|\1$fs\2$fs\3|p"  $1 |
+    awk -F$fs '{
+        indent = length($1)/4; # indent size
+        vname[indent] = $2;
+        for (i in vname) {
+            if (i > indent) {
+                delete vname[i]
+            }
+        }
+        #if (length($3) > 0) {
+            vn="'$prefix'";
+            for (i=0; i<indent; i++) {
+                vn=(vn)(vname[i])("_")
+                vnn = vname[i+1]
+                if (!(vn in varray)){
+                    printf("declare -gA %sMAP; ",toupper(vn));
+                }
+                varray[vn] = 1
+                if (!((vn,vnn) in varray)){
+                    printf("%sMAP[%s]=1; ",toupper(vn), toupper(vnn));
+                }
+                varray[vn,vnn] = 1
+            }
+            printf("readonly %s%s=\"%s\"; ",toupper(vn), toupper($2), $3);
+        #}
+    }'
+}
+
+get () {
+    local string=$1
+    for word in "${@:2}"; do
+        string+="_${word}";
+    done
+    echo $(eval echo "\${${string^^}}");
+}
+
+profile () {
+    echo $(get profile ${@});
+}
+
+profile_if_set () {
+    local key=$1;
+    local value=$(get profile ${@:2});
+    if [[ -z "${value}" ]] ; then
+        echo '\0';
+    else
+        echo "${key} ${value}"
+    fi;
+
+}
+
+
+
+# ------------------------------------------------------------
+# Printing functions
+# ------------------------------------------------------------
+
+success () {
+    echo -e "SUCCESS:${PROGNAME}: ${@}" 1>&2;
+}
+
+fail () {
+    echo -e "FAIL:${PROGNAME}: ${@}" 1>&2;
+}
+
+warn () {
+    echo -e "WARN:${PROGNAME}: ${@}" 1>&2;
+}
+
+error () {
+    echo -e "ERROR:${PROGNAME}: ${@}" 1>&2;
+}
+
+verbose() {
+    [[ "x${VERBOSE}" = "xtrue" ]] && echo -e "# ${@}" 1>&2;
+}
+
+notice() {
+    echo -e "${@}" 1>&2;
+}
+
+show_usage(){
+    usage;
+    exit 0;
+}
+
+wrong_usage(){
+    usage;
+    error $'\n'"${@}"$'\n';
+    exit 3;
+}
+
+assert_not_empty () {
+    local file_name=$1;
+    local message=$2;
+    if [[ -z "${file_name}" ]] ; then
+        wrong_usage "${message}";
+    fi;
+}
+
+compute_if_empty (){
+    local file_name=${1};
+    if [[ -z "${file_name}" ]] ; then
+        local initial_name=${2};
+        local extention=${3};
+        local suffix=${4};
+        assert_not_empty "$initial_name" "empty base name";
+        local base_name=${initial_name%.*};
+        if [[ -z "${extention}" ]] ; then
+            extention="${initial_name##*.}"
+        fi;
+        file_name="${base_name}-${suffix}.${extention}"
+    fi;
+    echo "${file_name}";
+}
+
+log_run (){
+    verbose ":: ${@}";
+    #eval "${@}";
+}
+
+parse_options (){
+
+    local OPTIONS=$(getopt -o hi:o:c:vq --long 'help,input:,output:config:,verbose,quiet' -n "$0" -- "${@}");
+
+
+    #set -- ${OPTIONS};
+
+    while [[ -n ${OPTIONS} ]] ; do
+        case ${1} in
+            -h|--help)
+                show_usage;
+                shift;;
+            -i|--input)
+                case "${2}" in
+                    '')
+                        shift 1;;
+                    *)
+                        INPUT=${2};
+                        readonly INPUT;
+                        shift 2;;
+                esac;;
+            -o|--output)
+                case "${2}" in
+                    '')
+                        shift 1;;
+                    *)
+                        OUTPUT=${2};
+                        shift 2;;
+                esac;;
+            -c|--config)
+                case "${2}" in
+                    '')
+                        shift 1;;
+                    *)
+                        CONFIG=${2};
+                        shift 2;;
+                esac;;
+            -v|--verbose)
+                VERBOSE='true';
+                readonly VERBOSE;
+                shift;;
+            -q|--quiet)
+                VERBOSE='false';
+                readonly VERBOSE;
+                shift;;
+            '--'|'')
+                break;;
+            *) wrong_usage "Unknown parameter '${1}'.";;
+        esac;
+    done;
+}
+
+handle_video_options(){
+    # DEFAULT_FFMPEG_OPTIONS_VIDEO_265
+    #     -codec:v libx265
+    #     -preset veryslow
+    #     -b:v 500k
+    #     -maxrate 500k
+    #     -bufsize 1000k
+    #     -vf scale=-1:720
+    #
+    #
+    # DEFAULT_FFMPEG_OPTIONS_VIDEO_264
+    #     -codec:v libx264
+    #     -profile:v high
+    #     -preset veryslow
+    #     -b:v 500k
+    #     -maxrate 500k
+    #     -bufsize 1000k
+    #     -vf scale=-1:720
+
+
+    local name=$1;
+
+    local codec_options="
+        -codec:v libx264
+        -profile:v $(profile $name video h264 profile)
+        -level:v $(profile $name video h264 level)";
+
+    local preset="$(profile $name video preset)";
+    local bitrate="$(profile $name video bitrate)";
+    local width="$(profile $name video width)";
+    local height="$(profile $name video height)";
+
+    local common_options="
+        -preset ${preset}
+        -b:v ${bitrate}
+        -vf scale=${width}:${height}";
+
+    local options="${codec_options} ${common_options}";
+    verbose "handle_video_options() -> ${options}"
+    echo ${options}
+}
+
+handle_video_audio(){
+    # DEFAULT_FFMPEG_OPTIONS_AUDIO
+    #     -strict experimental
+    #     -codec:a aac
+    #     -b:a 320k
+    #     -af "volume=4"
+
+
+    local name=$1;
+
+    local codec_options="
+        -strict experimental
+        -codec:a aac
+        -profile:v $(profile $name video aac profile)
+    ";
+
+    local bitrate="$(profile $name audio bitrate)";
+    local volume="$(profile $name audio volume)";
+
+
+    local common_options="
+        -strict experimental
+        -codec:a aac
+        -b:a $bitrate
+        -af volume=${volume}
+    ";
+
+    local options="${codec_options} ${common_options}";
+    verbose "handle_video_audio() -> ${options}"
+    echo ${options}
+}
+
+
+handle_profile(){
+
+    local name=$1
+
+    local suffix=$(profile $name suffix);
+    local pass=$(profile $name pass);
+
+
+    verbose "PROFILE ${name}; $suffix"
+
+    local OUTPUT=$(compute_if_empty "${OUTPUT}" "${INPUT}" 'mp4' $suffix);
+
+    local OUTPUT_PASS1=$(compute_if_empty "${OUTPUT_1PASS}" "${INPUT}" 'pass.mp4' $suffix);
+
+    local PASSLOGFILE=$(compute_if_empty "${PASSLOGFILE}" "${INPUT}" 'pass' $suffix);
+
+
+    FFMPEG_OPTIONS_COMMON="-t ${FFMPEG_TIME} -threads ${FFMPEG_THREADS}"
+
+
+
+    local FFMPEG_OPTIONS_VIDEO=$(handle_video_options "$name");
+
+    local FFMPEG_OPTIONS_AUDIO=$(handle_video_options "$name");
+
+
+
+    # log_run ${FFMPEG_BIN} ${FFMPEG_OPTIONS_COMMON} -i ${INPUT}  ${FFMPEG_OPTIONS_VIDEO} ${FFMPEG_OPTIONS_AUDIO} ${OUTPUT};
+
+    log_run ${FFMPEG_BIN} \
+        ${FFMPEG_OPTIONS_COMMON} \
+        -i ${INPUT} \
+        ${FFMPEG_OPTIONS_VIDEO} \
+        -pass 1 -passlogfile  ${PASSLOGFILE} ${FFMPEG_OPTIONS_AUDIO} -f mp4 ${OUTPUT_PASS1} ;
+
+    log_run ${FFMPEG_BIN} \
+        ${FFMPEG_OPTIONS_COMMON} \
+        -i ${INPUT} \
+        ${FFMPEG_OPTIONS_VIDEO} \
+        -pass 2 -passlogfile  ${PASSLOGFILE} ${FFMPEG_OPTIONS_AUDIO} -f mp4 ${OUTPUT} ;
+}
+
+
+
+parse_options "${@}";
+
+configure "${CONFIG}";
+
+assert_not_empty "${INPUT}" 'empty input file (-i)';
+
+for profile in "${!PROFILE_MAP[@]}"; do
+    handle_profile $profile
+done
+
+
+#
+# ffmpeg -i inputfile.avi -codec:v libx264 -profile:v main -preset slow -b:v 400k -maxrate 400k -bufsize 800k -vf scale=-1:480 -threads 0 -codec:a libfdk_aac -b:a 128k output.mp4
+#
+# X="d"
+# "d";
+#
+
+
+
+
+
+
+
