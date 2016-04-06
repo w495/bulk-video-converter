@@ -64,11 +64,10 @@ eval_config() {
     local config="$@";
     local res=$(parse_config $config);
     #[[ "x${VERBOSE}" = "xtrue" ]] && echo -e $res | sed 's/; /;\n/gi';
-    eval $res;
+    eval "${res}";
 }
 
 parse_config() {
-    echo -e "$1";
     local prefix=$2
     local s='[[:space:]]*' w='[a-zA-Z0-9_]*' fs=$(echo @|tr @ '\034')
     sed -ne "s|^\($s\):|\1|" \
@@ -121,6 +120,30 @@ profile_default () {
         echo "$default";
     else
         echo "${value}"
+    fi;
+}
+
+if_exists() {
+    local format=$1;
+    local value=${@:2};
+
+    for var in "${@:2}" ;do
+        if [[ -z "${var}" || "${var}" == "null" ]] ; then
+            value='null';
+        fi;
+    done
+
+
+    if [[ -n "${value}" && "${value}" != "null" ]] ; then
+        printf " ${format} " ${value};
+    fi;
+}
+
+profile_if_exists() {
+    local format=$1;
+    local value=$(profile ${@:2});
+    if [[ -n "${value}" && "${value}" != "null" ]] ; then
+        printf " ${format} " "${value}";
     fi;
 }
 
@@ -274,9 +297,15 @@ handle_video_h264_options(){
 
     local name=$1;
 
-    local codec_options="
-        -profile:v $(profile_default 'baseline' $name video codec profile)
-        -level:v $(profile_default '3.1' $name video codec level)";
+    local codec_options='';
+
+    local profile=$(profile $name video codec profile)
+    local level=$(profile $name video codec level)
+    local opts=$(profile $name video codec opts)
+
+    codec_options+=$(if_exists '-profile:v %s' $profile)
+    codec_options+=$(if_exists '-level:v %s' $level)
+    codec_options+=$(if_exists '-x264opts "%s"' $opts)
 
     echo "${codec_options}"
 }
@@ -310,12 +339,14 @@ handle_video_options(){
     local width="$(profile $name video width)";
     local height="$(profile $name video height)";
 
-    local common_options="
-        -preset ${preset}
-        -b:v ${bitrate}
-        -vf scale=${width}:${height}";
+    local common_options=""
 
-    local options="${codec_options} ${common_options}";
+    common_options+=$(if_exists '-preset %s' $preset)
+    common_options+=$(if_exists '-b:v %s' $bitrate)
+    common_options+=$(if_exists '-vf "scale=%s:%s"' $width $height)
+
+
+    local options="${common_options} ${codec_options}";
     verbose "handle_video_options() -> ${options}"
     echo ${options}
 }
@@ -325,9 +356,11 @@ handle_audio_codec_options(){
 
     local codec_name=$(profile_default 'aac' $name audio codec name)
 
-    local codec_options="
-        -strict experimental
-        -codec:a ${codec_name}";
+    local codec_options="";
+
+    codec_options+="-strict experimental ";
+    codec_options+="-codec:a ${codec_name} ";
+
 
     echo "${codec_options}"
 }
@@ -336,11 +369,13 @@ handle_audio_options(){
     local name=$1;
     local bitrate="$(profile $name audio bitrate)";
     local volume="$(profile $name audio volume)";
-    local common_options="
-        -b:a $bitrate
-        -af volume=${volume}";
+    local common_options="";
+
+    common_options+=$(if_exists '-b:a %s' $bitrate)
+    common_options+=$(if_exists '-af "volume=%s"' ${volume})
+
     local codec_options=$(handle_audio_codec_options $name)
-    local options="${codec_options} ${common_options}";
+    local options="${common_options} ${codec_options}";
     verbose "handle_audio_options() -> ${options}"
     echo ${options}
 }
@@ -349,7 +384,7 @@ handle_audio_options(){
 handle_profile(){
     local name=$1;
 
-    local suffix=$(profile_default 'norm' $name suffix);
+    local suffix=$(profile_default "${name,,}" $name suffix);
     local passes=$(profile_default '1' $name passes);
     local format=$(profile_default 'mp4' $name format);
     local output=$(compute_if_empty \
@@ -364,7 +399,11 @@ handle_profile(){
 
     verbose "PROFILE ${name}; $suffix $format"
 
-    local common_options="-t ${FFMPEG_TIME} -threads ${FFMPEG_THREADS}"
+    local global_options="";
+
+    global_options+=$(if_exists ' -t %s' ${FFMPEG_TIME})
+    global_options+=$(if_exists ' -threads %s' ${FFMPEG_THREADS})
+
     local video_options=$(handle_video_options "$name");
     local audio_options=$(handle_audio_options "$name");
 
@@ -374,7 +413,7 @@ handle_profile(){
             pass_options="-pass ${pass} -passlogfile  ${log}";
         fi;
         log_run ${FFMPEG_BIN} \
-            ${common_options} \
+            ${global_options} \
             -i ${INPUT} \
             ${video_options} \
             ${pass_options} \
@@ -388,7 +427,10 @@ main(){
     configure "${CONFIG}";
     assert_not_empty "${INPUT}" 'empty input file (-i)';
     for profile in "${!PROFILE_MAP[@]}"; do
-        handle_profile $profile
+        local skip_it=$(profile $profile skip_it);
+        if [[ -z ${skip_it} ]]; then
+            handle_profile $profile
+        fi;
     done
 }
 
