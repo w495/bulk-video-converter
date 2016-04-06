@@ -67,12 +67,13 @@ parse_config() {
     echo -e "$1";
     local prefix=$2
     local s='[[:space:]]*' w='[a-zA-Z0-9_]*' fs=$(echo @|tr @ '\034')
-    sed     -ne "s|^\($s\):|\1|" \
-            -e "s|^\($s\)\($w\)$s:$s[\"']\(.*\)[\"']$s\$|\1$fs\2$fs\3|p" \
-            -e "s|^\($s\)\($w\)$s:$s\(.*\)$s\$|\1$fs\2$fs\3|p"  $1 |
+    sed -ne "s|^\($s\):|\1|" \
+        -e "s|^\($s\)\($w\)$s:$s[\"']\(.*\)[\"']$s\$|\1$fs\2$fs\3|p" \
+        -e "s|^\($s\)\($w\)$s:$s\(.*\)$s\$|\1$fs\2$fs\3|p"  $1 |
     awk -F$fs '{
         indent = length($1)/4; # indent size
-        vname[indent] = $2;
+        tail = toupper($2);
+        vname[indent] = tail;
         for (i in vname) {
             if (i > indent) {
                 delete vname[i]
@@ -84,15 +85,15 @@ parse_config() {
                 vn=(vn)(vname[i])("_")
                 vnn = vname[i+1]
                 if (!(vn in varray)){
-                    printf("declare -gA %sMAP; ",toupper(vn));
+                    printf("declare -gA %sMAP; ", vn);
                 }
                 varray[vn] = 1
                 if (!((vn,vnn) in varray)){
-                    printf("%sMAP[%s]=1; ",toupper(vn), toupper(vnn));
+                    printf("%sMAP[%s]=1; ", vn, vnn);
                 }
                 varray[vn,vnn] = 1
             }
-            printf("readonly %s%s=\"%s\"; ",toupper(vn), toupper($2), $3);
+            printf("readonly %s%s=\"%s\"; ", vn, tail, $3);
         #}
     }'
 }
@@ -192,7 +193,9 @@ log_run (){
 
 parse_options (){
 
-    local OPTIONS=$(getopt -o hi:o:c:vq --long 'help,input:,output:config:,verbose,quiet' -n "$0" -- "${@}");
+    local OPTIONS=$(getopt -o hi:o:c:vq \
+        --long 'help,input:,output:config:,verbose,quiet' \
+        -n "$0" -- "${@}");
 
 
     #set -- ${OPTIONS};
@@ -344,19 +347,26 @@ handle_profile(){
 
 
 
-    # log_run ${FFMPEG_BIN} ${FFMPEG_OPTIONS_COMMON} -i ${INPUT}  ${FFMPEG_OPTIONS_VIDEO} ${FFMPEG_OPTIONS_AUDIO} ${OUTPUT};
+#     log_run ${FFMPEG_BIN} \
+#         ${FFMPEG_OPTIONS_COMMON} \
+#         -i ${INPUT}  \
+#         ${FFMPEG_OPTIONS_VIDEO} \
+#         ${FFMPEG_OPTIONS_AUDIO} \
+#         ${OUTPUT};
 
     log_run ${FFMPEG_BIN} \
         ${FFMPEG_OPTIONS_COMMON} \
         -i ${INPUT} \
         ${FFMPEG_OPTIONS_VIDEO} \
-        -pass 1 -passlogfile  ${PASSLOGFILE} ${FFMPEG_OPTIONS_AUDIO} -f mp4 ${OUTPUT_PASS1} ;
+        -pass 1 -passlogfile  ${PASSLOGFILE} \
+        ${FFMPEG_OPTIONS_AUDIO} -f mp4 ${OUTPUT_PASS1} ;
 
     log_run ${FFMPEG_BIN} \
         ${FFMPEG_OPTIONS_COMMON} \
         -i ${INPUT} \
         ${FFMPEG_OPTIONS_VIDEO} \
-        -pass 2 -passlogfile  ${PASSLOGFILE} ${FFMPEG_OPTIONS_AUDIO} -f mp4 ${OUTPUT} ;
+        -pass 2 -passlogfile  ${PASSLOGFILE} \
+        ${FFMPEG_OPTIONS_AUDIO} -f mp4 ${OUTPUT} ;
 }
 
 
@@ -373,7 +383,15 @@ done
 
 
 #
-# ffmpeg -i inputfile.avi -codec:v libx264 -profile:v main -preset slow -b:v 400k -maxrate 400k -bufsize 800k -vf scale=-1:480 -threads 0 -codec:a libfdk_aac -b:a 128k output.mp4
+# ffmpeg -i inputfile.avi
+# -codec:v libx264
+# -profile:v main
+# -preset slow -b:v 400k
+# -maxrate 400k
+# -bufsize 800k
+# -vf scale=-1:480
+# -threads 0 -codec:a
+# libfdk_aac -b:a 128k output.mp4
 #
 # X="d"
 # "d";
