@@ -63,7 +63,7 @@ $0CONFIGURE
 eval_config() {
     local config="$@";
     local res=$(parse_config $config);
-    #[[ "x${VERBOSE}" = "xtrue" ]] && echo -e $res | sed 's/; /;\n/gi';
+    # [[ "x${VERBOSE}" = "xtrue" ]] && echo -e $res | sed 's/; /;\n/gi';
     eval "${res}";
 }
 
@@ -92,7 +92,7 @@ parse_config() {
                 }
                 varray[vn] = 1
                 if (!((vn,vnn) in varray)){
-                    printf("%sMAP[%s]=1; ", vn, vnn);
+                    printf("%sMAP[%s]=\"%s\"; ", vn, vnn, $3);
                 }
                 varray[vn,vnn] = 1
             }
@@ -109,8 +109,20 @@ get () {
     echo $(eval echo "\${${string^^}}");
 }
 
-profile () {
+plain_profile () {
     echo $(get profile ${@});
+}
+
+profile () {
+    local name=$1;
+    local value=$(plain_profile $name ${@:2})
+    if [[ -z "${value}" ]] ; then
+        local parent=$(plain_profile $name extends)
+        if [[ -n "${parent}" ]] ; then
+            value=$(profile $parent ${@:2})
+        fi;
+    fi;
+    echo $value
 }
 
 profile_default () {
@@ -170,7 +182,7 @@ error () {
 }
 
 verbose() {
-    [[ "x${VERBOSE}" = "xtrue" ]] && echo -e "# ${@}" 1>&2;
+    [[ "x${VERBOSE}" = "xtrue" ]] && printf "# ${@}\n" 1>&2;
 }
 
 notice() {
@@ -212,11 +224,71 @@ compute_if_empty (){
     echo "${file_name}";
 }
 
-log_run (){
-    verbose ":: ${@}";
+
+substr() {
+    reqsubstr="$1"
+    shift
+    string="$@"
+    if [ -z "${string##*$reqsubstr*}" ] ;then
+        echo "String '$string' contain substring: '$reqsubstr'.";
+      else
+        echo "String '$string' don't contain substring: '$reqsubstr'."
+    fi
+}
+
+verbose_start (){
+    local string=$1;
+    local name="$string";
+    local offset="";
+    if [ -z "${string##*:*}" ] ;then
+        name=${string%:*}
+        offset=${string#*:}
+    fi
+    verbose "${offset} <${name}>";
+}
+
+
+verbose_end (){
+    local string=$1;
+    local name="$string";
+    local offset="";
+    if [ -z "${string##*:*}" ] ;then
+        name=${string%:*}
+        offset=${string#*:}
+    fi
+    verbose "${offset} </${name}>";
+}
+
+
+verbose_offset (){
+    verbose "${1}%2s${2}";
+}
+
+verbose_block (){
+    local string=$1;
+    local offset="";
+    if [ -z "${string##*:*}" ] ;then
+        offset=${string#*:}
+    fi
+    local value=${@:2}
+    verbose_start "${string}"
+    verbose_offset "${offset}" "${value}";
+    verbose_end "${string}";
+}
+
+verbose_run (){
+    local string=$1;
+    local offset="";
+    if [ -z "${string##*:*}" ] ;then
+        offset=${string#*:}
+    fi
+    local value=${@:2}
+    verbose_start "${string}"
+    verbose_offset "${offset}" "${value}";
     if [[ "x${DRY_RUN}" = "xfalse" ]]; then
-        eval "${@}";
+        eval "${value}";
     fi;
+    verbose_end "${string}";
 }
 
 parse_options (){
@@ -347,7 +419,8 @@ handle_video_options(){
 
 
     local options="${common_options} ${codec_options}";
-    verbose "handle_video_options() -> ${options}"
+
+    verbose_block "video:%2s" "${options}";
     echo ${options}
 }
 
@@ -376,7 +449,9 @@ handle_audio_options(){
 
     local codec_options=$(handle_audio_codec_options $name)
     local options="${common_options} ${codec_options}";
-    verbose "handle_audio_options() -> ${options}"
+
+    verbose_block "audio:%2s" "${options}";
+
     echo ${options}
 }
 
@@ -397,7 +472,8 @@ handle_profile(){
         "pass" \
         "$suffix");
 
-    verbose "PROFILE ${name}; $suffix $format"
+    verbose_start "profile ${name,,} $suffix $format";
+
 
     local global_options="";
 
@@ -407,12 +483,14 @@ handle_profile(){
     local video_options=$(handle_video_options "$name");
     local audio_options=$(handle_audio_options "$name");
 
+    verbose_start "passes:%2s";
+
     for pass in $(seq 1 ${passes}); do
         local pass_options="";
         if [[ ${passes} > 1 ]]; then
             pass_options="-pass ${pass} -passlogfile  ${log}";
         fi;
-        log_run ${FFMPEG_BIN} \
+        verbose_run "ffmpeg:%4s" ${FFMPEG_BIN} \
             ${global_options} \
             -i ${INPUT} \
             ${video_options} \
@@ -420,6 +498,11 @@ handle_profile(){
             ${audio_options} \
             -f ${format} -y ${output} ;
     done
+
+    verbose_end "passes:%2s";
+
+    verbose_end "profile";
+
 }
 
 main(){
@@ -427,8 +510,8 @@ main(){
     configure "${CONFIG}";
     assert_not_empty "${INPUT}" 'empty input file (-i)';
     for profile in "${!PROFILE_MAP[@]}"; do
-        local skip_it=$(profile $profile skip_it);
-        if [[ -z ${skip_it} ]]; then
+        local abstract=$(plain_profile $profile abstract);
+        if [[ -z ${abstract} ]]; then
             handle_profile $profile
         fi;
     done

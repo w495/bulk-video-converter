@@ -1,49 +1,47 @@
 ffmpeg:
     bin: /usr/bin/ffmpeg
     threads: 0
-
 profile:
-    #high:
-        #passes: 1
-        #video:
-            #width: 1280
-            #height:  720
-            #bitrate: 2000k
-            #preset: veryfast
-            #codec:
-                #name : libx264
-                #profile: high
-                #level: 3.1
-                #opts: "keyint=96:min-keyint=96:no-scenecut"
-                #weightp: 2
-                #b-frames: 3
-
-        #audio:
-            #channels: 5.1
-            #bitrate: 320k
-            #volume: 4
-            #codec:
-                #name: aac
-    tvzavr_low2:
+    tvzavr_base:
+        # sdsdsd
+        abstract: 1
         passes: 2
+        video:
+            preset: veryfast
+            codec:
+                name : libx264
+                weightp: 2
+                bframes: 3
+                profile: baseline
+                level: 3.0
+                opts: "keyint=96:min-keyint=96:no-scenecut"
+        audio:
+            volume: 4
+            codec:
+                name: aac
+    tvzavr_high:
+        extends: tvzavr_base
+        video:
+            width: 1280
+            height:  720
+            bitrate: 2000k
+            codec:
+                profile: high
+                level: 3.1
+        audio:
+            channels: 5.1
+            bitrate: 320k
+    tvzavr_low:
+        extends: tvzavr_base
         video:
             width: 480
             height:  270
             bitrate: 250k
-            preset: veryfast
             codec:
-                name : libx264
-                profile: baseline
-                level: 3.0
-                weightp: 2
-                bframes: 3 # -bf
-                opts: "keyint=96:min-keyint=96:no-scenecut"
         audio:
             channels: mono
             bitrate: 64k
-            volume: 4
-            codec:
-                name: aac
+
 
 
 
