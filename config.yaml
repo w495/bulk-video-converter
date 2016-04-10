@@ -3,23 +3,25 @@ ffmpeg:
     threads: 0
 profile:
     tvzavr_base:
-        # sdsdsd
+        # you can mark profile as abstract
+        # and it will be used only for inheritance.
         abstract: 1
         passes: 2
         video:
             preset: veryfast
             codec:
                 name : libx264
-                weightp: 2
-                bframes: 3
                 profile: baseline
                 level: 3.0
+                weightp: 2
+                bframes: 3
                 opts: "keyint=96:min-keyint=96:no-scenecut"
         audio:
             volume: 4
             codec:
                 name: aac
     tvzavr_high:
+        # Other options are inherited from `tvzavr_base`
         extends: tvzavr_base
         video:
             width: 1280
@@ -32,12 +34,12 @@ profile:
             channels: 5.1
             bitrate: 320k
     tvzavr_low:
+        # Other options are inherited from `tvzavr_base`
         extends: tvzavr_base
         video:
             width: 480
             height:  270
             bitrate: 250k
-            codec:
         audio:
             channels: mono
             bitrate: 64k

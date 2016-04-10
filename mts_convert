@@ -3,37 +3,30 @@
 
 VERBOSE=true
 DRY_RUN=false
-INPUT='';
-OUTPUT='';
-CONFIG='';
 
-PASSLOGFILE=''
+INPUT_FILE_NAME='';
+OUTPUT_FILE_NAME='';
+CONFIG_FILE_NAME='';
+
+PASS_LOG_FILE_PREFIX=''
 
 usage () {
 echo -e "
-$0 [-h]|-i <v.mp4> [-o <v.mp4>][-c <c.yml>][-v]
+$0 [-h]|-i <v.mp4> [-o <v.mp4>][-c <c.yml>][-v|-q][-d]
 
-    -h, --help     shows this test.
-    -i, --input    name of input video file.
-    -o, --output   prefix of output video file.
-    -c, --config   yaml-config file.
-    -v, --verbose  uses verbose mode. It tells about really actions.
-
+    -h, --help      shows this test.
+    -i, --input     name of input video file.
+    -o, --output    prefix of output video file.
+    -c, --config    yaml-config file.
+    -v, --verbose   uses verbose mode. It tells about really actions.
+    -q, --quiet     uses quiet mode. It disables quiet verbose mode.
+    -d, --dry-run   uses dry-run mode. It do not run anything.
 ";
 }
 
-configure () {
-    local file_name="$1";
-    if [[ -n "${file_name}" ]]; then
-        eval_config "${file_name}";
-    else
-        eval_default_config;
-    fi;
-}
 
-eval_default_config() {
-    eval_config <<$0CONFIGURE
-
+default_config() {
+    handle_config <<$0CONFIGURE
 ffmpeg:
     bin: /usr/bin/ffmpeg
     threads: 0
@@ -60,327 +53,69 @@ profile:
 $0CONFIGURE
 }
 
-eval_config() {
-    local config="$@";
-    local res=$(parse_config $config);
-    # [[ "x${VERBOSE}" = "xtrue" ]] && echo -e $res | sed 's/; /;\n/gi';
-    eval "${res}";
-}
+# ------------------------------------------------------------
+# Main function
+# ------------------------------------------------------------
 
-parse_config() {
-    local prefix=$2
-    local s='[[:space:]]*' w='[a-zA-Z0-9_]*' fs=$(echo @|tr @ '\034')
-    sed -ne "s|^\($s\):|\1|" \
-        -e "s|^\($s\)\($w\)$s:$s[\"']\(.*\)[\"']$s\$|\1$fs\2$fs\3|p" \
-        -e "s|^\($s\)\($w\)$s:$s\(.*\)$s\$|\1$fs\2$fs\3|p"  $1 |
-    awk -F$fs '{
-        indent = length($1)/4; # indent size
-        tail = toupper($2);
-        vname[indent] = tail;
-        for (i in vname) {
-            if (i > indent) {
-                delete vname[i]
-            }
-        }
-        #if (length($3) > 0) {
-            vn="'$prefix'";
-            for (i=0; i<indent; i++) {
-                vn=(vn)(vname[i])("_")
-                vnn = vname[i+1]
-                if (!(vn in varray)){
-                    printf("declare -gA %sMAP; ", vn);
-                }
-                varray[vn] = 1
-                if (!((vn,vnn) in varray)){
-                    printf("%sMAP[%s]=\"%s\"; ", vn, vnn, $3);
-                }
-                varray[vn,vnn] = 1
-            }
-            printf("readonly %s%s=\"%s\"; ", vn, tail, $3);
-        #}
-    }'
-}
-
-get () {
-    local string=$1
-    for word in "${@:2}"; do
-        string+="_${word}";
-    done
-    echo $(eval echo "\${${string^^}}");
-}
-
-plain_profile () {
-    echo $(get profile ${@});
-}
-
-profile () {
-    local name=$1;
-    local value=$(plain_profile $name ${@:2})
-    if [[ -z "${value}" ]] ; then
-        local parent=$(plain_profile $name extends)
-        if [[ -n "${parent}" ]] ; then
-            value=$(profile $parent ${@:2})
-        fi;
-    fi;
-    echo $value
-}
-
-profile_default () {
-    local default=$1;
-    local value=$(profile ${@:2});
-    if [[ -z "${value}" ]] ; then
-        echo "$default";
-    else
-        echo "${value}"
-    fi;
-}
-
-if_exists() {
-    local format=$1;
-    local value=${@:2};
-
-    for var in "${@:2}" ;do
-        if [[ -z "${var}" || "${var}" == "null" ]] ; then
-            value='null';
+main(){
+    configure "${@}"
+    assert_not_empty "${INPUT_FILE_NAME}" 'empty input file (-i)';
+    for profile in "${!PROFILE_MAP[@]}"; do
+        local abstract=$(plain_profile $profile abstract);
+        if [[ -z ${abstract} ]]; then
+            handle_profile $profile
         fi;
     done
-
-
-    if [[ -n "${value}" && "${value}" != "null" ]] ; then
-        printf " ${format} " ${value};
-    fi;
 }
 
-profile_if_exists() {
-    local format=$1;
-    local value=$(profile ${@:2});
-    if [[ -n "${value}" && "${value}" != "null" ]] ; then
-        printf " ${format} " "${value}";
-    fi;
-}
+# ------------------------------------------------------------
+# Function for handling one profile item
+# ------------------------------------------------------------
 
+handle_profile(){
+    local name="${1}";
+    local suffix=$(profile_default "${name,,}" "$name" 'suffix');
+    local passes=$(profile_default '1' "$name" 'passes');
+    local format=$(profile_default 'mp4' "$name" 'format');
+    local output=$(compute_if_empty \
+        "${OUTPUT_FILE_NAME}" \
+        "${INPUT_FILE_NAME}" \
+        "${format}" \
+        "$suffix");
+    local log=$(compute_if_empty "${PASS_LOG_FILE_PREFIX}" \
+        "${INPUT_FILE_NAME}" \
+        "pass" \
+        "$suffix");
+    verbose_start "profile ${name,,} $suffix $format";
+
+    local global_options="";
+    global_options+=$(if_exists ' -t %s' ${FFMPEG_TIME})
+    global_options+=$(if_exists ' -threads %s' ${FFMPEG_THREADS})
+
+    local video_options=$(handle_video_options "$name");
+    local audio_options=$(handle_audio_options "$name");
+    verbose_start "passes:%2s";
+    for pass in $(seq 1 ${passes}); do
+        local pass_options="";
+        if [[ ${passes} > 1 ]]; then
+            pass_options="-pass ${pass} -passlogfile  ${log}";
+        fi;
+        verbose_run "ffmpeg:%4s" ${FFMPEG_BIN} \
+            ${global_options} \
+            -i ${INPUT_FILE_NAME} \
+            ${video_options} \
+            ${pass_options} \
+            ${audio_options} \
+            -f ${format} -y ${output};
+    done
+    verbose_end "passes:%2s";
+    verbose_end "profile";
+}
 
 
 # ------------------------------------------------------------
-# Printing functions
+# Video functions
 # ------------------------------------------------------------
-
-success () {
-    echo -e "SUCCESS:${PROGNAME}: ${@}" 1>&2;
-}
-
-fail () {
-    echo -e "FAIL:${PROGNAME}: ${@}" 1>&2;
-}
-
-warn () {
-    echo -e "WARN:${PROGNAME}: ${@}" 1>&2;
-}
-
-error () {
-    echo -e "ERROR:${PROGNAME}: ${@}" 1>&2;
-}
-
-verbose() {
-    [[ "x${VERBOSE}" = "xtrue" ]] && printf "# ${@}\n" 1>&2;
-}
-
-notice() {
-    echo -e "${@}" 1>&2;
-}
-
-show_usage(){
-    usage;
-    exit 0;
-}
-
-wrong_usage(){
-    usage;
-    error $'\n'"${@}"$'\n';
-    exit 3;
-}
-
-assert_not_empty () {
-    local file_name=$1;
-    local message=$2;
-    if [[ -z "${file_name}" ]] ; then
-        wrong_usage "${message}";
-    fi;
-}
-
-compute_if_empty (){
-    local file_name=${1};
-    if [[ -z "${file_name}" ]] ; then
-        local initial_name=${2};
-        local extention=${3};
-        local suffix=${4};
-        assert_not_empty "$initial_name" "empty base name";
-        local base_name=${initial_name%.*};
-        if [[ -z "${extention}" ]] ; then
-            extention="${initial_name##*.}"
-        fi;
-        file_name="${base_name}-${suffix}.${extention}"
-    fi;
-    echo "${file_name}";
-}
-
-
-substr() {
-    reqsubstr="$1"
-    shift
-    string="$@"
-    if [ -z "${string##*$reqsubstr*}" ] ;then
-        echo "String '$string' contain substring: '$reqsubstr'.";
-      else
-        echo "String '$string' don't contain substring: '$reqsubstr'."
-    fi
-}
-
-verbose_start (){
-    local string=$1;
-    local name="$string";
-    local offset="";
-    if [ -z "${string##*:*}" ] ;then
-        name=${string%:*}
-        offset=${string#*:}
-    fi
-    verbose "${offset} <${name}>";
-}
-
-
-verbose_end (){
-    local string=$1;
-    local name="$string";
-    local offset="";
-    if [ -z "${string##*:*}" ] ;then
-        name=${string%:*}
-        offset=${string#*:}
-    fi
-    verbose "${offset} </${name}>";
-}
-
-
-verbose_offset (){
-    verbose "${1}%2s${2}";
-}
-
-verbose_block (){
-    local string=$1;
-    local offset="";
-    if [ -z "${string##*:*}" ] ;then
-        offset=${string#*:}
-    fi
-    local value=${@:2}
-    verbose_start "${string}"
-    verbose_offset "${offset}" "${value}";
-    verbose_end "${string}";
-}
-
-verbose_run (){
-    local string=$1;
-    local offset="";
-    if [ -z "${string##*:*}" ] ;then
-        offset=${string#*:}
-    fi
-    local value=${@:2}
-    verbose_start "${string}"
-    verbose_offset "${offset}" "${value}";
-    if [[ "x${DRY_RUN}" = "xfalse" ]]; then
-        eval "${value}";
-    fi;
-    verbose_end "${string}";
-}
-
-parse_options (){
-
-    local OPTIONS=$(getopt -o hi:o:c:vqd \
-        --long 'help,input:,output:config:,verbose,quiet,dry-run' \
-        -n "$0" -- "${@}");
-
-
-    #set -- ${OPTIONS};
-
-    while [[ -n ${OPTIONS} ]] ; do
-        case ${1} in
-            -h|--help)
-                show_usage;
-                shift;;
-            -i|--input)
-                case "${2}" in
-                    '')
-                        shift 1;;
-                    *)
-                        INPUT=${2};
-                        readonly INPUT;
-                        shift 2;;
-                esac;;
-            -o|--output)
-                case "${2}" in
-                    '')
-                        shift 1;;
-                    *)
-                        OUTPUT=${2};
-                        shift 2;;
-                esac;;
-            -c|--config)
-                case "${2}" in
-                    '')
-                        shift 1;;
-                    *)
-                        CONFIG=${2};
-                        shift 2;;
-                esac;;
-            -v|--verbose)
-                VERBOSE='true';
-                readonly VERBOSE;
-                shift;;
-            -d|--dry-run)
-                DRY_RUN='true';
-                readonly DRY_RUN;
-                shift;;
-            -q|--quiet)
-                VERBOSE='false';
-                readonly VERBOSE;
-                shift;;
-            '--'|'')
-                break;;
-            *) wrong_usage "Unknown parameter '${1}'.";;
-        esac;
-    done;
-}
-
-
-handle_video_codec_options(){
-    local name=$1;
-
-    local codec_name=$(profile_default 'libx264' $name video codec name)
-
-    local codec_options="-codec:v ${codec_name}";
-
-    if [[ "$codec_name" == "libx264" ]]; then
-        codec_options+=$(handle_video_h264_options $name);
-    fi;
-
-    echo "${codec_options}"
-}
-
-handle_video_h264_options(){
-    # -profile:v = baseline, main, high, high10, high422, high444
-
-    local name=$1;
-
-    local codec_options='';
-
-    local profile=$(profile $name video codec profile)
-    local level=$(profile $name video codec level)
-    local opts=$(profile $name video codec opts)
-
-    codec_options+=$(if_exists '-profile:v %s' $profile)
-    codec_options+=$(if_exists '-level:v %s' $level)
-    codec_options+=$(if_exists '-x264opts "%s"' $opts)
-
-    echo "${codec_options}"
-}
 
 handle_video_options(){
     # DEFAULT_video_options_265
@@ -424,19 +159,42 @@ handle_video_options(){
     echo ${options}
 }
 
-handle_audio_codec_options(){
+
+handle_video_codec_options(){
     local name=$1;
 
-    local codec_name=$(profile_default 'aac' $name audio codec name)
+    local codec_name=$(profile_default 'libx264' $name video codec name)
 
-    local codec_options="";
+    local codec_options="-codec:v ${codec_name}";
 
-    codec_options+="-strict experimental ";
-    codec_options+="-codec:a ${codec_name} ";
-
+    if [[ "$codec_name" == "libx264" ]]; then
+        codec_options+=$(handle_video_h264_options $name);
+    fi;
 
     echo "${codec_options}"
 }
+
+handle_video_h264_options(){
+    # -profile:v = baseline, main, high, high10, high422, high444
+
+    local name=$1;
+
+    local codec_options='';
+
+    local profile=$(profile $name video codec profile)
+    local level=$(profile $name video codec level)
+    local opts=$(profile $name video codec opts)
+
+    codec_options+=$(if_exists '-profile:v %s' $profile)
+    codec_options+=$(if_exists '-level:v %s' $level)
+    codec_options+=$(if_exists '-x264opts "%s"' $opts)
+
+    echo "${codec_options}"
+}
+
+# ------------------------------------------------------------
+# Audio functions
+# ------------------------------------------------------------
 
 handle_audio_options(){
     local name=$1;
@@ -456,66 +214,319 @@ handle_audio_options(){
 }
 
 
-handle_profile(){
+handle_audio_codec_options(){
     local name=$1;
 
-    local suffix=$(profile_default "${name,,}" $name suffix);
-    local passes=$(profile_default '1' $name passes);
-    local format=$(profile_default 'mp4' $name format);
-    local output=$(compute_if_empty \
-        "${OUTPUT}" \
-        "${INPUT}" \
-        "${format}" \
-        "$suffix");
-    local log=$(compute_if_empty "${PASSLOGFILE}" \
-        "${INPUT}" \
-        "pass" \
-        "$suffix");
+    local codec_name=$(profile_default 'aac' $name audio codec name)
 
-    verbose_start "profile ${name,,} $suffix $format";
+    local codec_options="";
+
+    codec_options+="-strict experimental ";
+    codec_options+="-codec:a ${codec_name} ";
 
 
-    local global_options="";
-
-    global_options+=$(if_exists ' -t %s' ${FFMPEG_TIME})
-    global_options+=$(if_exists ' -threads %s' ${FFMPEG_THREADS})
-
-    local video_options=$(handle_video_options "$name");
-    local audio_options=$(handle_audio_options "$name");
-
-    verbose_start "passes:%2s";
-
-    for pass in $(seq 1 ${passes}); do
-        local pass_options="";
-        if [[ ${passes} > 1 ]]; then
-            pass_options="-pass ${pass} -passlogfile  ${log}";
-        fi;
-        verbose_run "ffmpeg:%4s" ${FFMPEG_BIN} \
-            ${global_options} \
-            -i ${INPUT} \
-            ${video_options} \
-            ${pass_options} \
-            ${audio_options} \
-            -f ${format} -y ${output} ;
-    done
-
-    verbose_end "passes:%2s";
-
-    verbose_end "profile";
-
+    echo "${codec_options}"
 }
 
-main(){
+
+# ------------------------------------------------------------
+# Profile fields access functions
+# ------------------------------------------------------------
+
+profile_if_exists() {
+    local format="${1}";
+    local value=$(profile ${@:2});
+    if [[ -n "${value}" && "${value}" != "null" ]] ; then
+        printf " ${format} " "${value}";
+    fi;
+}
+
+if_exists() {
+    local format="${1}";
+    local value="${@:2}";
+    for var in "${@:2}" ;do
+        if [[ -z "${var}" || "${var}" == "null" ]] ; then
+            value='null';
+        fi;
+    done
+    if [[ -n "${value}" && "${value}" != "null" ]] ; then
+        printf " ${format} " ${value};
+    fi;
+}
+
+profile_default () {
+    local default="${1}";
+    local value=$(profile "${@:2}");
+    if [[ -z "${value}" ]] ; then
+        echo "${default}";
+    else
+        echo "${value}";
+    fi;
+}
+
+profile () {
+    local name="${1}";
+    local value=$(plain_profile "${name}" "${@:2}")
+    if [[ -z "${value}" ]] ; then
+        local parent=$(plain_profile "${name}" 'extends');
+        if [[ -n "${parent}" ]] ; then
+            value=$(profile "${parent}" "${@:2}");
+        fi;
+    fi;
+    echo "${value}";
+}
+
+plain_profile () {
+    echo $(get 'profile' "${@}");
+}
+
+get () {
+    local string="${1}";
+    for word in "${@:2}"; do
+        string+="_${word}";
+    done;
+    echo $(eval echo "\${${string^^}}");
+}
+
+
+# ------------------------------------------------------------
+# Functions for check and compute filenames.
+# ------------------------------------------------------------
+
+compute_if_empty (){
+    local file_name="${1}";
+    if [[ -z "${file_name}" ]] ; then
+        local initial_name="${2}";
+        local extention="${3}";
+        local suffix="${4}";
+        assert_not_empty "${initial_name}" "empty base name";
+        local base_name=${initial_name%.*};
+        if [[ -z "${extention}" ]] ; then
+            extention="${initial_name##*.}"
+        fi;
+        file_name="${base_name}-${suffix}.${extention}"
+    fi;
+    echo "${file_name}";
+}
+
+assert_not_empty () {
+    local file_name="${1}";
+    local message="${2}";
+    if [[ -z "${file_name}" ]] ; then
+        wrong_usage "${message}";
+    fi;
+}
+
+# ------------------------------------------------------------
+# Config functions
+# ------------------------------------------------------------
+
+configure () {
     parse_options "${@}";
-    configure "${CONFIG}";
-    assert_not_empty "${INPUT}" 'empty input file (-i)';
-    for profile in "${!PROFILE_MAP[@]}"; do
-        local abstract=$(plain_profile $profile abstract);
-        if [[ -z ${abstract} ]]; then
-            handle_profile $profile
-        fi;
-    done
+    local file_name="${CONFIG_FILE_NAME}";
+    if [[ -n "${file_name}" ]]; then
+        handle_config "${file_name}";
+    else
+        default_config;
+    fi;
 }
+
+parse_options (){
+
+    local OPTIONS=$(getopt -o hi:o:c:vqd \
+        --long 'help,input:,output:config:,verbose,quiet,dry-run' \
+        -n "$0" -- "${@}");
+
+    #set -- ${OPTIONS};
+
+    while [[ -n ${OPTIONS} ]] ; do
+        case ${1} in
+            -h|--help)
+                show_usage;
+                shift;;
+            -i|--input)
+                case "${2}" in
+                    '')
+                        shift 1;;
+                    *)
+                        INPUT_FILE_NAME=${2};
+                        readonly INPUT_FILE_NAME;
+                        shift 2;;
+                esac;;
+            -o|--output)
+                case "${2}" in
+                    '')
+                        shift 1;;
+                    *)
+                        OUTPUT_FILE_NAME=${2};
+                        readonly OUTPUT_FILE_NAME;
+                        shift 2;;
+                esac;;
+            -c|--config)
+                case "${2}" in
+                    '')
+                        shift 1;;
+                    *)
+                        CONFIG_FILE_NAME=${2};
+                        readonly CONFIG_FILE_NAME;
+                        shift 2;;
+                esac;;
+            -v|--verbose)
+                VERBOSE='true';
+                readonly VERBOSE;
+                shift;;
+            -d|--dry-run)
+                DRY_RUN='true';
+                readonly DRY_RUN;
+                shift;;
+            -q|--quiet)
+                VERBOSE='false';
+                readonly VERBOSE;
+                shift;;
+            '--'|'')
+                break;;
+            *) wrong_usage "Unknown parameter '${1}'.";;
+        esac;
+    done;
+}
+
+handle_config() {
+    local config="$@";
+    local res=$(parse_config $config);
+    # [[ "x${VERBOSE}" = "xtrue" ]] && echo -e $res | sed 's/; /;\n/gi';
+    eval "${res}";
+}
+
+parse_config() {
+    local prefix="$2";
+    local s='[[:space:]]*' w='[a-zA-Z0-9_]*' fs=$(echo @|tr @ '\034')
+    sed -ne "s|^\($s\):|\1|" \
+        -e "s|^\($s\)\($w\)$s:$s[\"']\(.*\)[\"']$s\$|\1$fs\2$fs\3|p" \
+        -e "s|^\($s\)\($w\)$s:$s\(.*\)$s\$|\1$fs\2$fs\3|p"  $1 |
+    awk -F$fs '{
+        indent = length($1)/4; # indent size
+        tail = toupper($2);
+        vname[indent] = tail;
+        for (i in vname) {
+            if (i > indent) {
+                delete vname[i]
+            }
+        }
+        #if (length($3) > 0) {
+            vn="'$prefix'";
+            for (i=0; i<indent; i++) {
+                vn=(vn)(vname[i])("_")
+                vnn = vname[i+1]
+                if (!(vn in varray)){
+                    printf("declare -gA %sMAP; ", vn);
+                }
+                varray[vn] = 1
+                if (!((vn,vnn) in varray)){
+                    printf("%sMAP[%s]=\"%s\"; ", vn, vnn, $3);
+                }
+                varray[vn,vnn] = 1
+            }
+            printf("readonly %s%s=\"%s\"; ", vn, tail, $3);
+        #}
+    }';
+}
+
+# ------------------------------------------------------------
+# Printing functions
+# ------------------------------------------------------------
+
+show_usage(){
+    usage;
+    exit 0;
+}
+
+wrong_usage(){
+    usage;
+    error $'\n'"${@}"$'\n';
+    exit 3;
+}
+
+verbose() {
+    [[ "x${VERBOSE}" = "xtrue" ]] && printf "# ${@}\n" 1>&2;
+}
+
+verbose_offset (){
+    verbose "${1}${2}";
+}
+
+verbose_inside (){
+    verbose_offset "${1}%2s" "${2}";
+}
+
+verbose_start (){
+    local string=$1;
+    local delimiter=':';
+    local name=$(awk -F "$delimiter" '{print $1}' <<< "$string")
+    local offset=$(awk -F "$delimiter" '{print $2}' <<< "$string")
+    verbose_offset "${offset}" "<${name}>";
+}
+
+verbose_end (){
+    local string=$1;
+    local delimiter=':';
+    local name=$(awk -F "$delimiter" '{print $1}' <<< "$string")
+    local offset=$(awk -F "$delimiter" '{print $2}' <<< "$string")
+    verbose_offset "${offset}" "</${name}>";
+}
+
+verbose_block (){
+    local string=$1;
+    local delimiter=':';
+    local offset=$(awk -F "$delimiter" '{print $2}' <<< "$string")
+    local value=${@:2}
+    verbose_start "${string}"
+    verbose_inside "${offset}" "${value}";
+    verbose_end "${string}";
+}
+
+verbose_run (){
+    local string=$1;
+    local offset="";
+    local delimiter=':';
+    local offset=$(awk -F "$delimiter" '{print $2}' <<< "$string")
+    local value=${@:2}
+    verbose_start "${string}"
+    verbose_inside "${offset}" "${value}";
+    if [[ "x${DRY_RUN}" = "xfalse" ]]; then
+        if [[ "x${VERBOSE}" = "xtrue" ]]; then
+            eval "${value}";
+        else
+            eval "${value}" 2> /dev/null;
+        fi;
+    fi;
+    verbose_end "${string}";
+}
+
+success () {
+    echo -e "SUCCESS:${PROGNAME}: ${@}" 1>&2;
+}
+
+fail () {
+    echo -e "FAIL:${PROGNAME}: ${@}" 1>&2;
+}
+
+warn () {
+    echo -e "WARN:${PROGNAME}: ${@}" 1>&2;
+}
+
+error () {
+    echo -e "ERROR:${PROGNAME}: ${@}" 1>&2;
+}
+
+notice() {
+    echo -e "${@}" 1>&2;
+}
+
+
+# ------------------------------------------------------------
+# Main function call.
+# ------------------------------------------------------------
+
 
 main "${@}";
 
