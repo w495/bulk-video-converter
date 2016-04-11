@@ -1,34 +1,57 @@
 #!/usr/bin/env bash
 
+# ------------------------------------------------------------
+# Startup constants.
+# ------------------------------------------------------------
 
-VERBOSE=true
-DRY_RUN=false
+# Random sting for random naming.
+readonly RANDOM_STING=$(cat /dev/urandom \
+    | tr -dc "A-Za-z0-9" \
+    | fold -c8 \
+    | head -n 1
+)
 
-INPUT_FILE_NAME='';
+# Time of script start for time based naming.
+readonly START_TIME=$(date "+%Y-%m-%d_%H-%M-%S-%N")
 
-OUTPUT_DIR_NAME='./';
-OUTPUT_FILE_NAME='';
+# ------------------------------------------------------------
+# Default options:
+#   They are not `readonly` because they can be
+#       redefined via command line arguments.
+# ------------------------------------------------------------
+
+VERBOSE='true';
+DRY_RUN='false';
 CONFIG_FILE_NAME='';
-
+INPUT_FILE_NAME='';
+OUTPUT_DIR_NAME='';
+OUTPUT_FILE_NAME='';
 PASS_LOG_FILE_PREFIX=''
+PASS_LOG_DIR_NAME="/tmp/${0}/${RANDOM_STING}";
+
 
 usage () {
-echo -e "
-$0 [-h]|-i <v.mp4> [-o <v.mp4>][-c <c.yml>][-v|-q][-d]
+    echo -e "${COLOR_BOLD}$0${COLOR_OFF} ${COLOR_DIM}<...>${COLOR_OFF}
 
-    -h, --help      shows this test.
-    -i, --input     name of input video file.
-    -o, --output    prefix of output video file.
-    -c, --config    yaml-config file.
-    -v, --verbose   uses verbose mode. It tells about really actions.
-    -q, --quiet     uses quiet mode. It disables quiet verbose mode.
-    -d, --dry-run   uses dry-run mode. It do not run anything.
-";
+    -h, --help          shows this test.
+    -i, --input         name of input video file.
+    -o, --output        prefix of output video file.
+    -O, --output-dir    output folder.
+    -L, --pass-log-dir  passlog folder.
+    -c, --config        yaml-config file.
+    -v, --verbose       uses verbose mode.
+                        It tells about really actions.
+    -q, --quiet         uses quiet mode.
+                        It disables quiet verbose mode.
+    -d, --dry-run       uses dry-run mode.
+                        It do not run anything.
+
+    ";
 }
 
 
 default_config() {
-    handle_config <<$0CONFIGURE
+    handle_config <<EOF
 ffmpeg:
     bin: /usr/bin/ffmpeg
     threads: 0
@@ -52,13 +75,12 @@ profile:
             volume: 4
             aac:
                 profile: aac_he
-$0CONFIGURE
+EOF
 }
 
 # ------------------------------------------------------------
 # Main function
 # ------------------------------------------------------------
-
 main(){
     configure "${@}"
     assert_not_empty "${INPUT_FILE_NAME}" 'empty input file (-i)';
@@ -88,7 +110,7 @@ handle_profile(){
     local pass_log_file_prefix=$(compute_if_empty \
         "${PASS_LOG_FILE_PREFIX}" \
         "${INPUT_FILE_NAME}" \
-        "${OUTPUT_DIR_NAME}"  \
+        "${PASS_LOG_DIR_NAME}"  \
         "${suffix}");
     verbose_start "profile n=${name,,} s=${suffix} f=${format}";
 
@@ -289,7 +311,8 @@ get () {
     for word in "${@:2}"; do
         string+="_${word}";
     done;
-    echo $(eval echo "\${${string^^}}");
+    local value="${string^^}";
+    echo $(eval echo "\${${value}}");
 }
 
 
@@ -301,23 +324,26 @@ compute_if_empty (){
     local out_file_name="${1}";
     if [[ -z "${out_file_name}" ]] ; then
         local initial_file_name="${2}";
-        local out_dir_name="${3}";
+        local initial_dir_name="${3}";
         local suffix="${4}";
         local extention="${5}";
         assert_not_empty "${initial_file_name}" "empty base name";
         local base_file_name=$(basename "${initial_file_name}");
-        local base_name=${base_file_name%.*};
+        local base_name="${base_file_name%.*}";
         if [[ -z "${extention}" ]] ; then
             extention="${base_file_name##*.}"
             extention="${extention,,}"
         fi;
-        notice 's1';
-
-        if [[ ! -d "${out_dir_name}" ]]; then
-            echo 'ssss'
-
+        if [[ -n "${initial_dir_name}" ]]; then
+            parent_dir_name=$(dirname "${initial_dir_name}");
+            base_dir_name=$(basename "${initial_dir_name}");
+            local out_dir_name="${parent_dir_name}/${base_dir_name}";
+            if [[ ! -d "${out_dir_name}" ]]; then
+                notice "creates directory ${out_dir_name}"
+                mkdir -p "${out_dir_name}";
+            fi;
+            base_name="${out_dir_name}/${base_name}"
         fi;
-
         out_file_name="${base_name}.${extention}"
         if [[ -n "${suffix}" ]] ; then
             out_file_name="${base_name}-${suffix}.${extention}"
@@ -352,9 +378,10 @@ configure () {
 
 parse_options (){
 
-    local OPTIONS=$(getopt -o i:o:O:c:hvqd          \
+    local OPTIONS=$(getopt -o i:o:c:O:L:hvqd        \
         --long                                      \
-            'input:,output:,output-dir:,config:,'   \
+            'input:,output:,config:,'               \
+            'output-dir:,pass-log-dir:'             \
             'help,verbose,quiet,dry-run'            \
          "$0" -- "${@}");
 
@@ -371,7 +398,6 @@ parse_options (){
                         shift 1;;
                     *)
                         INPUT_FILE_NAME=${2};
-                        readonly INPUT_FILE_NAME;
                         shift 2;;
                 esac;;
             -o|--output)
@@ -380,7 +406,6 @@ parse_options (){
                         shift 1;;
                     *)
                         OUTPUT_FILE_NAME=${2};
-                        readonly OUTPUT_FILE_NAME;
                         shift 2;;
                 esac;;
             -O|--output-dir)
@@ -389,7 +414,14 @@ parse_options (){
                         shift 1;;
                     *)
                         OUTPUT_DIR_NAME=${2};
-                        readonly OUTPUT_DIR_NAME;
+                        shift 2;;
+                esac;;
+            -L|--pass-log-dir)
+                case "${2}" in
+                    '')
+                        shift 1;;
+                    *)
+                        PASS_LOG_DIR_NAME=${2};
                         shift 2;;
                 esac;;
             -c|--config)
@@ -398,12 +430,10 @@ parse_options (){
                         shift 1;;
                     *)
                         CONFIG_FILE_NAME=${2};
-                        readonly CONFIG_FILE_NAME;
                         shift 2;;
                 esac;;
             -v|--verbose)
                 VERBOSE='true';
-                readonly VERBOSE;
                 shift;;
             -d|--dry-run)
                 DRY_RUN='true';
@@ -411,13 +441,19 @@ parse_options (){
                 shift;;
             -q|--quiet)
                 VERBOSE='false';
-                readonly VERBOSE;
                 shift;;
             '--'|'')
                 break;;
             *) wrong_usage "Unknown parameter '${1}'.";;
         esac;
     done;
+
+    readonly VERBOSE;
+    readonly CONFIG_FILE_NAME;
+    readonly OUTPUT_DIR_NAME;
+    readonly INPUT_FILE_NAME;
+    readonly OUTPUT_FILE_NAME;
+
 }
 
 handle_config() {
@@ -465,79 +501,54 @@ parse_config() {
 # Printing functions
 # ------------------------------------------------------------
 
+# All log-output into `stderr`
+readonly OUT_LOG_STREAM=2;
 
-if [ -t 2 ]; then
-    readonly COLOR_OFF='\e[0m'       # Text Reset
+# Colors works only in console.
+if [ -t ${OUT_LOG_STREAM} ]; then
+    readonly COLOR_OFF='\e[0m';      # Text Reset
 
-    # Common colors
-    readonly Black='\e[0;30m'        # Black
-    readonly Red='\e[0;31m'          # Red
-    readonly Green='\e[0;32m'        # Green
-    readonly Yellow='\e[0;33m'       # Yellow
-    readonly Blue='\e[0;34m'         # Blue
-    readonly Purple='\e[0;35m'       # Purple
-    readonly Cyan='\e[0;36m'         # Cyan
-    readonly White='\e[0;37m'        # White
+    readonly COLOR_DARK_BLACK='\e[30m';
+    readonly COLOR_DARK_RED='\e[31m';
+    readonly COLOR_DARK_GREEN='\e[32m';
+    readonly COLOR_DARK_YELLOW='\e[33m';
+    readonly COLOR_DARK_BLUE='\e[34m';
+    readonly COLOR_DARK_MAGENTA='\e[35m';
+    readonly COLOR_DARK_CYAN='\e[36m';
+    readonly COLOR_DARK_GRAY='\e[37m';
 
-    # Bold colors
-    readonly BBlack='\e[1;30m'       # Black
-    readonly BRed='\e[1;31m'         # Red
-    readonly BGreen='\e[1;32m'       # Green
-    readonly BYellow='\e[1;33m'      # Yellow
-    readonly BBlue='\e[1;34m'        # Blue
-    readonly BPurple='\e[1;35m'      # Purple
-    readonly BCyan='\e[1;36m'        # Cyan
-    readonly BWhite='\e[1;37m'       # White
+    readonly COLOR_LIGHT_BLACK='\e[90m';
+    readonly COLOR_LIGHT_RED='\e[91m';
+    readonly COLOR_LIGHT_GREEN='\e[92m';
+    readonly COLOR_LIGHT_YELLOW='\e[93m';
+    readonly COLOR_LIGHT_BLUE='\e[94m';
+    readonly COLOR_LIGHT_MAGENTA='\e[95m';
+    readonly COLOR_LIGHT_CYAN='\e[96m';
+    readonly COLOR_LIGHT_GRAY='\e[97m';
 
-    # Underlined colors
-    readonly UBlack='\e[4;30m'       # Black
-    readonly URed='\e[4;31m'         # Red
-    readonly UGreen='\e[4;32m'       # Green
-    readonly UYellow='\e[4;33m'      # Yellow
-    readonly UBlue='\e[4;34m'        # Blue
-    readonly UPurple='\e[4;35m'      # Purple
-    readonly UCyan='\e[4;36m'        # Cyan
-    readonly UWhite='\e[4;37m'       # White
+    readonly BG_COLOR_DARK_BLACK='\e[40m';
+    readonly BG_COLOR_DARK_RED='\e[41m';
+    readonly BG_COLOR_DARK_GREEN='\e[42m';
+    readonly BG_COLOR_DARK_YELLOW='\e[43m';
+    readonly BG_COLOR_DARK_BLUE='\e[44m';
+    readonly BG_COLOR_DARK_MAGENTA='\e[45m';
+    readonly BG_COLOR_DARK_CYAN='\e[46m';
+    readonly BG_COLOR_DARK_GRAY='\e[47m';
 
-    # Back colors
-    readonly On_Black='\e[40m'       # Black
-    readonly On_Red='\e[41m'         # Red
-    readonly On_Green='\e[42m'       # Green
-    readonly On_Yellow='\e[43m'      # Yellow
-    readonly On_Blue='\e[44m'        # Blue
-    readonly On_Purple='\e[45m'      # Purple
-    readonly On_Cyan='\e[46m'        # Cyan
-    readonly On_White='\e[47m'       # White
+    readonly BG_COLOR_LIGHT_BLACK='\e[100m';
+    readonly BG_COLOR_LIGHT_RED='\e[101m';
+    readonly BG_COLOR_LIGHT_GREEN='\e[102m';
+    readonly BG_COLOR_LIGHT_YELLOW='\e[103m';
+    readonly BG_COLOR_LIGHT_BLUE='\e[104m';
+    readonly BG_COLOR_LIGHT_MAGENTA='\e[105m';
+    readonly BG_COLOR_LIGHT_CYAN='\e[106m';
+    readonly BG_COLOR_LIGHT_GRAY='\e[107m';
 
-    # Intensive colors
-    readonly IBlack='\e[0;90m'       # Black
-    readonly IRed='\e[0;91m'         # Red
-    readonly IGreen='\e[0;92m'       # Green
-    readonly IYellow='\e[0;93m'      # Yellow
-    readonly IBlue='\e[0;94m'        # Blue
-    readonly IPurple='\e[0;95m'      # Purple
-    readonly ICyan='\e[0;96m'        # Cyan
-    readonly IWhite='\e[0;97m'       # White
-
-    # Bold Intensive colors
-    readonly BIBlack='\e[1;90m'      # Black
-    readonly BIRed='\e[1;91m'        # Red
-    readonly BIGreen='\e[1;92m'      # Green
-    readonly BIYellow='\e[1;93m'     # Yellow
-    readonly BIBlue='\e[1;94m'       # Blue
-    readonly BIPurple='\e[1;95m'     # Purple
-    readonly BICyan='\e[1;96m'       # Cyan
-    readonly BIWhite='\e[1;97m'      # White
-
-    # Back Bold Intensive colors
-    readonly On_IBlack='\e[0;100m'   # Black
-    readonly On_IRed='\e[0;101m'     # Red
-    readonly On_IGreen='\e[0;102m'   # Green
-    readonly On_IYellow='\e[0;103m'  # Yellow
-    readonly On_IBlue='\e[0;104m'    # Blue
-    readonly On_IPurple='\e[0;105m'  # Purple
-    readonly On_ICyan='\e[0;106m'    # Cyan
-    readonly On_IWhite='\e[0;107m'   # White
+    readonly COLOR_BOLD='\e[1m';
+    readonly COLOR_DIM='\e[2m';
+    readonly COLOR_UNDERLINED='\e[4m';
+    readonly COLOR_REVERSE='\e[7m';
+    readonly COLOR_DEL='\e[9m';
 fi;
 
 show_usage(){
@@ -547,12 +558,15 @@ show_usage(){
 
 wrong_usage(){
     usage;
-    error $'\n'"${@}"$'\n';
+    error "${@}";
     exit 3;
 }
 
 verbose() {
-    [[ "x${VERBOSE}" = "xtrue" ]] && printf "${BIGreen}#${COLOR_OFF} ${@}\n" 1>&2;
+    if [[ "x${VERBOSE}" = "xtrue" ]] ; then
+        printf "${COLOR_DARK_GREEN}#${COLOR_OFF} ${@}\n"  \
+            1>& ${OUT_LOG_STREAM};
+    fi
 }
 
 verbose_offset (){
@@ -568,7 +582,8 @@ verbose_start (){
     local delimiter=':';
     local name=$(awk -F "$delimiter" '{print $1}' <<< "$string")
     local offset=$(awk -F "$delimiter" '{print $2}' <<< "$string")
-    verbose_offset "${offset}" "${IPurple}<${name}>${COLOR_OFF}";
+    verbose_offset "${offset}"\
+    "${COLOR_LIGHT_MAGENTA}<${name}>${COLOR_OFF}";
 }
 
 verbose_end (){
@@ -576,7 +591,8 @@ verbose_end (){
     local delimiter=':';
     local name=$(awk -F "$delimiter" '{print $1}' <<< "$string")
     local offset=$(awk -F "$delimiter" '{print $2}' <<< "$string")
-    verbose_offset "${offset}" "${IPurple}</${name}>${COLOR_OFF}";
+    verbose_offset "${offset}"\
+    "${COLOR_LIGHT_MAGENTA}</${name}>${COLOR_OFF}";
 }
 
 verbose_block (){
@@ -585,53 +601,87 @@ verbose_block (){
     local offset=$(awk -F "$delimiter" '{print $2}' <<< "$string")
     local value=${@:2}
     verbose_start "${string}"
-    verbose_inside "${offset}" "${BICyan}${value}${COLOR_OFF}";
+    verbose_inside "${offset}"\
+    "${COLOR_BOLD}${COLOR_DARK_CYAN}${value}${COLOR_OFF}";
     verbose_end "${string}";
 }
 
 verbose_run (){
-    local string=$1;
-    local offset="";
+    local string="${1}";
+    local offset='';
     local delimiter=':';
-    local offset=$(awk -F "$delimiter" '{print $2}' <<< "$string")
-    local value=${@:2}
+    local offset=$(awk -F "$delimiter" '{print $2}' <<< "$string");
+    local value="${@:2}";
     verbose_start "${string}"
-    verbose_inside "${offset}" "${BIYellow}${value}${COLOR_OFF}";
+    verbose_inside "${offset}"\
+    "${COLOR_BOLD}${COLOR_LIGHT_YELLOW}${value}${COLOR_OFF}";
     if [[ "x${DRY_RUN}" = "xfalse" ]]; then
         if [[ "x${VERBOSE}" = "xtrue" ]]; then
-            eval "${value}";
-        else
-            eval "${value}" 2> /dev/null;
+            $(eval "${value}");
+        fi;
+        if [[ "x${VERBOSE}" = "xfalse" ]]; then
+            $(eval "${value}") 2> /dev/null
         fi;
     fi;
     verbose_end "${string}";
 }
 
 success () {
-    echo -e "${BIGreen}SUCCESS:${COLOR_OFF} ${0}: ${BIGreen}${@}${COLOR_OFF}" 1>&2;
+    info_print  'SUCCESS'\
+                "${NONE}"\
+                "${COLOR_DARK_GREEN}"\
+                "${COLOR_LIGHT_GREEN}"\
+                "${@}"
 }
 
 fail () {
-    echo -e "${BIRed}FAIL:${COLOR_OFF} ${0}: ${BIRed}${@}${COLOR_OFF}" 1>&2;
-}
-
-warn () {
-    echo -e "${BIYellow}WARN:${COLOR_OFF} ${0}: ${BIYellow}${@}${COLOR_OFF}" 1>&2;
+    info_print  'FAIL\t'\
+                "${NONE}"\
+                "${COLOR_DARK_RED}"\
+                "${COLOR_LIGHT_RED}"\
+                "${@}"
 }
 
 error () {
-    echo -e "${BIRed}ERROR:${COLOR_OFF} ${0}: ${BIRed}${@}${COLOR_OFF}" 1>&2;
+    info_print  'ERROR\t'\
+                "${BG_COLOR_DARK_RED}"\
+                "${COLOR_DARK_YELLOW}"\
+                "${COLOR_LIGHT_RED}"\
+                "${@}"
+}
+
+warn () {
+    info_print  'WARNING'\
+                "${BG_COLOR_LIGHT_YELLOW}"\
+                "${COLOR_DARK_RED}"\
+                "${COLOR_LIGHT_YELLOW}"\
+                "${@}"
 }
 
 notice() {
-    echo -e "${On_Blue}${BICyan} NOTICE:${COLOR_OFF} ${0}: ${BICyan}${@}${COLOR_OFF}" 1>&2;
+    info_print  'NOTICE\t'\
+                "${BG_COLOR_DARK_BLUE}"\
+                "${COLOR_DARK_CYAN}"\
+                "${COLOR_LIGHT_CYAN}"\
+                "${@}"
+}
+
+info_print() {
+    local LABEL_TEXT="${1}";
+    local MESSAGE_TEXT="${@:4}";
+    local LABLE_COLOR="${COLOR_BOLD}${2}${3}";
+    local LABEL="${LABLE_COLOR} ${LABEL_TEXT}:${COLOR_OFF}";
+    local WHERE_COLOR="${4}";
+    local WHERE="${WHERE_COLOR}${0}${COLOR_OFF}";
+    local MESSAGE_COLOR="${4}";
+    local MESSAGE="${MESSAGE_COLOR}${MESSAGE_TEXT}${COLOR_OFF}";
+    echo -e "${LABEL} ${WHERE} ${MESSAGE}" 1>& ${OUT_LOG_STREAM};
 }
 
 
 # ------------------------------------------------------------
 # Main function call.
 # ------------------------------------------------------------
-
 
 main "${@}";
 
