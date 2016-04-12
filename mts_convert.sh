@@ -14,6 +14,8 @@ readonly RANDOM_STING=$(cat /dev/urandom \
 # Time of script start for time based naming.
 readonly START_TIME=$(date "+%Y-%m-%d_%H-%M-%S-%N")
 
+readonly SCRIPT_NAME=$(basename $0);
+
 # ------------------------------------------------------------
 # Default options:
 #   They are not `readonly` because they can be
@@ -23,11 +25,11 @@ readonly START_TIME=$(date "+%Y-%m-%d_%H-%M-%S-%N")
 VERBOSE='true';
 DRY_RUN='false';
 CONFIG_FILE_NAME='';
-INPUT_FILE_NAME='';
+INPUT_FILE_NAME_LIST='';
 OUTPUT_DIR_NAME='';
 OUTPUT_FILE_NAME='';
 PASS_LOG_FILE_PREFIX=''
-PASS_LOG_DIR_NAME="/tmp/${0}/${RANDOM_STING}";
+PASS_LOG_DIR_NAME="/tmp/${SCRIPT_NAME}/${RANDOM_STING}";
 
 
 usage () {
@@ -83,13 +85,17 @@ EOF
 # ------------------------------------------------------------
 main(){
     configure "${@}"
-    assert_not_empty "${INPUT_FILE_NAME}" 'empty input file (-i)';
-    for profile in "${!PROFILE_MAP[@]}"; do
-        local abstract=$(plain_profile $profile abstract);
-        if [[ -z ${abstract} ]]; then
-            handle_profile $profile
-        fi;
-    done
+    assert_not_empty "${INPUT_FILE_NAME_LIST}" 'empty input file (-i)';
+    for input_file_name in ${INPUT_FILE_NAME_LIST} ; do
+        verbose_start "file name='${input_file_name}'";
+        for profile in "${!PROFILE_MAP[@]}"; do
+            local abstract=$(plain_profile $profile abstract);
+            if [[ -z ${abstract} ]]; then
+                handle_profile "${profile}" "${input_file_name}"
+            fi;
+        done;
+        verbose_end "file name='${input_file_name}'";
+    done;
 }
 
 # ------------------------------------------------------------
@@ -97,45 +103,57 @@ main(){
 # ------------------------------------------------------------
 
 handle_profile(){
-    local name="${1}";
-    local suffix=$(profile_default "${name,,}" "$name" 'suffix');
-    local passes=$(profile_default '1' "$name" 'passes');
-    local format=$(profile_default 'mp4' "$name" 'format');
+    local profile_name="${1}";
+    local input_file_name="${2}";
+
+    local step_name="${profile_name,,}"
+
+    local suffix=$(profile_default  \
+        "${step_name}"              \
+        "${profile_name}"           \
+        'suffix'
+    );
+
+    local passes=$(profile_default \
+        '1' "$profile_name" 'passes');
+    local format=$(profile_default \
+        'mp4' "$profile_name" 'format');
+
     local output_out_file_name=$(compute_if_empty \
         "${OUTPUT_FILE_NAME}" \
-        "${INPUT_FILE_NAME}" \
+        "${input_file_name}" \
         "${OUTPUT_DIR_NAME}"  \
         "${suffix}" \
         "${format}" );
     local pass_log_file_prefix=$(compute_if_empty \
         "${PASS_LOG_FILE_PREFIX}" \
-        "${INPUT_FILE_NAME}" \
+        "${input_file_name}" \
         "${PASS_LOG_DIR_NAME}"  \
         "${suffix}");
-    verbose_start "profile n=${name,,} s=${suffix} f=${format}";
+    verbose_start "profile name='${step_name}':%2s";
 
     local global_options="";
     global_options+=$(if_exists ' -t %s' ${FFMPEG_TIME})
     global_options+=$(if_exists ' -threads %s' ${FFMPEG_THREADS})
 
-    local video_options=$(handle_video_options "$name");
-    local audio_options=$(handle_audio_options "$name");
-    verbose_start "passes:%2s";
+    local video_options=$(handle_video_options "$profile_name");
+    local audio_options=$(handle_audio_options "$profile_name");
+    verbose_start "passes:%4s";
     for pass in $(seq 1 ${passes}); do
         local pass_options="";
         if [[ ${passes} > 1 ]]; then
             pass_options="-pass ${pass} -passlogfile  ${pass_log_file_prefix}";
         fi;
-        verbose_run "ffmpeg:%4s" ${FFMPEG_BIN} \
+        verbose_run "ffmpeg:%6s" ${FFMPEG_BIN} \
             ${global_options} \
-            -i ${INPUT_FILE_NAME} \
+            -i ${input_file_name} \
             ${video_options} \
             ${pass_options} \
             ${audio_options} \
             -f ${format} -y ${output_out_file_name};
     done
-    verbose_end "passes:%2s";
-    verbose_end "profile n=${name,,} s=${suffix} f=${format}";
+    verbose_end "passes:%4s";
+    verbose_end "profile name='${step_name}':%2s";
 }
 
 
@@ -181,7 +199,7 @@ handle_video_options(){
 
     local options="${common_options} ${codec_options}";
 
-    verbose_block "video:%2s" "${options}";
+    verbose_block "video:%4s" "${options}";
     echo ${options}
 }
 
@@ -234,7 +252,7 @@ handle_audio_options(){
     local codec_options=$(handle_audio_codec_options $name)
     local options="${common_options} ${codec_options}";
 
-    verbose_block "audio:%2s" "${options}";
+    verbose_block "audio:%4s" "${options}";
 
     echo ${options}
 }
@@ -378,14 +396,23 @@ configure () {
 
 parse_options (){
 
-    local OPTIONS=$(getopt -o i:o:c:O:L:hvqd        \
+    local OPTIONS=$(getopt \
+        -o                                          \
+            'i:o:c:O:L:hvqd'                        \
         --long                                      \
-            'input:,output:,config:,'               \
-            'output-dir:,pass-log-dir:'             \
-            'help,verbose,quiet,dry-run'            \
-         "$0" -- "${@}");
+            'input:,                                \
+            output:,                                \
+            config:,                                \
+            output-dir:,                            \
+            pass-log-dir:,                          \
+            help,                                   \
+            verbose,                                \
+            quiet,                                  \
+            dry-run'                                \
+        -n "$0"                                     \
+        -- "${@}");
 
-    #set -- ${OPTIONS};
+    eval set -- ${OPTIONS};
 
     while [[ -n ${OPTIONS} ]] ; do
         case ${1} in
@@ -397,7 +424,7 @@ parse_options (){
                     '')
                         shift 1;;
                     *)
-                        INPUT_FILE_NAME=${2};
+                        INPUT_FILE_NAME_LIST=${2};
                         shift 2;;
                 esac;;
             -o|--output)
@@ -443,6 +470,8 @@ parse_options (){
                 VERBOSE='false';
                 shift;;
             '--'|'')
+                shift 1;
+                INPUT_FILE_NAME_LIST+=" $@"
                 break;;
             *) wrong_usage "Unknown parameter '${1}'.";;
         esac;
@@ -451,7 +480,7 @@ parse_options (){
     readonly VERBOSE;
     readonly CONFIG_FILE_NAME;
     readonly OUTPUT_DIR_NAME;
-    readonly INPUT_FILE_NAME;
+    readonly INPUT_FILE_NAME_LIST;
     readonly OUTPUT_FILE_NAME;
 
 }
@@ -672,7 +701,7 @@ info_print() {
     local LABLE_COLOR="${COLOR_BOLD}${2}${3}";
     local LABEL="${LABLE_COLOR} ${LABEL_TEXT}:${COLOR_OFF}";
     local WHERE_COLOR="${4}";
-    local WHERE="${WHERE_COLOR}${0}${COLOR_OFF}";
+    local WHERE="${WHERE_COLOR}[${SCRIPT_NAME}]${COLOR_OFF}";
     local MESSAGE_COLOR="${4}";
     local MESSAGE="${MESSAGE_COLOR}${MESSAGE_TEXT}${COLOR_OFF}";
     echo -e "${LABEL} ${WHERE} ${MESSAGE}" 1>& ${OUT_LOG_STREAM};

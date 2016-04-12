@@ -17,7 +17,6 @@ profile:
                 bframes: 3
                 opts: "keyint=96:min-keyint=96:no-scenecut"
         audio:
-            volume: 4
             codec:
                 name: aac
     tvzavr_hd:
