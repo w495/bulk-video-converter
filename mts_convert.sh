@@ -12,7 +12,10 @@ readonly RANDOM_STING=$(cat /dev/urandom \
 )
 
 # Time of script start for time based naming.
-readonly START_TIME=$(date "+%Y-%m-%d_%H-%M-%S-%N")
+readonly START_TIME_STRING=$(date "+%Y-%m-%d_%H-%M-%S-%N")
+
+readonly START_TIME_NS=$(($(date +%s%N)))
+
 
 readonly SCRIPT_NAME=$(basename $0);
 
@@ -87,14 +90,15 @@ main(){
     configure "${@}"
     assert_not_empty "${INPUT_FILE_NAME_LIST}" 'empty input file (-i)';
     for input_file_name in ${INPUT_FILE_NAME_LIST} ; do
-        verbose_start "file name='${input_file_name}'";
+        assert_exists "${input_file_name}" "cannot find such file."
+        verbose_start "${input_file_name}";
         for profile in "${!PROFILE_MAP[@]}"; do
             local abstract=$(plain_profile $profile abstract);
             if [[ -z ${abstract} ]]; then
                 handle_profile "${profile}" "${input_file_name}"
             fi;
         done;
-        verbose_end "file name='${input_file_name}'";
+        verbose_end "${input_file_name}";
     done;
 }
 
@@ -119,7 +123,7 @@ handle_profile(){
     local format=$(profile_default \
         'mp4' "$profile_name" 'format');
 
-    local output_out_file_name=$(compute_if_empty \
+    local output_file_name=$(compute_if_empty \
         "${OUTPUT_FILE_NAME}" \
         "${input_file_name}" \
         "${OUTPUT_DIR_NAME}"  \
@@ -130,7 +134,7 @@ handle_profile(){
         "${input_file_name}" \
         "${PASS_LOG_DIR_NAME}"  \
         "${suffix}");
-    verbose_start "profile name='${step_name}':%2s";
+    verbose_start "profile ${step_name}:%2s";
 
     local global_options="";
     global_options+=$(if_exists ' -t %s' ${FFMPEG_TIME})
@@ -141,19 +145,23 @@ handle_profile(){
     verbose_start "passes:%4s";
     for pass in $(seq 1 ${passes}); do
         local pass_options="";
+        local output_pass_file_name="${output_file_name}";
         if [[ ${passes} > 1 ]]; then
             pass_options="-pass ${pass} -passlogfile  ${pass_log_file_prefix}";
+            if [[ ${pass} <  ${passes} ]]; then
+                output_pass_file_name="/dev/null"
+            fi;
         fi;
-        verbose_run "ffmpeg:%6s" ${FFMPEG_BIN} \
+        verbose_run "pass ${pass}:%6s" ${FFMPEG_BIN} \
             ${global_options} \
             -i ${input_file_name} \
             ${video_options} \
             ${pass_options} \
             ${audio_options} \
-            -f ${format} -y ${output_out_file_name};
+            -f ${format} -y ${output_pass_file_name};
     done
     verbose_end "passes:%4s";
-    verbose_end "profile name='${step_name}':%2s";
+    verbose_end "profile ${step_name}:%2s";
 }
 
 
@@ -198,7 +206,6 @@ handle_video_options(){
 
 
     local options="${common_options} ${codec_options}";
-
     verbose_block "video:%4s" "${options}";
     echo ${options}
 }
@@ -380,6 +387,15 @@ assert_not_empty () {
     fi;
 }
 
+assert_exists () {
+    local out_file_name="${1}";
+    local message="${2}";
+    if [[ ! -f "${out_file_name}" ]] ; then
+        wrong_usage "${message}";
+    fi;
+}
+
+
 # ------------------------------------------------------------
 # Config functions
 # ------------------------------------------------------------
@@ -533,6 +549,8 @@ parse_config() {
 # All log-output into `stderr`
 readonly OUT_LOG_STREAM=2;
 
+LOG_OFFSET=''
+
 # Colors works only in console.
 if [ -t ${OUT_LOG_STREAM} ]; then
     readonly COLOR_OFF='\e[0m';      # Text Reset
@@ -593,12 +611,13 @@ wrong_usage(){
 
 verbose() {
     if [[ "x${VERBOSE}" = "xtrue" ]] ; then
-        printf "${COLOR_DARK_GREEN}#${COLOR_OFF} ${@}\n"  \
+        printf "${@}\n"  \
             1>& ${OUT_LOG_STREAM};
     fi
 }
 
 verbose_offset (){
+    LOG_OFFSET="${1}";
     verbose "${1}${2}";
 }
 
@@ -612,7 +631,7 @@ verbose_start (){
     local name=$(awk -F "$delimiter" '{print $1}' <<< "$string")
     local offset=$(awk -F "$delimiter" '{print $2}' <<< "$string")
     verbose_offset "${offset}"\
-    "${COLOR_LIGHT_MAGENTA}<${name}>${COLOR_OFF}";
+    "${COLOR_LIGHT_MAGENTA}${name}:${COLOR_OFF}";
 }
 
 verbose_end (){
@@ -621,7 +640,7 @@ verbose_end (){
     local name=$(awk -F "$delimiter" '{print $1}' <<< "$string")
     local offset=$(awk -F "$delimiter" '{print $2}' <<< "$string")
     verbose_offset "${offset}"\
-    "${COLOR_LIGHT_MAGENTA}</${name}>${COLOR_OFF}";
+    "${COLOR_DARK_GREEN}# ${name} done${COLOR_OFF}";
 }
 
 verbose_block (){
@@ -655,6 +674,7 @@ verbose_run (){
     verbose_end "${string}";
 }
 
+
 success () {
     info_print  'SUCCESS'\
                 "${NONE}"\
@@ -664,7 +684,7 @@ success () {
 }
 
 fail () {
-    info_print  'FAIL\t'\
+    info_print  'FAIL'\
                 "${NONE}"\
                 "${COLOR_DARK_RED}"\
                 "${COLOR_LIGHT_RED}"\
@@ -672,7 +692,7 @@ fail () {
 }
 
 error () {
-    info_print  'ERROR\t'\
+    info_print  'ERROR'\
                 "${BG_COLOR_DARK_RED}"\
                 "${COLOR_DARK_YELLOW}"\
                 "${COLOR_LIGHT_RED}"\
@@ -688,24 +708,32 @@ warn () {
 }
 
 notice() {
-    info_print  'NOTICE\t'\
+    local NS=$(($(date +%s%N)-${START_TIME_NS}))
+    local MS=$((${NS}/1000000))
+    info_print  "NOTICE ${MS}"\
                 "${BG_COLOR_DARK_BLUE}"\
                 "${COLOR_DARK_CYAN}"\
                 "${COLOR_LIGHT_CYAN}"\
                 "${@}"
 }
 
+
 info_print() {
+
+
     local LABEL_TEXT="${1}";
     local MESSAGE_TEXT="${@:4}";
     local LABLE_COLOR="${COLOR_BOLD}${2}${3}";
-    local LABEL="${LABLE_COLOR} ${LABEL_TEXT}:${COLOR_OFF}";
+    local LABEL="${LABLE_COLOR}# ${LABEL_TEXT}:${COLOR_OFF}";
     local WHERE_COLOR="${4}";
-    local WHERE="${WHERE_COLOR}[${SCRIPT_NAME}]${COLOR_OFF}";
+    local WHERE="${WHERE_COLOR} ${SCRIPT_NAME}${COLOR_OFF}";
     local MESSAGE_COLOR="${4}";
     local MESSAGE="${MESSAGE_COLOR}${MESSAGE_TEXT}${COLOR_OFF}";
-    echo -e "${LABEL} ${WHERE} ${MESSAGE}" 1>& ${OUT_LOG_STREAM};
+    printf "${LOG_OFFSET}${LABEL} ${WHERE}${MESSAGE}\n" \
+        1>& ${OUT_LOG_STREAM};
+
 }
+
 
 
 # ------------------------------------------------------------
@@ -713,6 +741,7 @@ info_print() {
 # ------------------------------------------------------------
 
 main "${@}";
+
 
 #
 # ffmpeg -i inputfile.avi
