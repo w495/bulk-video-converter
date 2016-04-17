@@ -157,14 +157,10 @@ handle_profile(){
     parallel_bin+=$(if_exists '-j %s' ${PARALLEL_MAX_PROCS});
 
 
-    local global_options="";
-    global_options+=$(if_exists ' -ss %s' ${FFMPEG_START});
-    global_options+=$(if_exists ' -t %s' ${FFMPEG_DURATION});
-    global_options+=$(if_exists ' -threads %s' ${FFMPEG_THREADS});
-    if [[ $(is_display ${input_file_name}) ]]; then
-        global_options+='-f x11grab -s wxga '
-    fi;
-
+    local global_options=$(handle_global_options    \
+        "${profile_name}"                           \
+        "${input_file_name}"                        \
+    );
 
     local video_options=$(handle_video_options  \
         "${profile_name}"                       \
@@ -199,7 +195,25 @@ handle_profile(){
     verbose_end "profile ${step_name}@%2s";
 }
 
+# ------------------------------------------------------------
+# Global enconding functions
+# ------------------------------------------------------------
 
+handle_global_options(){
+    local profile_name="${1}";
+    local input_file_name="${2}";
+
+    local options="";
+    options+=$(if_exists ' -ss %s' ${FFMPEG_START});
+    options+=$(if_exists ' -t %s' ${FFMPEG_DURATION});
+    options+=$(if_exists ' -threads %s' ${FFMPEG_THREADS});
+    if [[ $(is_display ${input_file_name}) ]]; then
+        options+='-f x11grab -s wxga '
+    fi;
+
+    verbose_block "global@%4s" "${options}";
+    echo ${options};
+}
 
 # ------------------------------------------------------------
 # Video functions
@@ -225,17 +239,18 @@ handle_video_options(){
     #     -profile:v high
 
 
-    local name=$1;
+    local profile_name="${1}";
+    local input_file_name="${2}";
 
-    local codec_options=$(handle_video_codec_options $name);
+    local codec_options=$(handle_video_codec_options $profile_name);
 
-    local preset="$(profile $name video preset)";
-    local bitrate="$(profile $name video bitrate)";
-    local bufsize="$(profile $name video bufsize)";
-    local maxrate="$(profile $name video maxrate)";
+    local preset="$(profile $profile_name video preset)";
+    local bitrate="$(profile $profile_name video bitrate)";
+    local bufsize="$(profile $profile_name video bufsize)";
+    local maxrate="$(profile $profile_name video maxrate)";
 
-    local width="$(profile $name video width)";
-    local height="$(profile $name video height)";
+    local width="$(profile $profile_name video width)";
+    local height="$(profile $profile_name video height)";
 
     local common_options=""
 
@@ -302,15 +317,18 @@ handle_video_h264_options(){
 # ------------------------------------------------------------
 
 handle_audio_options(){
-    local name=$1;
-    local bitrate="$(profile $name audio bitrate)";
-    local volume="$(profile $name audio volume)";
+    local profile_name="${1}";
+    local input_file_name="${2}";
+
+
+    local bitrate="$(profile $profile_name audio bitrate)";
+    local volume="$(profile $profile_name audio volume)";
     local common_options="";
 
     common_options+=$(if_exists '-b:a %s' $bitrate)
     common_options+=$(if_exists '-af "volume=%s"' ${volume})
 
-    local codec_options=$(handle_audio_codec_options $name)
+    local codec_options=$(handle_audio_codec_options $profile_name)
     local options="${common_options} ${codec_options}";
 
     verbose_block "audio@%4s" "${options}";

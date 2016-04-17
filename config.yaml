@@ -7,37 +7,6 @@ parallel:
     bin: /usr/bin/sem
     max_procs: 4
 
-profile:
-    screen_hd:
-        video:
-            width: 1280
-            height:  720
-            bitrate: 2000k
-            preset: veryfast
-            codec:
-                level: 3.1
-                name : h264
-                profile: high444
-                weightp: 2
-                bframes: 3
-                opts: "keyint=96:min-keyint=96:no-scenecut"
-        audio:
-            channels: 5.1
-            bitrate: 320k
-            codec:
-                name: aac
-    screen_lw:
-        # Other options are inherited from `screen_hd`
-        extends: screen_hd
-        video:
-            width: 480
-            height:  270
-            bitrate: 250k
-            codec:
-                level: 3.0
-        audio:
-            channels: mono
-            bitrate: 64k
 
 
 _profile:
@@ -66,6 +35,38 @@ _profile:
             bitrate: 250k
             codec:
                 profile: baseline
+                level: 3.0
+        audio:
+            channels: mono
+            bitrate: 64k
+
+_profile_for_screen:
+    screen_hd:
+        video:
+            width: 1280
+            height:  720
+            bitrate: 2000k
+            preset: veryfast
+            codec:
+                level: 3.1
+                name : h264
+                profile: high444
+                weightp: 2
+                bframes: 3
+                opts: "keyint=96:min-keyint=96:no-scenecut"
+        audio:
+            channels: 5.1
+            bitrate: 320k
+            codec:
+                name: aac
+    screen_lw:
+        # Other options are inherited from `screen_hd`
+        extends: screen_hd
+        video:
+            width: 480
+            height:  270
+            bitrate: 250k
+            codec:
                 level: 3.0
         audio:
             channels: mono
