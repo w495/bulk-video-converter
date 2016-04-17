@@ -1,12 +1,52 @@
 ffmpeg:
     bin: /usr/bin/ffmpeg
     threads: 0
+    start: 00:00:05
+    duration: 00:00:10
+parallel:
+    bin: /usr/bin/sem
+    max_procs: 4
+
 profile:
+    screen_hd:
+        video:
+            width: 1280
+            height:  720
+            bitrate: 2000k
+            preset: veryfast
+            codec:
+                level: 3.1
+                name : h264
+                profile: high444
+                weightp: 2
+                bframes: 3
+                opts: "keyint=96:min-keyint=96:no-scenecut"
+        audio:
+            channels: 5.1
+            bitrate: 320k
+            codec:
+                name: aac
+    screen_lw:
+        # Other options are inherited from `screen_hd`
+        extends: screen_hd
+        video:
+            width: 480
+            height:  270
+            bitrate: 250k
+            codec:
+                level: 3.0
+        audio:
+            channels: mono
+            bitrate: 64k
+
+
+_profile:
     tvzavr:
         # you can mark profile as abstract
         # and it will be used only for inheritance.
         abstract: 1
-        passes: 2
+        passes: 1
+        input_format: x11grab
         video:
             preset: veryfast
             codec:
@@ -17,7 +57,36 @@ profile:
         audio:
             codec:
                 name: aac
-    tvzavr_1hd:
+    tvzavr_lw:
+        # Other options are inherited from `tvzavr_base`
+        extends: tvzavr
+        video:
+            width: 480
+            height:  270
+            bitrate: 250k
+            codec:
+                profile: baseline
+                level: 3.0
+        audio:
+            channels: mono
+            bitrate: 64k
+__profile:
+    tvzavr:
+        # you can mark profile as abstract
+        # and it will be used only for inheritance.
+        abstract: 1
+        passes: 1
+        video:
+            preset: veryfast
+            codec:
+                name : h264
+                weightp: 2
+                bframes: 3
+                opts: "keyint=96:min-keyint=96:no-scenecut"
+        audio:
+            codec:
+                name: aac
+    tvzavr_hd:
         # Other options are inherited from `tvzavr_base`
         extends: tvzavr
         video:

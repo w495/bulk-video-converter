@@ -100,7 +100,7 @@ main(){
     for input_file_name in ${INPUT_FILE_NAME_LIST} ; do
         assert_exists \
             "${input_file_name}"    \
-            "cannot find such file: ${input_file_name}."
+            "cannot find such file: ${input_file_name}. '$output_format'"
         verbose_start "${input_file_name}";
         for profile in "${!PROFILE_MAP[@]}"; do
             local abstract=$(plain_profile $profile abstract);
@@ -130,29 +130,51 @@ handle_profile(){
 
     local passes=$(profile_default \
         '1' "$profile_name" 'passes');
-    local format=$(profile_default \
-        'mp4' "$profile_name" 'format');
+
+    local output_format=$(profile_default \
+        'mp4' "$profile_name" 'output_format');
+
+    local extention=$(profile_default \
+        "$output_format" "$profile_name" 'extention');
 
     local output_file_name=$(compute_if_empty \
         "${OUTPUT_FILE_NAME}" \
         "${input_file_name}" \
         "${OUTPUT_DIR_NAME}"  \
         "${suffix}" \
-        "${format}" );
+        "${extention}" );
+
     local pass_log_file_prefix=$(compute_if_empty \
         "${PASS_LOG_FILE_PREFIX}" \
         "${input_file_name}" \
         "${PASS_LOG_DIR_NAME}"  \
         "${suffix}");
-    verbose_start "profile ${step_name}:%2s";
+
+    verbose_start "profile ${step_name}@%2s";
+
+    local parallel_bin='';
+    parallel_bin+=$(if_exists '%s --no-notice' ${PARALLEL_BIN});
+    parallel_bin+=$(if_exists '-j %s' ${PARALLEL_MAX_PROCS});
+
 
     local global_options="";
-    global_options+=$(if_exists ' -t %s' ${FFMPEG_TIME})
-    global_options+=$(if_exists ' -threads %s' ${FFMPEG_THREADS})
+    global_options+=$(if_exists ' -ss %s' ${FFMPEG_START});
+    global_options+=$(if_exists ' -t %s' ${FFMPEG_DURATION});
+    global_options+=$(if_exists ' -threads %s' ${FFMPEG_THREADS});
+    if [[ $(is_display ${input_file_name}) ]]; then
+        global_options+='-f x11grab -s wxga '
+    fi;
 
-    local video_options=$(handle_video_options "$profile_name");
-    local audio_options=$(handle_audio_options "$profile_name");
-    verbose_start "passes:%4s";
+
+    local video_options=$(handle_video_options  \
+        "${profile_name}"                       \
+        "${input_file_name}"                    \
+    );
+    local audio_options=$(handle_audio_options  \
+        "${profile_name}"                       \
+        "${input_file_name}"                    \
+    );
+    verbose_start "passes@%4s";
     for pass in $(seq 1 ${passes}); do
         local pass_options="";
         local output_pass_file_name="${output_file_name}";
@@ -162,17 +184,21 @@ handle_profile(){
                 output_pass_file_name="/dev/null"
             fi;
         fi;
-        verbose_run "pass ${pass}:%6s" ${FFMPEG_BIN} \
+        verbose_run "pass ${pass}@%6s"  "${parallel_bin}" \
+            ${FFMPEG_BIN} \
             ${global_options} \
             -i ${input_file_name} \
             ${video_options} \
             ${pass_options} \
             ${audio_options} \
-            -f ${format} -y ${output_pass_file_name};
+            -f ${output_format} -y ${output_pass_file_name} ';'
+
+
     done
-    verbose_end "passes:%4s";
-    verbose_end "profile ${step_name}:%2s";
+    verbose_end "passes@%4s";
+    verbose_end "profile ${step_name}@%2s";
 }
+
 
 
 # ------------------------------------------------------------
@@ -221,7 +247,7 @@ handle_video_options(){
 
 
     local options="${common_options} ${codec_options}";
-    verbose_block "video:%4s" "${options}";
+    verbose_block "video@%4s" "${options}";
     echo ${options}
 }
 
@@ -268,8 +294,6 @@ handle_video_h264_options(){
 
 
 
-    weightp
-
     echo "${codec_options}"
 }
 
@@ -289,7 +313,7 @@ handle_audio_options(){
     local codec_options=$(handle_audio_codec_options $name)
     local options="${common_options} ${codec_options}";
 
-    verbose_block "audio:%4s" "${options}";
+    verbose_block "audio@%4s" "${options}";
 
     echo ${options}
 }
@@ -315,15 +339,15 @@ handle_audio_codec_options(){
 # ------------------------------------------------------------
 
 profile_if_exists() {
-    local format="${1}";
+    local output_format="${1}";
     local value=$(profile ${@:2});
     if [[ -n "${value}" && "${value}" != "null" ]] ; then
-        printf " ${format} " "${value}";
+        printf " ${output_format} " "${value}";
     fi;
 }
 
 if_exists() {
-    local format="${1}";
+    local output_format="${1}";
     local value="${@:2}";
     for var in "${@:2}" ;do
         if [[ -z "${var}" || "${var}" == "null" ]] ; then
@@ -331,7 +355,7 @@ if_exists() {
         fi;
     done
     if [[ -n "${value}" && "${value}" != "null" ]] ; then
-        printf " ${format} " ${value};
+        printf " ${output_format} " ${value};
     fi;
 }
 
@@ -379,6 +403,13 @@ compute_if_empty (){
     local out_file_name="${1}";
     if [[ -z "${out_file_name}" ]] ; then
         local initial_file_name="${2}";
+        if [[ $(is_display ${initial_file_name}) ]]; then
+            initial_file_name=$(echo $initial_file_name \
+                | sed 's/[.]/-/g' | sed 's/[:]//g');
+            initial_file_name="display-${initial_file_name}"
+            initial_file_name+="-${START_TIME_STRING}"
+
+        fi;
         local initial_dir_name="${3}";
         local suffix="${4}";
         local extention="${5}";
@@ -418,14 +449,27 @@ assert_not_empty () {
 }
 
 assert_exists () {
-    local out_file_name="${1}";
+    local file_name="${1}";
     local message="${2}";
-    if [[ ! -f "${out_file_name}" ]] ; then
-        wrong_usage "${message}";
+
+    if [[ $(is_display ${file_name}) ]]; then
+        warn "uses display '${file_name}' as a file name"
+    else
+        if [[ ! -f "${file_name}" ]] ; then
+            wrong_usage "${message}";
+        fi;
     fi;
 }
 
 
+is_display () {
+    local file_name="${1}";
+    if [[ ${file_name:0:1} == ":" ]]; then
+        echo 'true'
+    else
+        echo ''
+    fi;
+}
 # ------------------------------------------------------------
 # Config functions
 # ------------------------------------------------------------
@@ -660,7 +704,7 @@ verbose_inside (){
 
 verbose_start (){
     local string=$1;
-    local delimiter=':';
+    local delimiter='@';
     local name=$(awk -F "$delimiter" '{print $1}' <<< "$string")
     local offset=$(awk -F "$delimiter" '{print $2}' <<< "$string")
     verbose_offset "${offset}"\
@@ -669,7 +713,7 @@ verbose_start (){
 
 verbose_end (){
     local string=$1;
-    local delimiter=':';
+    local delimiter='@';
     local name=$(awk -F "$delimiter" '{print $1}' <<< "$string")
     local offset=$(awk -F "$delimiter" '{print $2}' <<< "$string")
     verbose_offset "${offset}"\
@@ -678,7 +722,7 @@ verbose_end (){
 
 verbose_block (){
     local string=$1;
-    local delimiter=':';
+    local delimiter='@';
     local offset=$(awk -F "$delimiter" '{print $2}' <<< "$string")
     local value=${@:2}
     verbose_start "${string}"
@@ -689,19 +733,26 @@ verbose_block (){
 
 verbose_run (){
     local string="${1}";
+    local executor="${2}";
+
+    if [[ -z "${executor}" ]]; then
+        executor='eval';
+    fi;
+
     local offset='';
-    local delimiter=':';
+    local delimiter='@';
     local offset=$(awk -F "$delimiter" '{print $2}' <<< "$string");
-    local value="${@:2}";
+    local value="${@:3}";
+    local COLOR_ON="${COLOR_BOLD}${COLOR_LIGHT_YELLOW}"
     verbose_start "${string}"
     verbose_inside "${offset}"\
-    "${COLOR_BOLD}${COLOR_LIGHT_YELLOW}${value}${COLOR_OFF}";
+    "${COLOR_ON}${executor} ${value}${COLOR_OFF}";
     if [[ "x${DRY_RUN}" = "xfalse" ]]; then
         if [[ "x${VERBOSE}" = "xtrue" ]]; then
-            $(eval "${value}");
+            ${executor} "${value}";
         fi;
         if [[ "x${VERBOSE}" = "xfalse" ]]; then
-            $(eval "${value}") 2> /dev/null
+            ${executor} "${value}" 2> /dev/null
         fi;
     fi;
     verbose_end "${string}";
