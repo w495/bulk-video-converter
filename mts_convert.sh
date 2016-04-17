@@ -31,63 +31,138 @@ CONFIG_FILE_NAME='';
 INPUT_FILE_NAME_LIST='';
 OUTPUT_DIR_NAME='';
 OUTPUT_FILE_NAME='';
+
+FFMPEG_LOG_DIR_BASE_NAME="/var/log/${SCRIPT_NAME}"
+FFMPEG_LOG_DIR_NAME="${FFMPEG_LOG_DIR_BASE_NAME}/${START_TIME_STRING}"
+
 PASS_LOG_FILE_PREFIX=''
-PASS_LOG_DIR_NAME="/tmp/${SCRIPT_NAME}/${RANDOM_STING}";
+
+
+PASS_LOG_DIR_BASE_NAME="/tmp/${SCRIPT_NAME}"
+PASS_LOG_DIR_NAME="${PASS_LOG_DIR_BASE_NAME}/${RANDOM_STING}";
 
 
 usage () {
+    local C0="${COLOR_OFF}"
+    local IC="${COLOR_BOLD}${COLOR_LIGHT_CYAN}"
 
-    local title="${COLOR_BOLD}${SCRIPT_NAME}${COLOR_OFF}";
+    local AC="${COLOR_UNDERLINED}${COLOR_LIGHT_GREEN}"
+    local EC="${COLOR_DARK_YELLOW}"
+    local ETC="${COLOR_LIGHT_YELLOW}"
+
+    local MC="${COLOR_UNDERLINED}"
+    local FC="${COLOR_UNDERLINED}"
+    local WC="${COLOR_DARK_YELLOW}"
+    local WTC="${COLOR_LIGHT_YELLOW}"
+
+    local title="${COLOR_BOLD}${SCRIPT_NAME}${C0}";
     echo -e "
 ${title} — simple bulk configurable ffmpeg-based video converter.
+It uses YAML configuration for generating several output files from
+one (or more) input video file. Each output file is created according
+to «profile» subsection in YAML configuration. See profile example
+in the ${FC}'default_config'${C0} function in this script.
 
-${COLOR_BOLD}Usage:${COLOR_OFF}
+The main purpose of this tool to create several videos of different
+quality and size from one source. It is very helpful for handling raw
+videos from amateur filming camera.
+
+${COLOR_REVERSE} Usage:${C0}
     ${SCRIPT_NAME} [options] [filenames]
 
-${COLOR_BOLD}Options:${COLOR_OFF}
-    -h, --help          shows this test.
-    -i, --input         name of input video file
-                        It supports mask.
-    -o, --output        prefix of output video file.
-    -O, --output-dir    output folder.
-    -L, --pass-log-dir  passlog folder.
-    -c, --config        yaml-config file.
-    -v, --verbose       uses verbose mode.
-                        It tells about really actions.
-    -q, --quiet         uses quiet mode.
-                        It disables quiet verbose mode.
-    -d, --dry-run       uses dry-run mode.
-                        It do not run anything.
-
-    ";
+${COLOR_REVERSE} Options:${C0}
+    ${IC}-i, --input${C0} ${AC}<filename.mp4|:0.0>${C0}
+        name of input video file of display. It supports mask for
+        filenames. ${ETC}Examples:${C0}
+            ${EC}${SCRIPT_NAME} -i ./video.mts${C0}
+            ${EC}${SCRIPT_NAME} -i ./part1.mp4 ./part2.mp4${C0}
+            ${EC}${SCRIPT_NAME} -i ~/Videos/*.mp4${C0}
+            ${EC}${SCRIPT_NAME} -i :0.0${C0}
+        Also you can set input files names without '-i' option:
+            ${EC}${SCRIPT_NAME} ./video.mts${C0}
+            ${EC}${SCRIPT_NAME} ./part1.mp4 ./part2.mp4${C0}
+            ${EC}${SCRIPT_NAME} ~/Videos/*.mp4${C0}
+            ${EC}${SCRIPT_NAME} :0.0${C0}
+    ${IC}-c, --config${C0}  ${AC}<filename.yaml>${C0}
+        set yaml-config file for engoding profile. See examples in
+        the  ${FC}'default_config'${C0} function in this script.
+        ${ETC}Example:${C0}
+            ${EC}${SCRIPT_NAME} ./video.mts -c ./config.yaml${C0}
+    ${IC}-O, --output-dir${C0} ${AC}<dir name>${C0}
+        folder for output files. If not set it uses current folder to
+         save. ${ETC}Examples:${C0}
+            ${EC}${SCRIPT_NAME} ./video.mts -O ./out/ ${C0}
+    ${IC}-v, --verbose${C0}
+        uses verbose mode. It prints detailed report about ffmpeg
+        options and parametrs in YAML format.
+    ${IC}-q, --quiet${C0}
+        uses quiet mode. It disables «verbose» mode.
+    ${IC}-d, --dry-run${C0}
+        uses dry-run mode. It do not run anything, but is extremely
+        helpful. Several real ffmpeg launches on a real data can be
+        very time-consuming. You can use this option with a verbose
+        mode to check what will happen on a full launch.
+    ${IC}-F, --ffmpeg-log-dir${C0} ${AC}<dir name>${C0}
+        folder for ffmpeg logs.
+        default is ${FC}'${FFMPEG_LOG_DIR_BASE_NAME}'${C0}.
+    ${IC}-h, --help${C0}
+        shows this text.
+    ${IC}-P, --pass-log-dir${C0} ${AC}<dir name>${C0}
+        passlog folder. It uses only for several ffmpeg passes.
+        If not set it uses is ${FC}'${PASS_LOG_DIR_BASE_NAME}'${C0}.
+        ${WTC}WARNING:${C0}
+          ${WC}There is no reason to set it in a common situation.${C0}
+    ${IC}-o, --output${C0} ${AC}<filename.mp4>${C0}
+        name of output video file.
+        ${WTC}WARNING:${C0}
+          ${WC}There is no reason to set it in a common situation.${C0}
+${COLOR_REVERSE} Authors:${C0}
+    Ilya w495 Nikitin.
+    Report bugs to:
+        ${MC}w@w-495.ru${C0}
+        ${MC}w-495@yandex.ru${C0}
+    " 1>& ${OUT_LOG_STREAM};
 }
-
 
 default_config() {
     handle_config <<EOF
 ffmpeg:
-    bin: /usr/bin/ffmpeg
-    threads: 0
-    time: 10
+  bin: /usr/bin/ffmpeg
+  threads: 0
+  start: 00:00:05
+  duration: 00:00:10
+parallel:
+  bin: /usr/bin/sem
+  max_procs: 4
 profile:
-    default:
-        suffix: hd1
-        video:
-            width: 1280
-            height:  720
-            bitrate: 2000k
-            preset: veryslow
-            pass1:
-                params: -weightp 2 -bf 3
-            h264:
-                profile: main
-                level: 3.1
-        audio:
-            channels: 5.1
-            bitrate: 320k
-            volume: 4
-            aac:
-                profile: aac_he
+  base:
+    # you can mark profile as abstract
+    # and it will be used only for inheritance.
+    abstract: 1
+    passes: 2
+    video:
+      preset: veryfast
+      codec:
+        name : h264
+        weightp: 2
+        bframes: 3
+        opts: "keyint=96:min-keyint=96:no-scenecut"
+    audio:
+      codec:
+        name: aac
+  default:
+    # Other options are inherited from base
+    extends: base
+    video:
+      width: 480
+      height:  270
+      bitrate: 250k
+      codec:
+        profile: baseline
+        level: 3.0
+    audio:
+      channels: 1
+      bitrate: 64k
 EOF
 }
 
@@ -98,18 +173,24 @@ main(){
     configure "${@}"
     assert_not_empty "${INPUT_FILE_NAME_LIST}" 'empty input file list';
     for input_file_name in ${INPUT_FILE_NAME_LIST} ; do
-        assert_exists \
-            "${input_file_name}"    \
-            "cannot find such file: ${input_file_name}. '$output_format'"
-        verbose_start "${input_file_name}";
-        for profile in "${!PROFILE_MAP[@]}"; do
-            local abstract=$(plain_profile $profile abstract);
-            if [[ -z ${abstract} ]]; then
-                handle_profile "${profile}" "${input_file_name}"
-            fi;
-        done;
-        verbose_end "${input_file_name}";
+        (
+            assert_exists \
+                "${input_file_name}"    \
+                "no such file: ${input_file_name}. '$output_format'";
+            verbose_start "${input_file_name}";
+            for profile in "${!PROFILE_MAP[@]}"; do
+                (
+                    local abstract=$(plain_profile $profile abstract);
+                    if [[ -z ${abstract} ]]; then
+                        handle_profile "${profile}" "${input_file_name}"
+                    fi
+                ) &
+            done;
+            wait;
+            verbose_end "${input_file_name}";
+        ) &
     done;
+    wait;
 }
 
 # ------------------------------------------------------------
@@ -121,6 +202,8 @@ handle_profile(){
     local input_file_name="${2}";
 
     local step_name="${profile_name,,}"
+
+    verbose_start "profile ${step_name}@%2s";
 
     local suffix=$(profile_default  \
         "${step_name}"              \
@@ -150,8 +233,6 @@ handle_profile(){
         "${PASS_LOG_DIR_NAME}"  \
         "${suffix}");
 
-    verbose_start "profile ${step_name}@%2s";
-
     local parallel_bin='';
     parallel_bin+=$(if_exists '%s --no-notice' ${PARALLEL_BIN});
     parallel_bin+=$(if_exists '-j %s' ${PARALLEL_MAX_PROCS});
@@ -180,6 +261,13 @@ handle_profile(){
                 output_pass_file_name="/dev/null"
             fi;
         fi;
+        local log_file_name=$(compute_if_empty \
+            "${OUTPUT_FILE_NAME}" \
+            "${input_file_name}" \
+            "${FFMPEG_LOG_DIR_NAME}"  \
+            "${suffix}-${pass}-${extention}" \
+            "ffmpeg.log" );
+
         verbose_run "pass ${pass}@%6s"  "${parallel_bin}" \
             ${FFMPEG_BIN} \
             ${global_options} \
@@ -187,12 +275,15 @@ handle_profile(){
             ${video_options} \
             ${pass_options} \
             ${audio_options} \
-            -f ${output_format} -y ${output_pass_file_name} ';'
-
-
+            -f ${output_format} -y ${output_pass_file_name} \
+            "2> ${log_file_name} ;"
     done
     verbose_end "passes@%4s";
+
+
     verbose_end "profile ${step_name}@%2s";
+
+    clean_up  "${profile_name}" "${input_file_name}";
 }
 
 # ------------------------------------------------------------
@@ -248,6 +339,8 @@ handle_video_options(){
     local bitrate="$(profile $profile_name video bitrate)";
     local bufsize="$(profile $profile_name video bufsize)";
     local maxrate="$(profile $profile_name video maxrate)";
+    local minrate="$(profile $profile_name video minrate)";
+
 
     local width="$(profile $profile_name video width)";
     local height="$(profile $profile_name video height)";
@@ -256,7 +349,9 @@ handle_video_options(){
 
     common_options+=$(if_exists '-preset %s' $preset)
     common_options+=$(if_exists '-maxrate %s' $maxrate)
+    common_options+=$(if_exists '-minrate %s' $minrate)
     common_options+=$(if_exists '-bufsize %s' $bufsize)
+
 
     common_options+=$(if_exists '-vf "scale=%s:%s"' $width $height)
 
@@ -323,10 +418,21 @@ handle_audio_options(){
 
     local bitrate="$(profile $profile_name audio bitrate)";
     local volume="$(profile $profile_name audio volume)";
+    local channels="$(profile $profile_name audio channels)";
+
+    local filter_options=$(handle_audio_filter_options \
+       "${profile_name}"    \
+       "${input_file_name}" \
+    );
+
+
+
     local common_options="";
 
     common_options+=$(if_exists '-b:a %s' $bitrate)
-    common_options+=$(if_exists '-af "volume=%s"' ${volume})
+    common_options+=$(if_exists '-ac %s' $channels)
+
+    common_options+=$(if_exists '-filter:a "%s"' ${filter_options} )
 
     local codec_options=$(handle_audio_codec_options $profile_name)
     local options="${common_options} ${codec_options}";
@@ -337,6 +443,19 @@ handle_audio_options(){
 }
 
 
+handle_audio_filter_options(){
+    local profile_name="${1}";
+    local input_file_name="${2}";
+
+    local volume="$(profile $profile_name audio volume)";
+
+
+    local filter_options='';
+
+    filter_options+=$(if_exists 'volume=%s' $volume)
+
+    echo "${filter_options}"
+}
 handle_audio_codec_options(){
     local name=$1;
 
@@ -443,7 +562,7 @@ compute_if_empty (){
             base_dir_name=$(basename "${initial_dir_name}");
             local out_dir_name="${parent_dir_name}/${base_dir_name}";
             if [[ ! -d "${out_dir_name}" ]]; then
-                notice "creates directory ${out_dir_name}"
+                #notice "creates directory ${out_dir_name}"
                 mkdir -p "${out_dir_name}";
             fi;
             base_name="${out_dir_name}/${base_name}"
@@ -452,10 +571,19 @@ compute_if_empty (){
         if [[ -n "${suffix}" ]] ; then
             out_file_name="${base_name}-${suffix}.${extention}"
         fi;
-
-
     fi;
     echo "${out_file_name}";
+}
+
+clean_up (){
+    local profile_name="${1}";
+    local input_file_name="${2}";
+
+    if [[ -d "${PASS_LOG_DIR_NAME}" ]] ; then
+        #notice "deletes directory ${PASS_LOG_DIR_NAME}"
+        rm -rf "${PASS_LOG_DIR_NAME}";
+    fi;
+
 }
 
 assert_not_empty () {
@@ -506,13 +634,14 @@ parse_options (){
 
     local OPTIONS=$(getopt \
         -o                                          \
-            'i:o:c:O:L:hvqd'                        \
+            'i:o:c:O:P:F:hvqd'                        \
         --long                                      \
             'input:,                                \
             output:,                                \
             config:,                                \
             output-dir:,                            \
             pass-log-dir:,                          \
+            ffmpeg-log-dir:,                        \
             help,                                   \
             verbose,                                \
             quiet,                                  \
@@ -553,12 +682,20 @@ parse_options (){
                         OUTPUT_DIR_NAME=${2};
                         shift 2;;
                 esac;;
-            -L|--pass-log-dir)
+            -P|--pass-log-dir)
                 case "${2}" in
                     '')
                         shift 1;;
                     *)
                         PASS_LOG_DIR_NAME=${2};
+                        shift 2;;
+                esac;;
+            -F|--ffmpeg-log-dir)
+                case "${2}" in
+                    '')
+                        shift 1;;
+                    *)
+                        FFMPEG_LOG_DIR_NAME=${2};
                         shift 2;;
                 esac;;
             -c|--config)
@@ -592,6 +729,9 @@ parse_options (){
     readonly OUTPUT_DIR_NAME;
     readonly INPUT_FILE_NAME_LIST;
     readonly OUTPUT_FILE_NAME;
+    readonly FFMPEG_LOG_DIR_NAME;
+    readonly PASS_LOG_DIR_NAME;
+
 
 
 }
@@ -599,19 +739,27 @@ parse_options (){
 handle_config() {
     local config="$@";
     local res=$(parse_config $config);
-    # [[ "x${VERBOSE}" = "xtrue" ]] && echo -e $res | sed 's/; /;\n/gi';
+    #[[ "x${VERBOSE}" = "xtrue" ]] && echo -e $res | sed 's/; /;\n/gi';
     eval "${res}";
 }
 
 parse_config() {
     local prefix="$2";
-    local s='[[:space:]]*' w='[a-zA-Z0-9_]*' fs=$(echo @|tr @ '\034')
+    local s='[[:space:]]*';
+    local w='[a-zA-Z0-9_-]*';
+    local fs=$(echo @|tr @ '\034')
     sed -ne "s|^\($s\):|\1|" \
         -e "s|^\($s\)\($w\)$s:$s[\"']\(.*\)[\"']$s\$|\1$fs\2$fs\3|p" \
         -e "s|^\($s\)\($w\)$s:$s\(.*\)$s\$|\1$fs\2$fs\3|p"  $1 |
+    sed  -E 's/\s+\#.*//' |
     awk -F$fs '{
-        indent = length($1)/4; # indent size
+        indent = length($1)/2; # indent size
         tail = toupper($2);
+
+
+        indent = gensub(/\W/, "_", "g", indent)
+        tail = gensub(/\W/, "_", "g", tail)
+
         vname[indent] = tail;
         for (i in vname) {
             if (i > indent) {
@@ -628,13 +776,13 @@ parse_config() {
                 }
                 varray[vn] = 1
                 if (!((vn,vnn) in varray)){
-                    printf("%sMAP[%s]=\"%s\"; ", vn, vnn, $3);
+                    printf("%sMAP[\"%s\"]=\"%s\"; ", vn, vnn, $3);
                 }
                 varray[vn,vnn] = 1
             }
             printf("readonly %s%s=\"%s\"; ", vn, tail, $3);
         #}
-    }';
+    }' ;
 }
 
 # ------------------------------------------------------------

@@ -1,144 +1,144 @@
 ffmpeg:
-    bin: /usr/bin/ffmpeg
-    threads: 0
-    start: 00:00:05
-    duration: 00:00:10
-parallel:
-    bin: /usr/bin/sem
-    max_procs: 4
+  bin: /usr/bin/ffmpeg
+  threads: 0
+  start: 00:00:05
+  duration: 00:00:10
+profile:
+  __tvzavr_base:
+    # you can mark profile as abstract
+    # and it will be used only for inheritance.
+    abstract: 1
+    passes: 2
+    video:
+      preset: veryslow
+      codec:
+        name : h264
+        weightp: 2
+        bframes: 3
+        opts: "keyint=96:min-keyint=96:no-scenecut"
+    audio:
+      codec:
+        name: aac
+  tvzavr-lw:
+    # Other options are inherited from `tvzavr-base`
+    extends: __tvzavr_base
+    video:
+      width: 480
+      height:  270
+      bitrate: 250k
+      codec:
+        profile: baseline
+        level: 3.0
+    audio:
+      channels: 1
+      bitrate: 64k
 
 
 
-_profile:
-    tvzavr:
-        # you can mark profile as abstract
-        # and it will be used only for inheritance.
-        abstract: 1
-        passes: 1
-        input_format: x11grab
-        video:
-            preset: veryfast
-            codec:
-                name : h264
-                weightp: 2
-                bframes: 3
-                opts: "keyint=96:min-keyint=96:no-scenecut"
-        audio:
-            codec:
-                name: aac
-    tvzavr_lw:
-        # Other options are inherited from `tvzavr_base`
-        extends: tvzavr
-        video:
-            width: 480
-            height:  270
-            bitrate: 250k
-            codec:
-                profile: baseline
-                level: 3.0
-        audio:
-            channels: mono
-            bitrate: 64k
-
-_profile_for_screen:
+examples:
+  profile_for_screen:
     screen_hd:
-        video:
-            width: 1280
-            height:  720
-            bitrate: 2000k
-            preset: veryfast
-            codec:
-                level: 3.1
-                name : h264
-                profile: high444
-                weightp: 2
-                bframes: 3
-                opts: "keyint=96:min-keyint=96:no-scenecut"
-        audio:
-            channels: 5.1
-            bitrate: 320k
-            codec:
-                name: aac
+      video:
+        width: 1280
+        height:  720
+        bitrate: 2000k
+        preset: veryfast
+        codec:
+          level: 3.1
+          name : h264
+          profile: high444
+          weightp: 2
+          bframes: 3
+          opts: "keyint=96:min-keyint=96:no-scenecut"
+      audio:
+        channels: 5.1
+        bitrate: 320k
+        codec:
+          name: aac
     screen_lw:
-        # Other options are inherited from `screen_hd`
-        extends: screen_hd
-        video:
-            width: 480
-            height:  270
-            bitrate: 250k
-            codec:
-                level: 3.0
-        audio:
-            channels: mono
-            bitrate: 64k
-__profile:
+      # Other options are inherited from `screen_hd`
+      extends: screen_hd
+      video:
+        width: 480
+        height:  270
+        bitrate: 250k
+        codec:
+          level: 3.0
+      audio:
+        channels: mono
+        bitrate: 64k
+  profile_for_tvzavr:
     tvzavr:
-        # you can mark profile as abstract
-        # and it will be used only for inheritance.
-        abstract: 1
-        passes: 1
-        video:
-            preset: veryfast
-            codec:
-                name : h264
-                weightp: 2
-                bframes: 3
-                opts: "keyint=96:min-keyint=96:no-scenecut"
-        audio:
-            codec:
-                name: aac
+      # you can mark profile as abstract
+      # and it will be used only for inheritance.
+      abstract: 1
+      passes: 1
+      video:
+        preset: veryfast
+        codec:
+          name : h264
+          weightp: 2
+          bframes: 3
+          opts: "keyint=96:min-keyint=96:no-scenecut"
+      audio:
+        codec:
+          name: aac
     tvzavr_hd:
-        # Other options are inherited from `tvzavr_base`
-        extends: tvzavr
-        video:
-            width: 1280
-            height:  720
-            bitrate: 2000k
-            codec:
-                profile: high
-                level: 3.1
-        audio:
-            channels: 5.1
-            bitrate: 320k
+      # Other options are inherited from `tvzavr_base`
+      extends: tvzavr
+      video:
+        width: 1280
+        height:  720
+        bitrate: 2000k
+        codec:
+          profile: high
+          level: 3.1
+      audio:
+        channels: 5.1
+        bitrate: 320k
     tvzavr_hi:
-        # Other options are inherited from `tvzavr_base`
-        extends: tvzavr
-        video:
-            width: 854
-            height:  480
-            bitrate: 1000k
-            codec:
-                profile: main
-                level: 3.0
-        audio:
-            channels: stereo
-            bitrate: 196k
+      # Other options are inherited from `tvzavr_base`
+      extends: tvzavr
+      video:
+        width: 854
+        height:  480
+        bitrate: 1000k
+        codec:
+          profile: main
+          level: 3.0
+      audio:
+        channels: stereo
+        bitrate: 196k
     tvzavr_nr:
-        # Other options are inherited from `tvzavr_base`
-        extends: tvzavr
-        video:
-            width: 640
-            height:  360
-            bitrate: 600k
-            codec:
-                profile: main
-                level: 3.0
-        audio:
-            channels: stereo
-            bitrate: 128k
+      # Other options are inherited from `tvzavr_base`
+      extends: tvzavr
+      video:
+        width: 640
+        height:  360
+        bitrate: 600k
+        codec:
+          profile: main
+          level: 3.0
+      audio:
+        channels: stereo
+        bitrate: 128k
     tvzavr_lw:
-        # Other options are inherited from `tvzavr_base`
-        extends: tvzavr
-        video:
-            width: 480
-            height:  270
-            bitrate: 250k
-            codec:
-                profile: baseline
-                level: 3.0
-        audio:
-            channels: mono
-            bitrate: 64k
+      # Other options are inherited from `tvzavr_base`
+      extends: tvzavr
+      video:
+        width: 480
+        height:  270
+        bitrate: 250k
+        codec:
+          profile: baseline
+          level: 3.0
+      audio:
+        channels: mono
+        bitrate: 64k
+
+
+
+
 
 
 
