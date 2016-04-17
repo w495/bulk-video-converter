@@ -36,10 +36,18 @@ PASS_LOG_DIR_NAME="/tmp/${SCRIPT_NAME}/${RANDOM_STING}";
 
 
 usage () {
-    echo -e "${COLOR_BOLD}$0${COLOR_OFF} ${COLOR_DIM}<...>${COLOR_OFF}
 
+    local title="${COLOR_BOLD}${SCRIPT_NAME}${COLOR_OFF}";
+    echo -e "
+${title} — simple bulk configurable ffmpeg-based video converter.
+
+${COLOR_BOLD}Usage:${COLOR_OFF}
+    ${SCRIPT_NAME} [options] [filenames]
+
+${COLOR_BOLD}Options:${COLOR_OFF}
     -h, --help          shows this test.
-    -i, --input         name of input video file.
+    -i, --input         name of input video file
+                        It supports mask.
     -o, --output        prefix of output video file.
     -O, --output-dir    output folder.
     -L, --pass-log-dir  passlog folder.
@@ -88,9 +96,11 @@ EOF
 # ------------------------------------------------------------
 main(){
     configure "${@}"
-    assert_not_empty "${INPUT_FILE_NAME_LIST}" 'empty input file (-i)';
+    assert_not_empty "${INPUT_FILE_NAME_LIST}" 'empty input file list';
     for input_file_name in ${INPUT_FILE_NAME_LIST} ; do
-        assert_exists "${input_file_name}" "cannot find such file."
+        assert_exists \
+            "${input_file_name}"    \
+            "cannot find such file: ${input_file_name}."
         verbose_start "${input_file_name}";
         for profile in "${!PROFILE_MAP[@]}"; do
             local abstract=$(plain_profile $profile abstract);
@@ -195,13 +205,18 @@ handle_video_options(){
 
     local preset="$(profile $name video preset)";
     local bitrate="$(profile $name video bitrate)";
+    local bufsize="$(profile $name video bufsize)";
+    local maxrate="$(profile $name video maxrate)";
+
     local width="$(profile $name video width)";
     local height="$(profile $name video height)";
 
     local common_options=""
 
     common_options+=$(if_exists '-preset %s' $preset)
-    common_options+=$(if_exists '-b:v %s' $bitrate)
+    common_options+=$(if_exists '-maxrate %s' $maxrate)
+    common_options+=$(if_exists '-bufsize %s' $bufsize)
+
     common_options+=$(if_exists '-vf "scale=%s:%s"' $width $height)
 
 
@@ -214,11 +229,11 @@ handle_video_options(){
 handle_video_codec_options(){
     local name=$1;
 
-    local codec_name=$(profile_default 'libx264' $name video codec name)
+    local codec_name=$(profile_default 'h264' $name video codec name)
 
-    local codec_options="-codec:v ${codec_name}";
+    local codec_options="";
 
-    if [[ "$codec_name" == "libx264" ]]; then
+    if [[ "$codec_name" == "h264" ]]; then
         codec_options+=$(handle_video_h264_options $name);
     fi;
 
@@ -234,11 +249,26 @@ handle_video_h264_options(){
 
     local profile=$(profile $name video codec profile)
     local level=$(profile $name video codec level)
+
+    local weightp=$(profile $name video codec weightp)
+    local bframes=$(profile $name video codec bframes)
+
+
     local opts=$(profile $name video codec opts)
 
-    codec_options+=$(if_exists '-profile:v %s' $profile)
-    codec_options+=$(if_exists '-level:v %s' $level)
-    codec_options+=$(if_exists '-x264opts "%s"' $opts)
+
+    codec_options+='-codec:v libx264';
+    codec_options+=$(if_exists '-profile:v %s' $profile);
+    codec_options+=$(if_exists '-level:v %s' $level);
+
+    codec_options+=$(if_exists '-weightp %s' $weightp);
+    codec_options+=$(if_exists '-bf %s' $bframes);
+
+    codec_options+=$(if_exists '-x264opts "%s"' $opts);
+
+
+
+    weightp
 
     echo "${codec_options}"
 }
@@ -430,6 +460,8 @@ parse_options (){
 
     eval set -- ${OPTIONS};
 
+    #verbose_block 'options' "${OPTIONS}"
+
     while [[ -n ${OPTIONS} ]] ; do
         case ${1} in
             -h|--help)
@@ -440,7 +472,7 @@ parse_options (){
                     '')
                         shift 1;;
                     *)
-                        INPUT_FILE_NAME_LIST=${2};
+                        INPUT_FILE_NAME_LIST="${2} ";
                         shift 2;;
                 esac;;
             -o|--output)
@@ -487,7 +519,7 @@ parse_options (){
                 shift;;
             '--'|'')
                 shift 1;
-                INPUT_FILE_NAME_LIST+=" $@"
+                INPUT_FILE_NAME_LIST+="$@"
                 break;;
             *) wrong_usage "Unknown parameter '${1}'.";;
         esac;
@@ -498,6 +530,7 @@ parse_options (){
     readonly OUTPUT_DIR_NAME;
     readonly INPUT_FILE_NAME_LIST;
     readonly OUTPUT_FILE_NAME;
+
 
 }
 

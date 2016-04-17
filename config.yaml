@@ -10,16 +10,14 @@ profile:
         video:
             preset: veryfast
             codec:
-                name : libx264
-                profile: baseline
-                level: 3.0
+                name : h264
                 weightp: 2
                 bframes: 3
                 opts: "keyint=96:min-keyint=96:no-scenecut"
         audio:
             codec:
                 name: aac
-    tvzavr_hd:
+    tvzavr_1hd:
         # Other options are inherited from `tvzavr_base`
         extends: tvzavr
         video:
@@ -39,6 +37,9 @@ profile:
             width: 854
             height:  480
             bitrate: 1000k
+            codec:
+                profile: main
+                level: 3.0
         audio:
             channels: stereo
             bitrate: 196k
@@ -49,6 +50,9 @@ profile:
             width: 640
             height:  360
             bitrate: 600k
+            codec:
+                profile: main
+                level: 3.0
         audio:
             channels: stereo
             bitrate: 128k
@@ -59,6 +63,9 @@ profile:
             width: 480
             height:  270
             bitrate: 250k
+            codec:
+                profile: baseline
+                level: 3.0
         audio:
             channels: mono
             bitrate: 64k

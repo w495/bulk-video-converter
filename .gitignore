@@ -16,6 +16,7 @@
 *.vpn
 *.mp4
 *.mbtree
+*.tvz
 
 
 priv/*
