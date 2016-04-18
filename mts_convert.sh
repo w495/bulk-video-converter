@@ -276,7 +276,9 @@ handle_profile(){
     local profile_name="${1}";
     local input_file_name="${2}";
     local abstract=$(plain_profile ${profile_name} abstract);
+    local is_complex=$(plain_profile "${name}" 'is_complex');
     if [[ -z ${abstract} ]]; then
+
         handle_concrete_profile "${profile_name}" "${input_file_name}"
     fi;
 }
