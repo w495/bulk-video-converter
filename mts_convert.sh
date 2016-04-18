@@ -25,22 +25,25 @@ readonly SCRIPT_NAME=$(basename $0);
 #       redefined via command line arguments.
 # ------------------------------------------------------------
 
-VERBOSE='true';
-DRY_RUN='false';
-CONFIG_FILE_NAME='';
-INPUT_FILE_NAME_LIST='';
-OUTPUT_DIR_NAME='';
-OUTPUT_FILE_NAME='';
+declare VERBOSE='true';
+declare DRY_RUN='false';
+declare CONFIG_FILE_NAME='';
+declare INPUT_FILE_NAME_LIST='';
+declare OUTPUT_DIR_NAME='';
+declare OUTPUT_FILE_NAME='';
 
-FFMPEG_LOG_DIR_BASE_NAME="/var/log/${SCRIPT_NAME}"
-FFMPEG_LOG_DIR_NAME="${FFMPEG_LOG_DIR_BASE_NAME}/${START_TIME_STRING}"
+declare FFMPEG_LOG_DIR_BASE_NAME="/var/log/${SCRIPT_NAME}"
+declare FFMPEG_LOG_DIR_NAME="${FFMPEG_LOG_DIR_BASE_NAME}/${START_TIME_STRING}"
 
-PASS_LOG_FILE_PREFIX=''
+declare PASS_LOG_FILE_PREFIX=''
 
+declare PASS_LOG_DIR_BASE_NAME="/tmp/${SCRIPT_NAME}"
+declare PASS_LOG_DIR_NAME="${PASS_LOG_DIR_BASE_NAME}/${RANDOM_STING}";
 
-PASS_LOG_DIR_BASE_NAME="/tmp/${SCRIPT_NAME}"
-PASS_LOG_DIR_NAME="${PASS_LOG_DIR_BASE_NAME}/${RANDOM_STING}";
-
+declare FFMPEG_BIN;
+declare FFMPEG_START;
+declare FFMPEG_DURATION;
+declare FFMPEG_THREADS;
 
 usage () {
     local C0="${COLOR_OFF}"
@@ -68,12 +71,14 @@ quality and size from one source. It is very helpful for handling raw
 videos from amateur filming camera.
 
 ${COLOR_REVERSE} Usage:${C0}
-    ${SCRIPT_NAME} [options] [filenames]
+    ${SCRIPT_NAME} [options] [file names]
 
 ${COLOR_REVERSE} Options:${C0}
     ${IC}-i, --input${C0} ${AC}<filename.mp4|:0.0>${C0}
         name of input video file of display. It supports mask for
-        filenames. ${ETC}Examples:${C0}
+        filenames. If several files are passed, they will be handled
+        in parallel way. Mind this fact while operating the script.
+        ${ETC}Examples:${C0}
             ${EC}${SCRIPT_NAME} -i ./video.mts${C0}
             ${EC}${SCRIPT_NAME} -i ./part1.mp4 ./part2.mp4${C0}
             ${EC}${SCRIPT_NAME} -i ~/Videos/*.mp4${C0}
@@ -88,13 +93,15 @@ ${COLOR_REVERSE} Options:${C0}
         the  ${FC}'default_config'${C0} function in this script.
         ${ETC}Example:${C0}
             ${EC}${SCRIPT_NAME} ./video.mts -c ./config.yaml${C0}
+        If several profiles are passed, they will be handled in
+        parallel way.
     ${IC}-O, --output-dir${C0} ${AC}<dir name>${C0}
         folder for output files. If not set it uses current folder to
          save. ${ETC}Examples:${C0}
             ${EC}${SCRIPT_NAME} ./video.mts -O ./out/ ${C0}
     ${IC}-v, --verbose${C0}
         uses verbose mode. It prints detailed report about ffmpeg
-        options and parametrs in YAML format.
+        options and parameters in YAML format.
     ${IC}-q, --quiet${C0}
         uses quiet mode. It disables «verbose» mode.
     ${IC}-d, --dry-run${C0}
@@ -111,11 +118,13 @@ ${COLOR_REVERSE} Options:${C0}
         passlog folder. It uses only for several ffmpeg passes.
         If not set it uses is ${FC}'${PASS_LOG_DIR_BASE_NAME}'${C0}.
         ${WTC}WARNING:${C0}
-          ${WC}There is no reason to set it in a common situation.${C0}
+          ${WC}There is no reason to set this option
+          in a common situation.${C0}
     ${IC}-o, --output${C0} ${AC}<filename.mp4>${C0}
         name of output video file.
         ${WTC}WARNING:${C0}
-          ${WC}There is no reason to set it in a common situation.${C0}
+          ${WC}There is no reason to set this option
+          in a common situation.${C0}
 ${COLOR_REVERSE} Authors:${C0}
     Ilya w495 Nikitin.
     Report bugs to:
@@ -170,17 +179,18 @@ EOF
 # Main function
 # ------------------------------------------------------------
 main(){
+    declare -gA PROFILE_MAP;
     configure "${@}"
     assert_not_empty "${INPUT_FILE_NAME_LIST}" 'empty input file list';
     for input_file_name in ${INPUT_FILE_NAME_LIST} ; do
         (
             assert_exists \
                 "${input_file_name}"    \
-                "no such file: ${input_file_name}. '$output_format'";
+                "no such file: ${input_file_name}.";
             verbose_start "${input_file_name}";
             for profile in "${!PROFILE_MAP[@]}"; do
                 (
-                    local abstract=$(plain_profile $profile abstract);
+                    local abstract=$(plain_profile ${profile} abstract);
                     if [[ -z ${abstract} ]]; then
                         handle_profile "${profile}" "${input_file_name}"
                     fi
@@ -201,7 +211,8 @@ handle_profile(){
     local profile_name="${1}";
     local input_file_name="${2}";
 
-    local step_name="${profile_name,,}"
+    local step_name=$(echo "${profile_name}" \
+        | tr '[:upper:]' '[:lower:]');
 
     verbose_start "profile ${step_name}@%2s";
 
@@ -212,13 +223,13 @@ handle_profile(){
     );
 
     local passes=$(profile_default \
-        '1' "$profile_name" 'passes');
+        '1' "${profile_name}" 'passes');
 
     local output_format=$(profile_default \
-        'mp4' "$profile_name" 'output_format');
+        'mp4' "${profile_name}" 'output_format');
 
     local extention=$(profile_default \
-        "$output_format" "$profile_name" 'extention');
+        "$output_format" "${profile_name}" 'extention');
 
     local output_file_name=$(compute_if_empty \
         "${OUTPUT_FILE_NAME}" \
@@ -232,11 +243,6 @@ handle_profile(){
         "${input_file_name}" \
         "${PASS_LOG_DIR_NAME}"  \
         "${suffix}");
-
-    local parallel_bin='';
-    parallel_bin+=$(if_exists '%s --no-notice' ${PARALLEL_BIN});
-    parallel_bin+=$(if_exists '-j %s' ${PARALLEL_MAX_PROCS});
-
 
     local global_options=$(handle_global_options    \
         "${profile_name}"                           \
@@ -268,7 +274,7 @@ handle_profile(){
             "${suffix}-${pass}-${extention}" \
             "ffmpeg.log" );
 
-        verbose_run "pass ${pass}@%6s"  "${parallel_bin}" \
+        verbose_run "pass ${pass}@%6s"  \
             ${FFMPEG_BIN} \
             ${global_options} \
             -i ${input_file_name} \
@@ -276,18 +282,15 @@ handle_profile(){
             ${pass_options} \
             ${audio_options} \
             -f ${output_format} -y ${output_pass_file_name} \
-            "2> ${log_file_name} ;"
+            2>&1 | tee "${log_file_name} ;" 1>& ${OUT_LOG_STREAM};
     done
     verbose_end "passes@%4s";
-
-
     verbose_end "profile ${step_name}@%2s";
-
     clean_up  "${profile_name}" "${input_file_name}";
 }
 
 # ------------------------------------------------------------
-# Global enconding functions
+# Global encoding functions
 # ------------------------------------------------------------
 
 handle_global_options(){
@@ -333,27 +336,28 @@ handle_video_options(){
     local profile_name="${1}";
     local input_file_name="${2}";
 
-    local codec_options=$(handle_video_codec_options $profile_name);
+    local codec_options=$(handle_video_codec_options ${profile_name});
 
-    local preset="$(profile $profile_name video preset)";
-    local bitrate="$(profile $profile_name video bitrate)";
-    local bufsize="$(profile $profile_name video bufsize)";
-    local maxrate="$(profile $profile_name video maxrate)";
-    local minrate="$(profile $profile_name video minrate)";
+    local preset="$(profile ${profile_name} video preset)";
+    local bitrate="$(profile ${profile_name} video bitrate)";
+    local bufsize="$(profile ${profile_name} video bufsize)";
+    local maxrate="$(profile ${profile_name} video maxrate)";
+    local minrate="$(profile ${profile_name} video minrate)";
 
 
-    local width="$(profile $profile_name video width)";
-    local height="$(profile $profile_name video height)";
+    local width="$(profile ${profile_name} video width)";
+    local height="$(profile ${profile_name} video height)";
 
     local common_options=""
 
-    common_options+=$(if_exists '-preset %s' $preset)
-    common_options+=$(if_exists '-maxrate %s' $maxrate)
-    common_options+=$(if_exists '-minrate %s' $minrate)
-    common_options+=$(if_exists '-bufsize %s' $bufsize)
+    common_options+=$(if_exists '-preset %s' ${preset})
+    common_options+=$(if_exists '-b:v %s' ${bitrate})
+    common_options+=$(if_exists '-maxrate %s' ${maxrate})
+    common_options+=$(if_exists '-minrate %s' ${minrate})
+    common_options+=$(if_exists '-bufsize %s' ${bufsize})
 
 
-    common_options+=$(if_exists '-vf "scale=%s:%s"' $width $height)
+    common_options+=$(if_exists '-vf "scale=%s:%s"' ${width} ${height})
 
 
     local options="${common_options} ${codec_options}";
@@ -363,14 +367,16 @@ handle_video_options(){
 
 
 handle_video_codec_options(){
-    local name=$1;
-
-    local codec_name=$(profile_default 'h264' $name video codec name)
+    local profile_name="${1}";
+    local input_file_name="${2}";
+    
+    
+    local codec_name=$(profile_default 'h264' ${profile_name} video codec name)
 
     local codec_options="";
 
     if [[ "$codec_name" == "h264" ]]; then
-        codec_options+=$(handle_video_h264_options $name);
+        codec_options+=$(handle_video_h264_options ${profile_name});
     fi;
 
     echo "${codec_options}"
@@ -379,28 +385,29 @@ handle_video_codec_options(){
 handle_video_h264_options(){
     # -profile:v = baseline, main, high, high10, high422, high444
 
-    local name=$1;
+    local profile_name="${1}";
+    local input_file_name="${2}";
 
     local codec_options='';
 
-    local profile=$(profile $name video codec profile)
-    local level=$(profile $name video codec level)
+    local h264_profile=$(profile ${profile_name} video codec profile)
+    local level=$(profile ${profile_name} video codec level)
 
-    local weightp=$(profile $name video codec weightp)
-    local bframes=$(profile $name video codec bframes)
+    local weightp=$(profile ${profile_name} video codec weightp)
+    local bframes=$(profile ${profile_name} video codec bframes)
 
 
-    local opts=$(profile $name video codec opts)
+    local opts=$(profile ${profile_name} video codec opts)
 
 
     codec_options+='-codec:v libx264';
-    codec_options+=$(if_exists '-profile:v %s' $profile);
-    codec_options+=$(if_exists '-level:v %s' $level);
+    codec_options+=$(if_exists '-profile:v %s' ${h264_profile});
+    codec_options+=$(if_exists '-level:v %s' ${level});
 
-    codec_options+=$(if_exists '-weightp %s' $weightp);
-    codec_options+=$(if_exists '-bf %s' $bframes);
+    codec_options+=$(if_exists '-weightp %s' ${weightp});
+    codec_options+=$(if_exists '-bf %s' ${bframes});
 
-    codec_options+=$(if_exists '-x264opts "%s"' $opts);
+    codec_options+=$(if_exists '-x264opts "%s"' ${opts});
 
 
 
@@ -416,9 +423,9 @@ handle_audio_options(){
     local input_file_name="${2}";
 
 
-    local bitrate="$(profile $profile_name audio bitrate)";
-    local volume="$(profile $profile_name audio volume)";
-    local channels="$(profile $profile_name audio channels)";
+    local bitrate="$(profile ${profile_name} audio bitrate)";
+    local volume="$(profile ${profile_name} audio volume)";
+    local channels="$(profile ${profile_name} audio channels)";
 
     local filter_options=$(handle_audio_filter_options \
        "${profile_name}"    \
@@ -429,12 +436,12 @@ handle_audio_options(){
 
     local common_options="";
 
-    common_options+=$(if_exists '-b:a %s' $bitrate)
-    common_options+=$(if_exists '-ac %s' $channels)
+    common_options+=$(if_exists '-b:a %s' ${bitrate})
+    common_options+=$(if_exists '-ac %s' ${channels})
 
     common_options+=$(if_exists '-filter:a "%s"' ${filter_options} )
 
-    local codec_options=$(handle_audio_codec_options $profile_name)
+    local codec_options=$(handle_audio_codec_options ${profile_name})
     local options="${common_options} ${codec_options}";
 
     verbose_block "audio@%4s" "${options}";
@@ -447,19 +454,21 @@ handle_audio_filter_options(){
     local profile_name="${1}";
     local input_file_name="${2}";
 
-    local volume="$(profile $profile_name audio volume)";
+    local volume="$(profile ${profile_name} audio volume)";
 
 
     local filter_options='';
 
-    filter_options+=$(if_exists 'volume=%s' $volume)
+    filter_options+=$(if_exists 'volume=%s' ${volume})
 
     echo "${filter_options}"
 }
-handle_audio_codec_options(){
-    local name=$1;
 
-    local codec_name=$(profile_default 'aac' $name audio codec name)
+handle_audio_codec_options(){
+    local profile_name="${1}";
+    local input_file_name="${2}";
+
+    local codec_name=$(profile_default 'aac' ${profile_name} audio codec name)
 
     local codec_options="";
 
@@ -541,7 +550,7 @@ compute_if_empty (){
     if [[ -z "${out_file_name}" ]] ; then
         local initial_file_name="${2}";
         if [[ $(is_display ${initial_file_name}) ]]; then
-            initial_file_name=$(echo $initial_file_name \
+            initial_file_name=$(echo ${initial_file_name} \
                 | sed 's/[.]/-/g' | sed 's/[:]//g');
             initial_file_name="display-${initial_file_name}"
             initial_file_name+="-${START_TIME_STRING}"
@@ -555,7 +564,8 @@ compute_if_empty (){
         local base_name="${base_file_name%.*}";
         if [[ -z "${extention}" ]] ; then
             extention="${base_file_name##*.}"
-            extention="${extention,,}"
+            extention=$(echo "${extention}" \
+                | tr '[:upper:]' '[:lower:]');
         fi;
         if [[ -n "${initial_dir_name}" ]]; then
             parent_dir_name=$(dirname "${initial_dir_name}");
@@ -738,8 +748,11 @@ parse_options (){
 
 handle_config() {
     local config="$@";
-    local res=$(parse_config $config);
-    #[[ "x${VERBOSE}" = "xtrue" ]] && echo -e $res | sed 's/; /;\n/gi';
+    local res=$(parse_config ${config});
+    if [[ "_${VERBOSE}" == "_true" ]]; then
+        notice 'handles config';
+        #echo -e ${res} | sed 's/; /;\n/gi';
+    fi;
     eval "${res}";
 }
 
@@ -752,7 +765,7 @@ parse_config() {
         -e "s|^\($s\)\($w\)$s:$s[\"']\(.*\)[\"']$s\$|\1$fs\2$fs\3|p" \
         -e "s|^\($s\)\($w\)$s:$s\(.*\)$s\$|\1$fs\2$fs\3|p"  $1 |
     sed  -E 's/\s+\#.*//' |
-    awk -F$fs '{
+    awk -F${fs} '{
         indent = length($1)/2; # indent size
         tail = toupper($2);
 
@@ -767,7 +780,7 @@ parse_config() {
             }
         }
         #if (length($3) > 0) {
-            vn="'$prefix'";
+            vn="'${prefix}'";
             for (i=0; i<indent; i++) {
                 vn=(vn)(vname[i])("_")
                 vnn = vname[i+1]
@@ -796,6 +809,7 @@ LOG_OFFSET=''
 
 # Colors works only in console.
 if [ -t ${OUT_LOG_STREAM} ]; then
+    readonly COLOR_NONE='';
     readonly COLOR_OFF='\e[0m';      # Text Reset
 
     readonly COLOR_DARK_BLACK='\e[30m';
@@ -853,7 +867,7 @@ wrong_usage(){
 }
 
 verbose() {
-    if [[ "x${VERBOSE}" = "xtrue" ]] ; then
+    if [[ "_${VERBOSE}" == "_true" ]] ; then
         printf "${@}\n"  \
             1>& ${OUT_LOG_STREAM};
     fi
@@ -899,26 +913,20 @@ verbose_block (){
 
 verbose_run (){
     local string="${1}";
-    local executor="${2}";
-
-    if [[ -z "${executor}" ]]; then
-        executor='eval';
-    fi;
-
     local offset='';
     local delimiter='@';
     local offset=$(awk -F "$delimiter" '{print $2}' <<< "$string");
-    local value="${@:3}";
+    local value="${@:2}";
     local COLOR_ON="${COLOR_BOLD}${COLOR_LIGHT_YELLOW}"
     verbose_start "${string}"
     verbose_inside "${offset}"\
-    "${COLOR_ON}${executor} ${value}${COLOR_OFF}";
-    if [[ "x${DRY_RUN}" = "xfalse" ]]; then
-        if [[ "x${VERBOSE}" = "xtrue" ]]; then
-            ${executor} "${value}";
+    "${COLOR_ON}${value}${COLOR_OFF}";
+    if [[ "_${DRY_RUN}" == "_false" ]]; then
+        if [[ "_${VERBOSE}" == "_true" ]]; then
+            $(eval "${value}");
         fi;
-        if [[ "x${VERBOSE}" = "xfalse" ]]; then
-            ${executor} "${value}" 2> /dev/null
+        if [[ "_${VERBOSE}" == "_false" ]]; then
+            $(eval "${value}") 2> /dev/null
         fi;
     fi;
     verbose_end "${string}";
@@ -927,7 +935,7 @@ verbose_run (){
 
 success () {
     info_print  'SUCCESS'\
-                "${NONE}"\
+                "${COLOR_NONE}"\
                 "${COLOR_DARK_GREEN}"\
                 "${COLOR_LIGHT_GREEN}"\
                 "${@}"
@@ -935,7 +943,7 @@ success () {
 
 fail () {
     info_print  'FAIL'\
-                "${NONE}"\
+                "${COLOR_NONE}"\
                 "${COLOR_DARK_RED}"\
                 "${COLOR_LIGHT_RED}"\
                 "${@}"
@@ -992,21 +1000,6 @@ info_print() {
 
 main "${@}";
 
-
-#
-# ffmpeg -i inputfile.avi
-# -codec:v libx264
-# -profile:v main
-# -preset slow -b:v 400k
-# -maxrate 400k
-# -bufsize 800k
-# -vf scale=-1:480
-# -threads 0 -codec:a
-# libfdk_aac -b:a 128k output.mp4
-#
-# X="d"
-# "d";
-#
 
 
 
