@@ -9,14 +9,10 @@ readonly RANDOM_STING=$(cat /dev/urandom \
     | tr -dc "A-Za-z0-9" \
     | fold -c8 \
     | head -n 1
-)
-
+);
 # Time of script start for time based naming.
-readonly START_TIME_STRING=$(date "+%Y-%m-%d_%H-%M-%S-%N")
-
-readonly START_TIME_NS=$(($(date +%s%N)))
-
-
+readonly START_TIME_STRING=$(date "+%Y-%m-%d_%H-%M-%S-%N");
+readonly START_TIME_NS=$(($(date +%s%N)));
 readonly SCRIPT_NAME=$(basename $0);
 
 # ------------------------------------------------------------
@@ -27,23 +23,31 @@ readonly SCRIPT_NAME=$(basename $0);
 
 declare VERBOSE='true';
 declare DRY_RUN='false';
-declare CONFIG_FILE_NAME='';
-declare INPUT_FILE_NAME_LIST='';
-declare OUTPUT_DIR_NAME='';
-declare OUTPUT_FILE_NAME='';
+declare CONFIG_FILE_NAME;
+declare INPUT_FILE_NAME_LIST;
+declare OUTPUT_DIR_NAME;
+declare OUTPUT_FILE_NAME;
+declare PASS_LOG_FILE_PREFIX;
 
-declare FFMPEG_LOG_DIR_BASE_NAME="/var/log/${SCRIPT_NAME}"
-declare FFMPEG_LOG_DIR_NAME="${FFMPEG_LOG_DIR_BASE_NAME}/${START_TIME_STRING}"
+declare LOG_DIR_BASE_NAME="/var/log/${SCRIPT_NAME}";
+declare LOG_DIR_NAME="${LOG_DIR_BASE_NAME}/${START_TIME_STRING}"
 
-declare PASS_LOG_FILE_PREFIX=''
+declare TMP_DIR_BASE_NAME="/tmp/${SCRIPT_NAME}"
+declare TMP_DIR_NAME="${TMP_DIR_BASE_NAME}/${RANDOM_STING}";
+declare PASS_LOG_DIR_NAME="${TMP_DIR_NAME}/pass-log";
 
-declare PASS_LOG_DIR_BASE_NAME="/tmp/${SCRIPT_NAME}"
-declare PASS_LOG_DIR_NAME="${PASS_LOG_DIR_BASE_NAME}/${RANDOM_STING}";
+# ------------------------------------------------------------
+# Internal global variables.
+# ------------------------------------------------------------
 
-declare FFMPEG_BIN;
-declare FFMPEG_START;
-declare FFMPEG_DURATION;
-declare FFMPEG_THREADS;
+declare -g  FFMPEG_BIN;
+declare -g  FFMPEG_START;
+declare -g  FFMPEG_DURATION;
+declare -g  FFMPEG_THREADS;
+declare -gA PROFILE_MAP;
+
+declare -g  FILE_LOG_PREFIX="${TMP_DIR_NAME}/file-log";
+declare -g  PROFILE_LOG_PREFIX="${TMP_DIR_NAME}/profile-log";
 
 usage () {
     local C0="${COLOR_OFF}"
@@ -102,6 +106,9 @@ ${COLOR_REVERSE} Options:${C0}
     ${IC}-v, --verbose${C0}
         uses verbose mode. It prints detailed report about ffmpeg
         options and parameters in YAML format.
+        ${WTC}NOTE:${C0}
+          ${WC}Mind the fact that all files and profiles are handled
+          in parallel. So, log lines can be mixed.${C0}
     ${IC}-q, --quiet${C0}
         uses quiet mode. It disables «verbose» mode.
     ${IC}-d, --dry-run${C0}
@@ -111,12 +118,12 @@ ${COLOR_REVERSE} Options:${C0}
         mode to check what will happen on a full launch.
     ${IC}-F, --ffmpeg-log-dir${C0} ${AC}<dir name>${C0}
         folder for ffmpeg logs.
-        default is ${FC}'${FFMPEG_LOG_DIR_BASE_NAME}'${C0}.
+        default is ${FC}'${LOG_DIR_BASE_NAME}'${C0}.
     ${IC}-h, --help${C0}
         shows this text.
     ${IC}-P, --pass-log-dir${C0} ${AC}<dir name>${C0}
         passlog folder. It uses only for several ffmpeg passes.
-        If not set it uses is ${FC}'${PASS_LOG_DIR_BASE_NAME}'${C0}.
+        If not set it uses is ${FC}'${TMP_DIR_BASE_NAME}'${C0}.
         ${WTC}WARNING:${C0}
           ${WC}There is no reason to set this option
           in a common situation.${C0}
@@ -175,36 +182,107 @@ EOF
 # ------------------------------------------------------------
 # Main function
 # ------------------------------------------------------------
+
 main(){
-    declare -gA PROFILE_MAP;
-    configure "${@}"
-    assert_not_empty "${INPUT_FILE_NAME_LIST}" 'empty input file list';
-    for input_file_name in ${INPUT_FILE_NAME_LIST} ; do
-        (
-            assert_exists \
-                "${input_file_name}"    \
-                "no such file: ${input_file_name}.";
-            verbose_start "${input_file_name}";
-            for profile in "${!PROFILE_MAP[@]}"; do
-                (
-                    local abstract=$(plain_profile ${profile} abstract);
-                    if [[ -z ${abstract} ]]; then
-                        handle_profile "${profile}" "${input_file_name}"
-                    fi
-                ) &
-            done;
-            wait;
-            verbose_end "${input_file_name}";
-        ) &
+    # non-local function `configure` — sets global options of script.
+    configure "${@}";
+
+    $(assert_not_empty              \
+        "${INPUT_FILE_NAME_LIST}"   \
+        'empty input file list'     \
+    );
+    $(start_up);
+    $(handle_file_sequence "${INPUT_FILE_NAME_LIST}");
+    $(clean_up);
+}
+
+handle_file_sequence(){
+    local file_name_sequence="${1}";
+    local -i file_index=1;
+    for file_name in ${file_name_sequence} ; do
+        # Handle each file in parallel.  But log about it sequentially.
+        $(handle_file_async                             \
+            "${file_name}"                              \
+            "${file_index}"                             \
+            "${FILE_LOG_PREFIX}-${file_index}"           \
+        );
+        file_index+=1
     done;
     wait;
+    cat ${FILE_LOG_PREFIX}* 1>& ${OUT_LOG_STREAM}
+}
+
+
+handle_file_async(){
+    local input_file_name="${1}";
+    local file_index="${2}";
+    local file_log="${3}";
+    (
+        $(handle_file   \
+            "${input_file_name}"    \
+            "${file_index}"         \
+        );
+    ) 2>"${file_log}.log" &
+}
+
+
+handle_file(){
+    local input_file_name="${1}";
+    local file_index="${2}";
+    $(assert_exists                         \
+        "${input_file_name}"                \
+        "no such file: ${input_file_name}." \
+    );
+    $(verbose_start "${input_file_name}");
+    $(handle_profile_sequence   \
+        "${input_file_name}"    \
+        "${file_index}"         \
+    );
+    $(verbose_end "${input_file_name}");
+}
+
+
+handle_profile_sequence(){
+    local input_file_name="${1}";
+    local file_index="${2}";
+    local profile_log_prefix="${PROFILE_LOG_PREFIX}-${file_index}";
+    local -i profile_index=1;
+    for profile_name in "${!PROFILE_MAP[@]}"; do
+        $(handle_profile_async                                      \
+            "${profile_name}"                                       \
+            "${input_file_name}"                                    \
+            "${profile_log_prefix}-${profile_index}"  \
+        );
+        profile_index+=1
+    done;
+    wait;
+    cat ${profile_log_prefix}* 1>& ${OUT_LOG_STREAM}
+}
+
+handle_profile_async(){
+    local profile_name="${1}";
+    local input_file_name="${2}";
+    local profile_log="${3}";
+    (
+        $(handle_profile "${profile_name}" "${input_file_name}")
+    ) 2>"${profile_log}.log" &
+}
+
+
+handle_profile(){
+    local profile_name="${1}";
+    local input_file_name="${2}";
+    local abstract=$(plain_profile ${profile_name} abstract);
+    if [[ -z ${abstract} ]]; then
+        handle_concrete_profile "${profile_name}" "${input_file_name}"
+    fi;
 }
 
 # ------------------------------------------------------------
 # Function for handling one profile item
 # ------------------------------------------------------------
 
-handle_profile(){
+handle_concrete_profile(){
     local profile_name="${1}";
     local input_file_name="${2}";
 
@@ -256,7 +334,7 @@ handle_profile(){
     );
     verbose_start "passes@%4s";
     for pass in $(seq 1 ${passes}); do
-        local pass_options="";
+        local pass_options='';
         local output_pass_file_name="${output_file_name}";
         if [[ ${passes} > 1 ]]; then
             pass_options="-pass ${pass} -passlogfile  ${pass_log_file_prefix}";
@@ -267,7 +345,7 @@ handle_profile(){
         local log_file_name=$(compute_if_empty \
             "${OUTPUT_FILE_NAME}" \
             "${input_file_name}" \
-            "${FFMPEG_LOG_DIR_NAME}"  \
+            "${LOG_DIR_NAME}"  \
             "${suffix}-${pass}-${extention}" \
             "ffmpeg.log" );
 
@@ -283,7 +361,6 @@ handle_profile(){
     done
     verbose_end "passes@%4s";
     verbose_end "profile ${step_name}@%2s";
-    clean_up  "${profile_name}" "${input_file_name}";
 }
 
 # ------------------------------------------------------------
@@ -294,7 +371,7 @@ handle_global_options(){
     local profile_name="${1}";
     local input_file_name="${2}";
 
-    local options="";
+    local options='';
     options+=$(if_exists ' -ss %s' ${FFMPEG_START});
     options+=$(if_exists ' -t %s' ${FFMPEG_DURATION});
     options+=$(if_exists ' -threads %s' ${FFMPEG_THREADS});
@@ -345,7 +422,7 @@ handle_video_options(){
     local width="$(profile ${profile_name} video width)";
     local height="$(profile ${profile_name} video height)";
 
-    local common_options=""
+    local common_options=''
 
     common_options+=$(if_exists '-preset %s' ${preset})
     common_options+=$(if_exists '-b:v %s' ${bitrate})
@@ -353,9 +430,7 @@ handle_video_options(){
     common_options+=$(if_exists '-minrate %s' ${minrate})
     common_options+=$(if_exists '-bufsize %s' ${bufsize})
 
-
     common_options+=$(if_exists '-vf "scale=%s:%s"' ${width} ${height})
-
 
     local options="${common_options} ${codec_options}";
     verbose_block "video@%4s" "${options}";
@@ -370,7 +445,7 @@ handle_video_codec_options(){
     
     local codec_name=$(profile_default 'h264' ${profile_name} video codec name)
 
-    local codec_options="";
+    local codec_options='';
 
     if [[ "$codec_name" == "h264" ]]; then
         codec_options+=$(handle_video_h264_options ${profile_name});
@@ -428,10 +503,7 @@ handle_audio_options(){
        "${profile_name}"    \
        "${input_file_name}" \
     );
-
-
-
-    local common_options="";
+    local common_options='';
 
     common_options+=$(if_exists '-b:a %s' ${bitrate})
     common_options+=$(if_exists '-ac %s' ${channels})
@@ -465,9 +537,10 @@ handle_audio_codec_options(){
     local profile_name="${1}";
     local input_file_name="${2}";
 
-    local codec_name=$(profile_default 'aac' ${profile_name} audio codec name)
+    local codec_name=$(profile_default \
+        'aac' ${profile_name} audio codec name);
 
-    local codec_options="";
+    local codec_options='';
 
     codec_options+="-strict experimental ";
     codec_options+="-codec:a ${codec_name} ";
@@ -583,13 +656,18 @@ compute_if_empty (){
     echo "${out_file_name}";
 }
 
-clean_up (){
-    local profile_name="${1}";
-    local input_file_name="${2}";
 
-    if [[ -d "${PASS_LOG_DIR_NAME}" ]] ; then
-        #notice "deletes directory ${PASS_LOG_DIR_NAME}"
-        rm -rf "${PASS_LOG_DIR_NAME}";
+start_up (){
+    if [[ ! -d "${TMP_DIR_NAME}" ]] ; then
+        #notice "creates directory ${TMP_DIR_NAME}"
+        mkdir -p "${TMP_DIR_NAME}";
+    fi;
+}
+
+clean_up (){
+    if [[ -d "${TMP_DIR_BASE_NAME}" ]] ; then
+        #notice "deletes directory ${TMP_DIR_BASE_NAME}"
+        rm -rf "${TMP_DIR_BASE_NAME}";
     fi;
 
 }
@@ -703,7 +781,7 @@ parse_options (){
                     '')
                         shift 1;;
                     *)
-                        FFMPEG_LOG_DIR_NAME=${2};
+                        LOG_DIR_NAME=${2};
                         shift 2;;
                 esac;;
             -c|--config)
@@ -737,7 +815,7 @@ parse_options (){
     readonly OUTPUT_DIR_NAME;
     readonly INPUT_FILE_NAME_LIST;
     readonly OUTPUT_FILE_NAME;
-    readonly FFMPEG_LOG_DIR_NAME;
+    readonly LOG_DIR_NAME;
     readonly PASS_LOG_DIR_NAME;
 
 
