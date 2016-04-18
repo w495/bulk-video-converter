@@ -76,7 +76,7 @@ ${COLOR_REVERSE} Usage:${C0}
 ${COLOR_REVERSE} Options:${C0}
     ${IC}-i, --input${C0} ${AC}<filename.mp4|:0.0>${C0}
         name of input video file of display. It supports mask for
-        filenames. If several files are passed, they will be handled
+        file names. If several files are passed, they will be handled
         in parallel way. Mind this fact while operating the script.
         ${ETC}Examples:${C0}
             ${EC}${SCRIPT_NAME} -i ./video.mts${C0}
@@ -89,7 +89,7 @@ ${COLOR_REVERSE} Options:${C0}
             ${EC}${SCRIPT_NAME} ~/Videos/*.mp4${C0}
             ${EC}${SCRIPT_NAME} :0.0${C0}
     ${IC}-c, --config${C0}  ${AC}<filename.yaml>${C0}
-        set yaml-config file for engoding profile. See examples in
+        set yaml-config file for encoding profile. See examples in
         the  ${FC}'default_config'${C0} function in this script.
         ${ETC}Example:${C0}
             ${EC}${SCRIPT_NAME} ./video.mts -c ./config.yaml${C0}
@@ -140,9 +140,6 @@ ffmpeg:
   threads: 0
   start: 00:00:05
   duration: 00:00:10
-parallel:
-  bin: /usr/bin/sem
-  max_procs: 4
 profile:
   base:
     # you can mark profile as abstract
@@ -536,13 +533,14 @@ get () {
     for word in "${@:2}"; do
         string+="_${word}";
     done;
-    local value="${string^^}";
-    echo $(eval echo "\${${value}}");
+    local field_name="${string^^}";
+    local var_name=$(echo "\${${field_name}}")
+    echo $(eval echo "${var_name}")
 }
 
 
 # ------------------------------------------------------------
-# Functions for check and compute filenames.
+# Functions for check and compute file names.
 # ------------------------------------------------------------
 
 compute_if_empty (){
@@ -768,33 +766,28 @@ parse_config() {
     awk -F${fs} '{
         indent = length($1)/2; # indent size
         tail = toupper($2);
-
-
         indent = gensub(/\W/, "_", "g", indent)
         tail = gensub(/\W/, "_", "g", tail)
-
         vname[indent] = tail;
         for (i in vname) {
             if (i > indent) {
                 delete vname[i]
             }
         }
-        #if (length($3) > 0) {
-            vn="'${prefix}'";
-            for (i=0; i<indent; i++) {
-                vn=(vn)(vname[i])("_")
-                vnn = vname[i+1]
-                if (!(vn in varray)){
-                    printf("declare -gA %sMAP; ", vn);
-                }
-                varray[vn] = 1
-                if (!((vn,vnn) in varray)){
-                    printf("%sMAP[\"%s\"]=\"%s\"; ", vn, vnn, $3);
-                }
-                varray[vn,vnn] = 1
+        vn="'${prefix}'";
+        for (i=0; i<indent; i++) {
+            vn=(vn)(vname[i])("_")
+            vnn = vname[i+1]
+            if (!(vn in varray)){
+                printf("declare -gA %sMAP; ", vn);
             }
-            printf("readonly %s%s=\"%s\"; ", vn, tail, $3);
-        #}
+            varray[vn] = 1
+            if (!((vn,vnn) in varray)){
+                printf("%sMAP[\"%s\"]=\"%s\"; ", vn, vnn, $3);
+            }
+            varray[vn,vnn] = 1
+        }
+        printf("readonly %s%s=\"%s\"; ", vn, tail, $3);
     }' ;
 }
 
@@ -809,7 +802,7 @@ LOG_OFFSET=''
 
 # Colors works only in console.
 if [ -t ${OUT_LOG_STREAM} ]; then
-    readonly COLOR_NONE='';
+    readonly COLOR_NONE;
     readonly COLOR_OFF='\e[0m';      # Text Reset
 
     readonly COLOR_DARK_BLACK='\e[30m';
@@ -981,8 +974,8 @@ info_print() {
 
     local LABEL_TEXT="${1}";
     local MESSAGE_TEXT="${@:4}";
-    local LABLE_COLOR="${COLOR_BOLD}${2}${3}";
-    local LABEL="${LABLE_COLOR}# ${LABEL_TEXT}:${COLOR_OFF}";
+    local LABEL_COLOR="${COLOR_BOLD}${2}${3}";
+    local LABEL="${LABEL_COLOR}# ${LABEL_TEXT}:${COLOR_OFF}";
     local WHERE_COLOR="${4}";
     local WHERE="${WHERE_COLOR} ${SCRIPT_NAME}${COLOR_OFF}";
     local MESSAGE_COLOR="${4}";
