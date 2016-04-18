@@ -749,7 +749,7 @@ parse_options (){
 handle_config() {
     local config="$@";
     local res=$(parse_config ${config});
-    if [[ "_${VERBOSE}" == "_true" ]]; then
+    if [[ "${VERBOSE}" == "true" ]]; then
         notice 'handles config';
         #echo -e ${res} | sed 's/; /;\n/gi';
     fi;
@@ -867,7 +867,7 @@ wrong_usage(){
 }
 
 verbose() {
-    if [[ "_${VERBOSE}" == "_true" ]] ; then
+    if [[ "${VERBOSE}" == "true" ]] ; then
         printf "${@}\n"  \
             1>& ${OUT_LOG_STREAM};
     fi
@@ -921,11 +921,11 @@ verbose_run (){
     verbose_start "${string}"
     verbose_inside "${offset}"\
     "${COLOR_ON}${value}${COLOR_OFF}";
-    if [[ "_${DRY_RUN}" == "_false" ]]; then
-        if [[ "_${VERBOSE}" == "_true" ]]; then
+    if [[ "${DRY_RUN}" == "false" ]]; then
+        if [[ "${VERBOSE}" == "true" ]]; then
             $(eval "${value}");
         fi;
-        if [[ "_${VERBOSE}" == "_false" ]]; then
+        if [[ "${VERBOSE}" == "false" ]]; then
             $(eval "${value}") 2> /dev/null
         fi;
     fi;
