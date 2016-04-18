@@ -34,7 +34,7 @@ profile:
         profile: high
         level: 3.1
     audio:
-      channels: 6 # 5.1
+      channels: 5.1
       bitrate: 320k
 
   ## Semi-TVzavr's profile for Desctop Web Video.
@@ -66,7 +66,7 @@ profile:
         profile: main
         level: 3.0
     audio:
-      channels: 2 # stereo
+      channels: stereo
       bitrate: 128k
 
   ## Semi-TVzavr's profile for old mobile devices
@@ -82,7 +82,7 @@ profile:
         profile: baseline
         level: 3.0
     audio:
-      channels: 1 # mono
+      channels: mono
       bitrate: 64k
 
   # High-quality SD video for archive/storage
@@ -100,7 +100,7 @@ profile:
     audio:
       codec:
         name: aac
-      channels: 6 # 5.1
+      channels: 5.1
       bitrate: 196k
 
   # Standard web video (480p at 500kbit/s)
@@ -115,7 +115,7 @@ profile:
       bufsize: 1000k
     audio:
       bitrate: 128k
-      channels: 2 # stereo
+      channels: stereo
 
   # 480p video for iPads and tablets
   # 480p at 400kbit/s in main profile
@@ -143,7 +143,7 @@ profile:
       bufsize: 500k
     audio:
       bitrate: 96k
-      channels: 1 # mono
+      channels: mono
 
 
 examples:

@@ -505,7 +505,6 @@ handle_audio_options(){
 
     local bitrate="$(profile ${profile_name} audio bitrate)";
     local volume="$(profile ${profile_name} audio volume)";
-    local channels="$(profile ${profile_name} audio channels)";
 
     local filter_options=$(handle_audio_filter_options \
        "${profile_name}"    \
@@ -514,6 +513,12 @@ handle_audio_options(){
     local common_options='';
 
     common_options+=$(if_exists '-b:a %s' ${bitrate})
+
+    common_options+=$(handle_audio_channels_options \
+        ${profile_name}     \
+        ${input_file_name}  \
+    );
+
     common_options+=$(if_exists '-ac %s' ${channels})
 
     common_options+=$(if_exists '-filter:a "%s"' ${filter_options} )
@@ -526,6 +531,22 @@ handle_audio_options(){
     echo ${options}
 }
 
+handle_audio_channels_options(){
+    local profile_name="${1}";
+    local input_file_name="${2}";
+
+    local channels="$(profile ${profile_name} audio channels)";
+
+    case "${channels}" in
+        mono) channels='1';;
+        stereo) channels='2';;
+        5.1) channels='6';;
+        *) ;;
+    esac;
+    local channels_options=$(if_exists '-ac %s' ${channels})
+
+    echo ${channels_options}
+}
 
 handle_audio_filter_options(){
     local profile_name="${1}";
