@@ -49,7 +49,7 @@ declare -gA PROFILE_MAP;
 declare -g  FILE_LOG_PREFIX="${TMP_DIR_NAME}/file-log";
 declare -g  PROFILE_LOG_PREFIX="${TMP_DIR_NAME}/profile-log";
 
-usage () {
+usage() {
     local C0="${COLOR_OFF}"
     local IC="${COLOR_BOLD}${COLOR_LIGHT_CYAN}"
 
@@ -184,6 +184,8 @@ EOF
 # ------------------------------------------------------------
 
 main(){
+    $(verbose_start "${SCRIPT_NAME}");
+
     # non-local function `configure` — sets global options of script.
     configure "${@}";
 
@@ -194,6 +196,7 @@ main(){
     $(start_up);
     $(handle_file_sequence "${INPUT_FILE_NAME_LIST}");
     $(clean_up);
+    $(verbose_end "${SCRIPT_NAME}");
 }
 
 handle_file_sequence(){
@@ -233,12 +236,12 @@ handle_file(){
         "${input_file_name}"                \
         "no such file: ${input_file_name}." \
     );
-    $(verbose_start "${input_file_name}");
+    $(verbose_start "${input_file_name}@%2s");
     $(handle_profile_sequence   \
         "${input_file_name}"    \
         "${file_index}"         \
     );
-    $(verbose_end "${input_file_name}");
+    $(verbose_end "${input_file_name}@%2s");
 }
 
 
@@ -289,7 +292,7 @@ handle_concrete_profile(){
     local step_name=$(echo "${profile_name}" \
         | tr '[:upper:]' '[:lower:]');
 
-    verbose_start "profile ${step_name}@%2s";
+    verbose_start "profile ${step_name}@%4s";
 
     local suffix=$(profile_default  \
         "${step_name}"              \
@@ -332,7 +335,7 @@ handle_concrete_profile(){
         "${profile_name}"                       \
         "${input_file_name}"                    \
     );
-    verbose_start "passes@%4s";
+    verbose_start "passes@%6s";
     for pass in $(seq 1 ${passes}); do
         local pass_options='';
         local output_pass_file_name="${output_file_name}";
@@ -349,7 +352,7 @@ handle_concrete_profile(){
             "${suffix}-${pass}-${extention}" \
             "ffmpeg.log" );
 
-        verbose_run "pass ${pass}@%6s"  \
+        verbose_run "pass ${pass}@%8s"  \
             ${FFMPEG_BIN} \
             ${global_options} \
             -i ${input_file_name} \
@@ -359,8 +362,8 @@ handle_concrete_profile(){
             -f ${output_format} -y ${output_pass_file_name} \
             2>&1 | tee "${log_file_name} ;" 1>& ${OUT_LOG_STREAM};
     done
-    verbose_end "passes@%4s";
-    verbose_end "profile ${step_name}@%2s";
+    verbose_end "passes@%6s";
+    verbose_end "profile ${step_name}@%4s";
 }
 
 # ------------------------------------------------------------
@@ -379,7 +382,7 @@ handle_global_options(){
         options+='-f x11grab -s wxga '
     fi;
 
-    verbose_block "global@%4s" "${options}";
+    verbose_block "global@%6s" "${options}";
     echo ${options};
 }
 
@@ -433,7 +436,7 @@ handle_video_options(){
     common_options+=$(if_exists '-vf "scale=%s:%s"' ${width} ${height})
 
     local options="${common_options} ${codec_options}";
-    verbose_block "video@%4s" "${options}";
+    verbose_block "video@%6s" "${options}";
     echo ${options}
 }
 
@@ -443,7 +446,10 @@ handle_video_codec_options(){
     local input_file_name="${2}";
     
     
-    local codec_name=$(profile_default 'h264' ${profile_name} video codec name)
+    local codec_name=$(profile_default \
+        'h264' \
+        ${profile_name} video codec name
+    );
 
     local codec_options='';
 
@@ -513,7 +519,7 @@ handle_audio_options(){
     local codec_options=$(handle_audio_codec_options ${profile_name})
     local options="${common_options} ${codec_options}";
 
-    verbose_block "audio@%4s" "${options}";
+    verbose_block "audio@%6s" "${options}";
 
     echo ${options}
 }
@@ -643,7 +649,7 @@ compute_if_empty (){
             base_dir_name=$(basename "${initial_dir_name}");
             local out_dir_name="${parent_dir_name}/${base_dir_name}";
             if [[ ! -d "${out_dir_name}" ]]; then
-                #notice "creates directory ${out_dir_name}"
+                notice "creates directory ${out_dir_name}"
                 mkdir -p "${out_dir_name}";
             fi;
             base_name="${out_dir_name}/${base_name}"
@@ -659,14 +665,14 @@ compute_if_empty (){
 
 start_up (){
     if [[ ! -d "${TMP_DIR_NAME}" ]] ; then
-        #notice "creates directory ${TMP_DIR_NAME}"
+        notice "creates directory ${TMP_DIR_NAME}"
         mkdir -p "${TMP_DIR_NAME}";
     fi;
 }
 
 clean_up (){
     if [[ -d "${TMP_DIR_BASE_NAME}" ]] ; then
-        #notice "deletes directory ${TMP_DIR_BASE_NAME}"
+        notice "deletes directory ${TMP_DIR_BASE_NAME}"
         rm -rf "${TMP_DIR_BASE_NAME}";
     fi;
 
@@ -825,10 +831,9 @@ parse_options (){
 handle_config() {
     local config="$@";
     local res=$(parse_config ${config});
-    if [[ "${VERBOSE}" == "true" ]]; then
-        notice 'handles config';
-        #echo -e ${res} | sed 's/; /;\n/gi';
-    fi;
+    #if [[ "${VERBOSE}" == "true" ]]; then
+    #    echo -e ${res} | sed 's/; /;\n/gi';
+    #fi;
     eval "${res}";
 }
 
@@ -876,7 +881,7 @@ parse_config() {
 # All log-output into `stderr`
 readonly OUT_LOG_STREAM=2;
 
-LOG_OFFSET=''
+declare -g LOG_OFFSET='';
 
 # Colors works only in console.
 if [ -t ${OUT_LOG_STREAM} ]; then
