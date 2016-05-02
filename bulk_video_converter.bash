@@ -506,7 +506,6 @@ handle_global_device_options(){
     local input_file_name="${2}";
 
     local options='';
-
     local audio_input_format=$(profile_default  \
         'alsa'                      \
         ${profile_name}             \
@@ -514,7 +513,6 @@ handle_global_device_options(){
         audio                       \
         format                      \
     );
-
     local audio_input_device=$(profile_default  \
         'hw:0'                      \
         ${profile_name}             \
@@ -522,8 +520,6 @@ handle_global_device_options(){
         audio                       \
         device                      \
     );
-
-
     local video_input_format=$(profile_default  \
         'x11grab'                   \
         ${profile_name}             \
@@ -531,7 +527,6 @@ handle_global_device_options(){
         video                       \
         format                      \
     );
-
     local video_input_size=$(profile_default  \
         'wxga'                      \
         ${profile_name}             \
@@ -540,13 +535,10 @@ handle_global_device_options(){
         size                        \
     );
 
-
     options+=$(if_exists ' -f %s' ${audio_input_format});
     options+=$(if_exists ' -i %s' ${audio_input_device});
-
     options+=$(if_exists ' -f %s' ${video_input_format});
     options+=$(if_exists ' -s %s' ${video_input_size});
-
 
     echo ${options};
 }
