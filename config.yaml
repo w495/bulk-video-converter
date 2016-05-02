@@ -104,7 +104,7 @@ profile:
   # Standard web video (480p at 500kbit/s)
   # from https://www.virag.si/2012/01/web-video-encoding-tutorial-with-ffmpeg-0-9/
   virag_h264x1_480p_web:
-    extends: virag_h264x1_sd
+    extends: virag_h264x1_pal_sd
     video:
       height: 480
       preset: slow

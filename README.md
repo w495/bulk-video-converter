@@ -18,15 +18,11 @@ ffmpeg:
   stop: 00:00:30
 profile:
   base:
-    abstract: 1 
-        # This profile will be used only for inheritance.
-    output_dir_name: ./out 
-        # optional parametr.
-    pass_log_dir_name: ./pass_log
-        # optional parametr.
+    abstract: 1     # This profile will be used only for inheritance.
+    output_dir_name: ./out          # Optional parametr.
+    pass_log_dir_name: ./pass_log   # Optional parametr.
   my_profile:
-    extends: base 
-        # Other options are inherited from `base`.
+    extends: base   # Other options are inherited from `base`.
     passes: 2
     video:
       preset: veryslow
@@ -50,18 +46,18 @@ profile:
 It generates output log like this:
 ```yaml
 bulk_video_converter.bash:
-  /home/w495/Videos/input/00001.MTS :
+  /home/user/Video/00001.MTS :
     profile my_profile:
       global input: -ss '00:00:10' -threads '0' 
       video: -preset 'veryslow'  -b:v '2000k'  -vf 'scale=1280:720'  -codec:v 'libx264' -profile:v 'high'  -level:v '3.1'  -weightp '2'  -bf '3'  -x264opts 'keyint=96:min-keyint=96:no-scenecut' 
       audio: -b:a '320k' -ac '6' -strict 'experimental' -codec:a 'aac' 
       global output: -ss '00:00:10' -to '00:00:30' 
       passes:
-        pass 1: /usr/bin/ffmpeg -ss '00:00:10' -threads '0' -i '/home/w495/Videos/input/00001.MTS' -preset 'veryslow' -b:v '2000k' -vf 'scale=1280:720' -codec:v 'libx264' -profile:v 'high' -level:v '3.1' -weightp '2' -bf '3' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -pass 1 -passlogfile ./pass_log/00001-my_profile.mts -b:a '320k' -ac '6' -strict 'experimental' -codec:a 'aac' -ss '00:00:10' -to '00:00:30' -f 'mp4' -y '/dev/null' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-02_04-09-08-036081777/00001-my_profile-1-mp4.ffmpeg.log 1>&2;
-        pass 2: /usr/bin/ffmpeg -ss '00:00:10' -threads '0' -i '/home/w495/Videos/input/00001.MTS' -preset 'veryslow' -b:v '2000k' -vf 'scale=1280:720' -codec:v 'libx264' -profile:v 'high' -level:v '3.1' -weightp '2' -bf '3' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -pass 2 -passlogfile ./pass_log/00001-my_profile.mts -b:a '320k' -ac '6' -strict 'experimental' -codec:a 'aac' -ss '00:00:10' -to '00:00:30' -f 'mp4' -y './out/00001-my_profile.mp4' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-02_04-09-08-036081777/00001-my_profile-2-mp4.ffmpeg.log 1>&2;
+        pass 1: /usr/bin/ffmpeg -ss '00:00:10' -threads '0' -i '/home/user/Video/00001.MTS' -preset 'veryslow' -b:v '2000k' -vf 'scale=1280:720' -codec:v 'libx264' -profile:v 'high' -level:v '3.1' -weightp '2' -bf '3' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -pass 1 -passlogfile ./pass_log/00001-my_profile.mts -b:a '320k' -ac '6' -strict 'experimental' -codec:a 'aac' -ss '00:00:10' -to '00:00:30' -f 'mp4' -y '/dev/null' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-02_04-09-08-036081777/00001-my_profile-1-mp4.ffmpeg.log 1>&2;
+        pass 2: /usr/bin/ffmpeg -ss '00:00:10' -threads '0' -i '/home/user/Video/00001.MTS' -preset 'veryslow' -b:v '2000k' -vf 'scale=1280:720' -codec:v 'libx264' -profile:v 'high' -level:v '3.1' -weightp '2' -bf '3' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -pass 2 -passlogfile ./pass_log/00001-my_profile.mts -b:a '320k' -ac '6' -strict 'experimental' -codec:a 'aac' -ss '00:00:10' -to '00:00:30' -f 'mp4' -y './out/00001-my_profile.mp4' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-02_04-09-08-036081777/00001-my_profile-2-mp4.ffmpeg.log 1>&2;
       # passes done
     # profile my_profile done
-  # /home/w495/Videos/input/00001.MTS done
+  # /home/user/Video/00001.MTS done
 # bulk_video_converter.bash done
 
 ```
@@ -130,8 +126,8 @@ If you want to get several files from one source
 you shold describe several profiles in the config.
 
 For example, let we use profiles from 
-[H.264 web video encoding tutorial with FFmpeg](https://www.virag.si/2012/01/web-video-encoding-tutorial-with-ffmpeg-0-9/)
-    
+[H.264 web video encoding tutorial with FFmpeg.](https://www.virag.si/2012/01/web-video-encoding-tutorial-with-ffmpeg-0-9/)
+
 ```yaml
 ffmpeg:
   bin: /usr/bin/ffmpeg
@@ -140,17 +136,13 @@ ffmpeg:
   stop: 00:00:30
 profile:
   base:
-    abstract: 1 
-        # It will be used only for inheritance.
-    source: /path/to/video/files/*.MTS 
-        # also you can set names of files within config
+    abstract: 1 # It will be used only for inheritance.
+    source: /home/user/Video/*.MTS  # also you can set file names here.
     output_dir_name: ./out
     pass_log_dir_name: ./pass_log
-    
-  # High-quality SD video for archive/storage
-  # (PAL at 1Mbit/s in high profile):
+ 
+  # High-quality SD video. (PAL at 1Mbit/s in high profile)
   virag_h264x1_pal_sd:
-    # Other options are inherited from `base`
     extends:   base
     passes: 1
     video:
@@ -166,9 +158,9 @@ profile:
       channels: 5.1
       bitrate: 196k
 
-  # Standard web video (480p at 500kbit/s)
+  # Standard web video (480p at 500kbit/s).
   virag_h264x1_480p_web:
-    extends: virag_h264x1_sd
+    extends: virag_h264x1_pal_sd
     video:
       height: 480
       preset: slow
@@ -179,8 +171,7 @@ profile:
       bitrate: 128k
       channels: stereo
 
-  # 480p video for iPads and tablets
-  # 480p at 400kbit/s in main profile
+  # 480p video for iPads and tablets (400kbit/s in main profile).
   virag_h264x1_480p_tablet:
     extends: virag_h264x1_480p_web
     video:
@@ -190,8 +181,7 @@ profile:
       maxrate: 400k
       bufsize: 800k
 
-  # 360p video for older mobile phones
-  # (360p at 250kbit/s in baseline profile)
+  # 360p video for older mobile phones (250kbit/s in baseline profile).
   virag_h264x1_360p_mobile:
     extends: virag_h264x1_480p_tablet
     video:
@@ -204,7 +194,105 @@ profile:
     audio:
       bitrate: 96k
       channels: mono
-
-
 ```
 
+
+You can check what you will get with dry-run option (`-d`).
+So for virag's profiles you will have output with four ffmpeg-commands.
+
+```bash
+[user@host ~]$ ./bulk_video_converter.bash  -c config.yaml -d
+bulk_video_converter.bash:
+# NOTICE 31:  bulk_video_converter.bash creates directory /tmp/bulk_video_converter.bash/tWZoduQt
+# NOTICE 38:  bulk_video_converter.bash gets file names from config
+  FROM-CONFIG-tWZoduQt :
+  # FROM-CONFIG-tWZoduQt  done
+  /home/user/Video/00001.MTS VIRAG_H264X1_360P_MOBILE:
+    profile virag_h264x1_360p_mobile:
+      global input:
+          -ss '00:00:10'   -threads '0' 
+      # global input done
+      video:
+         -preset 'slow'  -b:v '250k'  -maxrate '250k'  -bufsize '500k'  -vf 'scale=0:360'  -codec:v 'libx264' -profile:v 'baseline' 
+      # video done
+      audio:
+         -b:a '96k' -ac '1' -strict 'experimental' -codec:a 'aac' 
+      # audio done
+      global output:
+          -ss '00:00:10'   -to '00:00:30' 
+      # global output done
+      passes:
+        pass 1:
+          /usr/bin/ffmpeg -ss '00:00:10' -threads '0' -i '/home/user/Video/00001.MTS' -preset 'slow' -b:v '250k' -maxrate '250k' -bufsize '500k' -vf 'scale=0:360' -codec:v 'libx264' -profile:v 'baseline' -b:a '96k' -ac '1' -strict 'experimental' -codec:a 'aac' -ss '00:00:10' -to '00:00:30' -f 'mp4' -y './out/00001-virag_h264x1_360p_mobile.mp4' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-02_04-47-37-259507693/00001-virag_h264x1_360p_mobile-1-mp4.ffmpeg.log 1>&2;
+        # pass 1 done
+      # passes done
+    # profile virag_h264x1_360p_mobile done
+  # /home/user/Video/00001.MTS VIRAG_H264X1_360P_MOBILE done
+  /home/user/Video/00001.MTS VIRAG_H264X1_480P_TABLET:
+    profile virag_h264x1_480p_tablet:
+      global input:
+          -ss '00:00:10'   -threads '0' 
+      # global input done
+      video:
+         -preset 'slow'  -b:v '400k'  -maxrate '400k'  -bufsize '800k'  -vf 'scale=0:480'  -codec:v 'libx264' -profile:v 'main' 
+      # video done
+      audio:
+         -b:a '128k' -ac '2' -strict 'experimental' -codec:a 'aac' 
+      # audio done
+      global output:
+          -ss '00:00:10'   -to '00:00:30' 
+      # global output done
+      passes:
+        pass 1:
+          /usr/bin/ffmpeg -ss '00:00:10' -threads '0' -i '/home/user/Video/00001.MTS' -preset 'slow' -b:v '400k' -maxrate '400k' -bufsize '800k' -vf 'scale=0:480' -codec:v 'libx264' -profile:v 'main' -b:a '128k' -ac '2' -strict 'experimental' -codec:a 'aac' -ss '00:00:10' -to '00:00:30' -f 'mp4' -y './out/00001-virag_h264x1_480p_tablet.mp4' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-02_04-47-37-259507693/00001-virag_h264x1_480p_tablet-1-mp4.ffmpeg.log 1>&2;
+        # pass 1 done
+      # passes done
+    # profile virag_h264x1_480p_tablet done
+  # /home/user/Video/00001.MTS VIRAG_H264X1_480P_TABLET done
+  /home/user/Video/00001.MTS VIRAG_H264X1_480P_WEB:
+    profile virag_h264x1_480p_web:
+      global input:
+          -ss '00:00:10'   -threads '0' 
+      # global input done
+      video:
+         -preset 'slow'  -b:v '500k'  -maxrate '500k'  -bufsize '1000k'  -vf 'scale=0:480'  -codec:v 'libx264' -profile:v 'main' 
+      # video done
+      audio:
+         -b:a '128k' -ac '2' -strict 'experimental' -codec:a 'aac' 
+      # audio done
+      global output:
+          -ss '00:00:10'   -to '00:00:30' 
+      # global output done
+      passes:
+        pass 1:
+          /usr/bin/ffmpeg -ss '00:00:10' -threads '0' -i '/home/user/Video/00001.MTS' -preset 'slow' -b:v '500k' -maxrate '500k' -bufsize '1000k' -vf 'scale=0:480' -codec:v 'libx264' -profile:v 'main' -b:a '128k' -ac '2' -strict 'experimental' -codec:a 'aac' -ss '00:00:10' -to '00:00:30' -f 'mp4' -y './out/00001-virag_h264x1_480p_web.mp4' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-02_04-47-37-259507693/00001-virag_h264x1_480p_web-1-mp4.ffmpeg.log 1>&2;
+        # pass 1 done
+      # passes done
+    # profile virag_h264x1_480p_web done
+  # /home/user/Video/00001.MTS VIRAG_H264X1_480P_WEB done
+  /home/user/Video/00001.MTS VIRAG_H264X1_PAL_SD:
+    profile virag_h264x1_pal_sd:
+      global input:
+          -ss '00:00:10'   -threads '0' 
+      # global input done
+      video:
+         -preset 'slower'  -b:v '1000k'  -vf 'scale=0:576'  -codec:v 'libx264' -profile:v 'main' 
+      # video done
+      audio:
+         -b:a '196k' -ac '6' -strict 'experimental' -codec:a 'aac' 
+      # audio done
+      global output:
+          -ss '00:00:10'   -to '00:00:30' 
+      # global output done
+      passes:
+      # NOTICE 413:  bulk_video_converter.bash creates directory /var/log/bulk_video_converter.bash/2016-05-02_04-47-37-259507693
+        pass 1:
+          /usr/bin/ffmpeg -ss '00:00:10' -threads '0' -i '/home/user/Video/00001.MTS' -preset 'slower' -b:v '1000k' -vf 'scale=0:576' -codec:v 'libx264' -profile:v 'main' -b:a '196k' -ac '6' -strict 'experimental' -codec:a 'aac' -ss '00:00:10' -to '00:00:30' -f 'mp4' -y './out/00001-virag_h264x1_pal_sd.mp4' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-02_04-47-37-259507693/00001-virag_h264x1_pal_sd-1-mp4.ffmpeg.log 1>&2;
+        # pass 1 done
+      # passes done
+    # profile virag_h264x1_pal_sd done
+  # /home/user/Video/00001.MTS VIRAG_H264X1_PAL_SD done
+# NOTICE 696:  bulk_video_converter.bash deletes directory /tmp/bulk_video_converter.bash
+# bulk_video_converter.bash done
+[user@host ~]$ 
+```

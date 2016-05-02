@@ -14,7 +14,7 @@ readonly RANDOM_STING=$(cat /dev/urandom \
 readonly START_TIME_STRING=$(date "+%Y-%m-%d_%H-%M-%S-%N");
 readonly START_TIME_NS=$(($(date +%s%N)));
 readonly SCRIPT_NAME=$(basename $0);
-readonly FROM_CONFIG_FILE_FLAG='<from_config>'
+readonly FROM_CONFIG_FILE_FLAG="FROM-CONFIG-${RANDOM_STING}"
 # ------------------------------------------------------------
 # Default options:
 #   They are not `readonly` because they can be
