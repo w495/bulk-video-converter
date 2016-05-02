@@ -3,12 +3,12 @@
 ## Fast start
 
 For call 
-```(bash)
+```bash
 bulk_video_converter.bash -c config.yaml  -d ~/Videos/input/00001.MTS
 ```
 
 with `config.yaml` like this
-```(YAML)
+```yaml
 ffmpeg:
   bin: /usr/bin/ffmpeg
   threads: 0
@@ -46,7 +46,7 @@ profile:
 ```
 
 It generates output log like this:
-```(YAML)
+```yaml
 bulk_video_converter.bash:
 # NOTICE 28:  bulk_video_converter.bash creates directory /tmp/bulk_video_converter.bash/1Ee1Z6T4
   /home/w495/Videos/input/00001.MTS :
@@ -83,7 +83,7 @@ bulk_video_converter.bash:
 And perform 2 sequential commands for `ffmpeg`.
 
 * For the first pass:
-```(bash)
+```bash
 /usr/bin/ffmpeg                                         \
     -ss 00:00:10                                        \
     -threads 0                                          \
@@ -111,7 +111,7 @@ And perform 2 sequential commands for `ffmpeg`.
 
 * And for second one:
 
-```(bash)
+```bash
 /usr/bin/ffmpeg                                         \
     -ss 00:00:10                                        \
     -threads 0                                          \
