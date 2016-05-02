@@ -89,7 +89,7 @@ Where:
 * `00001.MTS` — is you source video file.
 * `config.yaml` — is configuration that describes you transcoded file.
 
-#### Config example 
+#### Config example for one profile
 
 ```yaml
 ffmpeg:
@@ -128,7 +128,7 @@ profile:
 With such configuration the converter will generate output log
 and perform two sequential ffmpeg passes.
 
-#### Output log example 
+#### Output log example for one profile
 
 ```yaml
 bulk_video_converter.bash:
@@ -148,8 +148,9 @@ bulk_video_converter.bash:
 
 ```
 
+#### Performance example for one profile
 
-#### Performance example: pass 1
+##### Performance example: pass 1
 
 
 ```bash
@@ -179,7 +180,7 @@ bulk_video_converter.bash:
 ```
 
 
-#### Performance example: pass 2
+##### Performance example: pass 2
 
 
 ```bash
@@ -214,6 +215,9 @@ bulk_video_converter.bash:
 If you want to get several files from one source you should describe 
 several profiles in the config. For example, let we use profiles from 
 [H.264 web video encoding tutorial with FFmpeg.](https://www.virag.si/2012/01/web-video-encoding-tutorial-with-ffmpeg-0-9/)
+
+
+#### Config example for virag's profiles
 
 ```yaml
 ffmpeg:
@@ -275,6 +279,8 @@ profile:
       channels: mono
 ```
 
+
+#### Output example for virag's profiles
 
 You can check what you will get with dry-run option (`-d`).
 So for virag's profiles you will have output with four ffmpeg-commands.
