@@ -82,7 +82,8 @@ bulk_video_converter.bash:
 
 And perform 2 sequential commands for `ffmpeg`.
 
-* For first pass: ```(bash)
+* For the first pass:
+```(bash)
 /usr/bin/ffmpeg                                         \
     -ss 00:00:10                                        \
     -threads 0                                          \
@@ -108,7 +109,9 @@ And perform 2 sequential commands for `ffmpeg`.
     -y /dev/null;
 ```
 
-* and  ```(bash)
+* And for second one:
+
+```(bash)
 /usr/bin/ffmpeg                                         \
     -ss 00:00:10                                        \
     -threads 0                                          \
