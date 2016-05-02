@@ -1,14 +1,14 @@
 # mts-converter
 
-##Table of contents
+## Table of contents
 
   * [Table of contents](#table-of-contents)
-  * [Fast start](#fast-start)
+  * [Quick start guide](#quick-start-guide)
     * [Conversion to one file](#conversion-to-one-file)
     * [Conversion to several files](#conversion-to-several-files)
-
-
-## Fast start
+  * [TODO](#todo)
+  
+## Quick start guide
 
 ### Conversion to one file
 
@@ -296,3 +296,8 @@ bulk_video_converter.bash:
 # bulk_video_converter.bash done
 [user@host ~]$ 
 ```
+
+
+## TODO
+
+* Add error handling for parallel processes.
