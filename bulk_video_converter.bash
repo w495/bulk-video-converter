@@ -660,9 +660,9 @@ handle_audio_channels_options(){
     local input_file_name="${2}";
     local channels="$(profile ${profile_name} audio channels)";
     case "${channels}" in
-        mono)   channels='1';;
-        stereo) channels='2';;
-        5.1)    channels='6';;
+        'mono')   channels='1';;
+        'stereo') channels='2';;
+        '5.1')    channels='6';;
         *) ;;
     esac;
     local channels_options=$(if_exists "-ac '%s'" ${channels})
