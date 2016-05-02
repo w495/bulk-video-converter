@@ -73,7 +73,7 @@ in the ${FC}'default_config'${C0} function in this script.
 
 The main purpose of this tool to create several videos of different
 quality and size from one source. It is very helpful for handling raw
-videos from amateur filming camera.
+videos from amateur filming camera (especially *.MTS files).
 
 ${COLOR_REVERSE} Usage:${C0}
     ${SCRIPT_NAME} [options] [file names]
@@ -88,11 +88,15 @@ ${COLOR_REVERSE} Options:${C0}
             ${EC}${SCRIPT_NAME} -i ./part1.mp4 ./part2.mp4${C0}
             ${EC}${SCRIPT_NAME} -i ~/Videos/*.mp4${C0}
             ${EC}${SCRIPT_NAME} -i :0.0${C0}
-        Also you can set input files names without '-i' option:
+        Also you can set input files' names without '-i' option:
             ${EC}${SCRIPT_NAME} ./video.mts${C0}
             ${EC}${SCRIPT_NAME} ./part1.mp4 ./part2.mp4${C0}
             ${EC}${SCRIPT_NAME} ~/Videos/*.mp4${C0}
             ${EC}${SCRIPT_NAME} :0.0${C0}
+        Also you can set input files' names within config file.
+        For this you should define the 'source' field (or
+        'source / video' or 'source / video / device') inside the
+        profile.
     ${IC}-c, --config${C0}  ${AC}<filename.yaml>${C0}
         set yaml-config file for encoding profile. See examples in
         the  ${FC}'default_config'${C0} function in this script.
