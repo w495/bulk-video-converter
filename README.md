@@ -16,23 +16,19 @@ ffmpeg:
   stop: 00:00:30
 profile:
   base:
-    # you can mark profile as abstract
-    # and it will be used only for inheritance.
-    abstract: 1
+    abstract: 1 # It will be used only for inheritance.
     output_dir_name: ./out
     pass_log_dir_name: ./pass_log
-
   my_profile:
-    # Other options are inherited from `base`
-    extends:   base
+    extends: base # Other options are inherited from `base`
     passes: 2
     video:
       preset: veryslow
-      width:   1280
-      height:  720
+      width: 1280
+      height: 720
       bitrate: 2000k
       codec:
-        name : h264
+        name: h264
         weightp: 2
         bframes: 3
         opts: "keyint=96:min-keyint=96:no-scenecut"
