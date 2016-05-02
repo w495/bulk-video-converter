@@ -13,73 +13,73 @@ profile:
     output_dir_name: ./out
     pass_log_dir_name: ./pass_log
 
-#  ## Semi-TVzavr's profile for SmartTV devices.
-#  ## Check in the player on the https://www.tvzavr.ru/
-#  tvzavr_h264x2_720p_hd:
-#    # Other options are inherited from `base`
-#    extends:   base
-#    passes: 2
-#    video:
-#      preset: veryslow
-#      width:   1280
-#      height:  720
-#      bitrate: 2000k
-#      codec:
-#        name : h264
-#        weightp: 2
-#        bframes: 3
-#        opts: "keyint=96:min-keyint=96:no-scenecut"
-#        profile: high
-#        level: 3.1
-#    audio:
-#      codec:
-#        name: aac
-#      channels: 5.1
-#      bitrate: 320k
+  ## Semi-TVzavr's profile for SmartTV devices.
+  ## Check in the player on the https://www.tvzavr.ru/
+  tvzavr_h264x2_720p_hd:
+    # Other options are inherited from `base`
+    extends:   base
+    passes: 2
+    video:
+      preset: veryslow
+      width:   1280
+      height:  720
+      bitrate: 2000k
+      codec:
+        name : h264
+        weightp: 2
+        bframes: 3
+        opts: "keyint=96:min-keyint=96:no-scenecut"
+        profile: high
+        level: 3.1
+    audio:
+      codec:
+        name: aac
+      channels: 5.1
+      bitrate: 320k
 
-#  ## Semi-TVzavr's profile for Desctop Web Video.
-#  ## Check in the player on the https://www.tvzavr.ru/
-#  tvzavr_h264x2_480p_hi:
-#    # Other options are inherited from `tvzavr_h264x2_base`
-#    extends: tvzavr_h264x2_720p_hd
-#    video:
-#      width:   854
-#      height:  480
-#      bitrate: 1000k
-#      codec:
-#        profile: main
-#        level: 3.0
-#    audio:
-#      channels: 3 # stereo 3
-#      bitrate: 196k
-#
-#  ## Semi-TVzavr's profile for tablets.
-#  ## Check in the player on the https://www.tvzavr.ru/
-#  tvzavr_h264x2_360p_nr:
-#    # Other options are inherited from `tvzavr_h264x2_base`
-#    extends: tvzavr_h264x2_480p_hi
-#    video:
-#      width:   640
-#      height:  360
-#      bitrate: 600k
-#    audio:
-#      channels: stereo
-#      bitrate: 128k
-#
-#  ## Semi-TVzavr's profile for old mobile devices
-#  ## Check in the player on the https://www.tvzavr.ru/.
-#  tvzavr_h264x2_270p_lw:
-#    # Other options are inherited from `tvzavr_h264x2_base`
-#    extends: tvzavr_h264x2_360p_nr
-#    video:
-#      width:   480
-#      height:  270
-#      bitrate: 250k
-#      codec:
-#        profile: baseline0
-#    audio:
-#      channels: mono
-#      bitrate: 64k
+  ## Semi-TVzavr's profile for Desctop Web Video.
+  ## Check in the player on the https://www.tvzavr.ru/
+  tvzavr_h264x2_480p_hi:
+    # Other options are inherited from `tvzavr_h264x2_base`
+    extends: tvzavr_h264x2_720p_hd
+    video:
+      width:   854
+      height:  480
+      bitrate: 1000k
+      codec:
+        profile: main
+        level: 3.0
+    audio:
+      channels: 3 # stereo 3
+      bitrate: 196k
+
+  ## Semi-TVzavr's profile for tablets.
+  ## Check in the player on the https://www.tvzavr.ru/
+  tvzavr_h264x2_360p_nr:
+    # Other options are inherited from `tvzavr_h264x2_base`
+    extends: tvzavr_h264x2_480p_hi
+    video:
+      width:   640
+      height:  360
+      bitrate: 600k
+    audio:
+      channels: stereo
+      bitrate: 128k
+
+  ## Semi-TVzavr's profile for old mobile devices
+  ## Check in the player on the https://www.tvzavr.ru/.
+  tvzavr_h264x2_270p_lw:
+    # Other options are inherited from `tvzavr_h264x2_base`
+    extends: tvzavr_h264x2_360p_nr
+    video:
+      width:   480
+      height:  270
+      bitrate: 250k
+      codec:
+        profile: baseline0
+    audio:
+      channels: mono
+      bitrate: 64k
 
   # High-quality SD video for archive/storage
   # (PAL at 1Mbit/s in high profile):
@@ -143,7 +143,6 @@ profile:
       bitrate: 96k
       channels: mono
 
-#
 
 # Device capturing example
 profile_screen:
