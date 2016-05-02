@@ -9,7 +9,7 @@ profile:
     # you can mark profile as abstract
     # and it will be used only for inheritance.
     abstract: 1
-    source: /home/w495/Videos/input/00001.MTS
+    #source: /home/w495/Videos/input/00001.MTS
     output_dir_name: ./out
     pass_log_dir_name: ./pass_log
 

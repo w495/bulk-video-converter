@@ -254,21 +254,22 @@ handle_file(){
         "${input_file_name}"                \
         "no such file: ${input_file_name}." \
     );
-    $(verbose_start "${input_file_name} ${concrete_profile}@%2s");
+
+    #$(debug "handles ${input_file_name} with ${concrete_profile}";)
 
     if [[ -n ${concrete_profile} ]]; then
+        $(verbose_start "${input_file_name}@%2s");
         $(handle_concrete_profile   \
             "${concrete_profile}"       \
             "${input_file_name}"    \
         )
+        $(verbose_end "${input_file_name}@%2s");
     else
         $(handle_profile_sequence   \
             "${input_file_name}"    \
             "${file_index}"         \
         );
     fi;
-
-    $(verbose_end "${input_file_name} ${concrete_profile}@%2s");
 }
 
 
@@ -295,7 +296,7 @@ handle_profile_async(){
     local profile_log="${3}";
     (
         $(handle_profile "${profile_name}" "${input_file_name}")
-    ) 2>"${profile_log}.log" &
+    ) 2>"${profile_log}.log"
 }
 
 
@@ -1234,7 +1235,17 @@ notice() {
     info_print  "NOTICE ${MS}"\
                 "${BG_COLOR_DARK_BLUE}"\
                 "${COLOR_DARK_CYAN}"\
-                "${COLOR_LIGHT_CYAN}"\
+                "${COLOR_DIM}${COLOR_DARK_CYAN}"\
+                "${@}"
+}
+
+debug() {
+    local NS=$(($(date +%s%N)-${START_TIME_NS}))
+    local MS=$((${NS}/1000000))
+    info_print  "DEBUG ${MS}"\
+                "${BG_COLOR_DARK_GREEN}"\
+                "${COLOR_DARK_BLACK}"\
+                "${COLOR_DIM}${COLOR_DARK_GREEN}"\
                 "${@}"
 }
 

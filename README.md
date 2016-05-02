@@ -203,11 +203,8 @@ So for virag's profiles you will have output with four ffmpeg-commands.
 ```bash
 [user@host ~]$ ./bulk_video_converter.bash  -c config.yaml -d
 bulk_video_converter.bash:
-# NOTICE 31:  bulk_video_converter.bash creates directory /tmp/bulk_video_converter.bash/tWZoduQt
-# NOTICE 38:  bulk_video_converter.bash gets file names from config
-  FROM-CONFIG-tWZoduQt :
-  # FROM-CONFIG-tWZoduQt  done
-  /home/user/Video/00001.MTS VIRAG_H264X1_360P_MOBILE:
+# NOTICE 25:  bulk_video_converter.bash creates directory /tmp/bulk_video_converter.bash/01TaRYSd
+  /home/user/Video/00001.MTS:
     profile virag_h264x1_360p_mobile:
       global input:
           -ss '00:00:10'   -threads '0' 
@@ -223,12 +220,12 @@ bulk_video_converter.bash:
       # global output done
       passes:
         pass 1:
-          /usr/bin/ffmpeg -ss '00:00:10' -threads '0' -i '/home/user/Video/00001.MTS' -preset 'slow' -b:v '250k' -maxrate '250k' -bufsize '500k' -vf 'scale=0:360' -codec:v 'libx264' -profile:v 'baseline' -b:a '96k' -ac '1' -strict 'experimental' -codec:a 'aac' -ss '00:00:10' -to '00:00:30' -f 'mp4' -y './out/00001-virag_h264x1_360p_mobile.mp4' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-02_04-47-37-259507693/00001-virag_h264x1_360p_mobile-1-mp4.ffmpeg.log 1>&2;
+          /usr/bin/ffmpeg -ss '00:00:10' -threads '0' -i '/home/user/Video/00001.MTS' -preset 'slow' -b:v '250k' -maxrate '250k' -bufsize '500k' -vf 'scale=0:360' -codec:v 'libx264' -profile:v 'baseline' -b:a '96k' -ac '1' -strict 'experimental' -codec:a 'aac' -ss '00:00:10' -to '00:00:30' -f 'mp4' -y './out/00001-virag_h264x1_360p_mobile.mp4' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-02_05-14-20-695774334/00001-virag_h264x1_360p_mobile-1-mp4.ffmpeg.log 1>&2;
         # pass 1 done
       # passes done
     # profile virag_h264x1_360p_mobile done
-  # /home/user/Video/00001.MTS VIRAG_H264X1_360P_MOBILE done
-  /home/user/Video/00001.MTS VIRAG_H264X1_480P_TABLET:
+  # /home/user/Video/00001.MTS done
+  /home/user/Video/00001.MTS:
     profile virag_h264x1_480p_tablet:
       global input:
           -ss '00:00:10'   -threads '0' 
@@ -244,12 +241,12 @@ bulk_video_converter.bash:
       # global output done
       passes:
         pass 1:
-          /usr/bin/ffmpeg -ss '00:00:10' -threads '0' -i '/home/user/Video/00001.MTS' -preset 'slow' -b:v '400k' -maxrate '400k' -bufsize '800k' -vf 'scale=0:480' -codec:v 'libx264' -profile:v 'main' -b:a '128k' -ac '2' -strict 'experimental' -codec:a 'aac' -ss '00:00:10' -to '00:00:30' -f 'mp4' -y './out/00001-virag_h264x1_480p_tablet.mp4' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-02_04-47-37-259507693/00001-virag_h264x1_480p_tablet-1-mp4.ffmpeg.log 1>&2;
+          /usr/bin/ffmpeg -ss '00:00:10' -threads '0' -i '/home/user/Video/00001.MTS' -preset 'slow' -b:v '400k' -maxrate '400k' -bufsize '800k' -vf 'scale=0:480' -codec:v 'libx264' -profile:v 'main' -b:a '128k' -ac '2' -strict 'experimental' -codec:a 'aac' -ss '00:00:10' -to '00:00:30' -f 'mp4' -y './out/00001-virag_h264x1_480p_tablet.mp4' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-02_05-14-20-695774334/00001-virag_h264x1_480p_tablet-1-mp4.ffmpeg.log 1>&2;
         # pass 1 done
       # passes done
     # profile virag_h264x1_480p_tablet done
-  # /home/user/Video/00001.MTS VIRAG_H264X1_480P_TABLET done
-  /home/user/Video/00001.MTS VIRAG_H264X1_480P_WEB:
+  # /home/user/Video/00001.MTS done
+  /home/user/Video/00001.MTS:
     profile virag_h264x1_480p_web:
       global input:
           -ss '00:00:10'   -threads '0' 
@@ -265,12 +262,12 @@ bulk_video_converter.bash:
       # global output done
       passes:
         pass 1:
-          /usr/bin/ffmpeg -ss '00:00:10' -threads '0' -i '/home/user/Video/00001.MTS' -preset 'slow' -b:v '500k' -maxrate '500k' -bufsize '1000k' -vf 'scale=0:480' -codec:v 'libx264' -profile:v 'main' -b:a '128k' -ac '2' -strict 'experimental' -codec:a 'aac' -ss '00:00:10' -to '00:00:30' -f 'mp4' -y './out/00001-virag_h264x1_480p_web.mp4' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-02_04-47-37-259507693/00001-virag_h264x1_480p_web-1-mp4.ffmpeg.log 1>&2;
+          /usr/bin/ffmpeg -ss '00:00:10' -threads '0' -i '/home/user/Video/00001.MTS' -preset 'slow' -b:v '500k' -maxrate '500k' -bufsize '1000k' -vf 'scale=0:480' -codec:v 'libx264' -profile:v 'main' -b:a '128k' -ac '2' -strict 'experimental' -codec:a 'aac' -ss '00:00:10' -to '00:00:30' -f 'mp4' -y './out/00001-virag_h264x1_480p_web.mp4' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-02_05-14-20-695774334/00001-virag_h264x1_480p_web-1-mp4.ffmpeg.log 1>&2;
         # pass 1 done
       # passes done
     # profile virag_h264x1_480p_web done
-  # /home/user/Video/00001.MTS VIRAG_H264X1_480P_WEB done
-  /home/user/Video/00001.MTS VIRAG_H264X1_PAL_SD:
+  # /home/user/Video/00001.MTS done
+  /home/user/Video/00001.MTS:
     profile virag_h264x1_pal_sd:
       global input:
           -ss '00:00:10'   -threads '0' 
@@ -285,14 +282,14 @@ bulk_video_converter.bash:
           -ss '00:00:10'   -to '00:00:30' 
       # global output done
       passes:
-      # NOTICE 413:  bulk_video_converter.bash creates directory /var/log/bulk_video_converter.bash/2016-05-02_04-47-37-259507693
+      # NOTICE 527:  bulk_video_converter.bash creates directory /var/log/bulk_video_converter.bash/2016-05-02_05-14-20-695774334
         pass 1:
-          /usr/bin/ffmpeg -ss '00:00:10' -threads '0' -i '/home/user/Video/00001.MTS' -preset 'slower' -b:v '1000k' -vf 'scale=0:576' -codec:v 'libx264' -profile:v 'main' -b:a '196k' -ac '6' -strict 'experimental' -codec:a 'aac' -ss '00:00:10' -to '00:00:30' -f 'mp4' -y './out/00001-virag_h264x1_pal_sd.mp4' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-02_04-47-37-259507693/00001-virag_h264x1_pal_sd-1-mp4.ffmpeg.log 1>&2;
+          /usr/bin/ffmpeg -ss '00:00:10' -threads '0' -i '/home/user/Video/00001.MTS' -preset 'slower' -b:v '1000k' -vf 'scale=0:576' -codec:v 'libx264' -profile:v 'main' -b:a '196k' -ac '6' -strict 'experimental' -codec:a 'aac' -ss '00:00:10' -to '00:00:30' -f 'mp4' -y './out/00001-virag_h264x1_pal_sd.mp4' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-02_05-14-20-695774334/00001-virag_h264x1_pal_sd-1-mp4.ffmpeg.log 1>&2;
         # pass 1 done
       # passes done
     # profile virag_h264x1_pal_sd done
-  # /home/user/Video/00001.MTS VIRAG_H264X1_PAL_SD done
-# NOTICE 696:  bulk_video_converter.bash deletes directory /tmp/bulk_video_converter.bash
+  # /home/user/Video/00001.MTS done
+# NOTICE 835:  bulk_video_converter.bash deletes directory /tmp/bulk_video_converter.bash
 # bulk_video_converter.bash done
 [user@host ~]$ 
 ```
