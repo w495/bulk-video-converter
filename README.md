@@ -1,13 +1,83 @@
-# mts-converter
+# Bulk Video Converter
+
+This is simple configurable bulk ffmpeg-based video converter.
+
+It uses YAML configuration for generating several output files from
+one (or more) input video file. Each output file is created according
+to `profile` subsection in YAML configuration. See examples below.
 
 ## Table of contents
 
-  * [Table of contents](#table-of-contents)
-  * [Quick start guide](#quick-start-guide)
+* [Motivation](#motivation)
+* [Requirements](#requirements)
+* [Quick start guide](#quick-start-guide)
     * [Conversion to one file](#conversion-to-one-file)
     * [Conversion to several files](#conversion-to-several-files)
-  * [TODO](#todo)
+* [TODO](#todo)
   
+## Motivation
+
+The main purpose of this tool is transcoding single source
+to several videos of different qualities and sizes. 
+It is very helpful for handling raw videos from 
+amateur camera (especially `*.MTS` files).
+
+## Requirements
+
+```
+ffmpeg version 2.8.6 Copyright (c) 2000-2016 the FFmpeg developers
+built with gcc 5.1.1 (GCC) 20150618 (Red Hat 5.1.1-4)
+configuration: 
+    --prefix=/usr 
+    --bindir=/usr/bin 
+    --datadir=/usr/share/ffmpeg 
+    --incdir=/usr/include/ffmpeg 
+    --libdir=/usr/lib64 
+    --mandir=/usr/share/man 
+    --arch=x86_64 
+    --optflags='-O2 -g -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong 
+    --param=ssp-buffer-size=4 -grecord-gcc-switches -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -m64 -mtune=generic' 
+    --enable-bzlib 
+    --disable-crystalhd 
+    --enable-frei0r 
+    --enable-gnutls 
+    --enable-ladspa 
+    --enable-libass 
+    --enable-libcdio 
+    --enable-libdc1394 
+    --disable-indev=jack 
+    --enable-libfreetype 
+    --enable-libgsm 
+    --enable-libmp3lame 
+    --enable-openal 
+    --enable-libopencv 
+    --enable-libopenjpeg 
+    --enable-libopus 
+    --enable-libpulse 
+    --enable-libschroedinger 
+    --enable-libsoxr 
+    --enable-libspeex 
+    --enable-libtheora 
+    --enable-libvorbis 
+    --enable-libv4l2 
+    --enable-libvpx 
+    --enable-libx264 
+    --enable-libx265 
+    --enable-libxvid 
+    --enable-x11grab 
+    --enable-avfilter 
+    --enable-avresample 
+    --enable-postproc 
+    --enable-pthreads 
+    --disable-static 
+    --enable-shared 
+    --enable-gpl 
+    --disable-debug 
+    --disable-stripping 
+    --shlibdir=/usr/lib64 
+    --enable-runtime-cpudetect
+```
+
 ## Quick start guide
 
 ### Conversion to one file

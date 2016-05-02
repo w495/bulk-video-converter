@@ -66,7 +66,7 @@ usage() {
 
     local title="${COLOR_BOLD}${SCRIPT_NAME}${C0}";
     echo -e "
-${title} — simple bulk configurable ffmpeg-based video converter.
+${title} — simple configurable bulk ffmpeg-based video converter.
 It uses YAML configuration for generating several output files from
 one (or more) input video file. Each output file is created according
 to «profile» subsection in YAML configuration. See profile example
