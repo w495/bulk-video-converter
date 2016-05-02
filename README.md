@@ -37,8 +37,22 @@ configuration:
     --libdir=/usr/lib64 
     --mandir=/usr/share/man 
     --arch=x86_64 
-    --optflags='-O2 -g -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong 
-    --param=ssp-buffer-size=4 -grecord-gcc-switches -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -m64 -mtune=generic' 
+    --optflags='
+        -O2 
+        -g 
+        -pipe 
+        -Wall 
+        -Werror=format-security 
+        -Wp,
+        -D_FORTIFY_SOURCE=2 
+        -fexceptions 
+        -fstack-protector-strong 
+        --param=ssp-buffer-size=4 
+        -grecord-gcc-switches 
+        -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 
+        -m64 
+        -mtune=generic
+    ' 
     --enable-bzlib 
     --disable-crystalhd 
     --enable-frei0r 
