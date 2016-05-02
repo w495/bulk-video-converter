@@ -77,56 +77,56 @@ And perform 2 sequential commands for `ffmpeg`.
 * For the first pass:
 ```bash
 /usr/bin/ffmpeg                                             \
-   -ss '00:00:10'                                          \
-   -threads '0'                                            \
-   -i '/path/to/video/file/00001.MTS'                      \
-   -preset 'veryslow'                                      \
-   -b:v '2000k'                                            \
-   -vf 'scale=1280:720'                                    \
-   -codec:v 'libx264'                                      \
-   -profile:v 'high'                                       \
-   -level:v '3.1'                                          \
-   -weightp '2'                                            \
-   -bf '3'                                                 \
-   -x264opts 'keyint=96:min-keyint=96:no-scenecut'         \
-   -pass '1'                                               \
-   -passlogfile './pass_log/00001-my_profile.mts'          \
-   -b:a '320k'                                             \
-   -ac '6'                                                 \
-   -strict 'experimental'                                  \ 
-   -codec:a 'aac'                                          \
-   -ss '00:00:10'                                          \
-   -to '00:00:30'                                          \
-   -f 'mp4'                                                \
-   -y '/dev/null';
+  -ss '00:00:10'                                          \
+  -threads '0'                                            \
+  -i '/path/to/video/file/00001.MTS'                      \
+  -preset 'veryslow'                                      \
+  -b:v '2000k'                                            \
+  -vf 'scale=1280:720'                                    \
+  -codec:v 'libx264'                                      \
+  -profile:v 'high'                                       \
+  -level:v '3.1'                                          \
+  -weightp '2'                                            \
+  -bf '3'                                                 \
+  -x264opts 'keyint=96:min-keyint=96:no-scenecut'         \
+  -pass '1'                                               \
+  -passlogfile './pass_log/00001-my_profile.mts'          \
+  -b:a '320k'                                             \
+  -ac '6'                                                 \
+  -strict 'experimental'                                  \ 
+  -codec:a 'aac'                                          \
+  -ss '00:00:10'                                          \
+  -to '00:00:30'                                          \
+  -f 'mp4'                                                \
+  -y '/dev/null';
 ```
 
 * And for second one:
 
 ```bash
 /usr/bin/ffmpeg                                             \
-   -ss '00:00:10'                                          \
-   -threads '0'                                            \
-   -i '/path/to/video/file/00001.MTS'                      \
-   -preset 'veryslow'                                      \
-   -b:v '2000k'                                            \
-   -vf 'scale=1280:720'                                    \
-   -codec:v 'libx264'                                      \
-   -profile:v 'high'                                       \
-   -level:v '3.1'                                          \
-   -weightp '2'                                            \
-   -bf '3'                                                 \
-   -x264opts 'keyint=96:min-keyint=96:no-scenecut'         \
-   -pass '2'                                               \
-   -passlogfile './pass_log/00001-my_profile.mts'          \
-   -b:a '320k'                                             \
-   -ac '6'                                                 \
-   -strict 'experimental'                                  \ 
-   -codec:a 'aac'                                          \
-   -ss '00:00:10'                                          \
-   -to '00:00:30'                                          \
-   -f 'mp4'                                                \
-   -y './out/00001-my_profile.mp4';
+  -ss '00:00:10'                                          \
+  -threads '0'                                            \
+  -i '/path/to/video/file/00001.MTS'                      \
+  -preset 'veryslow'                                      \
+  -b:v '2000k'                                            \
+  -vf 'scale=1280:720'                                    \
+  -codec:v 'libx264'                                      \
+  -profile:v 'high'                                       \
+  -level:v '3.1'                                          \
+  -weightp '2'                                            \
+  -bf '3'                                                 \
+  -x264opts 'keyint=96:min-keyint=96:no-scenecut'         \
+  -pass '2'                                               \
+  -passlogfile './pass_log/00001-my_profile.mts'          \
+  -b:a '320k'                                             \
+  -ac '6'                                                 \
+  -strict 'experimental'                                  \ 
+  -codec:a 'aac'                                          \
+  -ss '00:00:10'                                          \
+  -to '00:00:30'                                          \
+  -f 'mp4'                                                \
+  -y './out/00001-my_profile.mp4';
 ```
 
 
@@ -151,9 +151,7 @@ profile:
     source: /home/user/Video/*.MTS  # also you can set file names here.
     output_dir_name: ./out
     pass_log_dir_name: ./pass_log
- 
-  # High-quality SD video. (PAL at 1Mbit/s in high profile)
-  virag_h264x1_pal_sd:
+  virag_h264x1_pal_sd:                  # PAL SD video.
     extends:   base
     passes: 1
     video:
@@ -168,9 +166,7 @@ profile:
         name: aac
       channels: 5.1
       bitrate: 196k
-
-  # Standard web video (480p at 500kbit/s).
-  virag_h264x1_480p_web:
+  virag_h264x1_480p_web:                # Standard web video.
     extends: virag_h264x1_pal_sd
     video:
       height: 480
@@ -181,9 +177,7 @@ profile:
     audio:
       bitrate: 128k
       channels: stereo
-
-  # 480p video for iPads and tablets (400kbit/s in main profile).
-  virag_h264x1_480p_tablet:
+  virag_h264x1_480p_tablet:             # Video for iPads and tablets.
     extends: virag_h264x1_480p_web
     video:
       codec:
@@ -191,9 +185,7 @@ profile:
       bitrate: 400k
       maxrate: 400k
       bufsize: 800k
-
-  # 360p video for older mobile phones (250kbit/s in baseline profile).
-  virag_h264x1_360p_mobile:
+  virag_h264x1_360p_mobile:             # 360p video for old phones.
     extends: virag_h264x1_480p_tablet
     video:
       height: 360
@@ -218,7 +210,7 @@ bulk_video_converter.bash:
   /home/user/Video/00001.MTS:
     profile virag_h264x1_360p_mobile:
       global input:
-         -ss '00:00:10'  -threads '0' 
+        -ss '00:00:10' -threads '0' 
       # global input done
       video:
         -preset 'slow' -b:v '250k' -maxrate '250k' -bufsize '500k' -vf 'scale=0:360' -codec:v 'libx264' -profile:v 'baseline' 
@@ -227,7 +219,7 @@ bulk_video_converter.bash:
         -b:a '96k' -ac '1' -strict 'experimental' -codec:a 'aac' 
       # audio done
       global output:
-         -ss '00:00:10'  -to '00:00:30' 
+        -ss '00:00:10' -to '00:00:30' 
       # global output done
       passes:
         pass 1:
@@ -239,7 +231,7 @@ bulk_video_converter.bash:
   /home/user/Video/00001.MTS:
     profile virag_h264x1_480p_tablet:
       global input:
-         -ss '00:00:10'  -threads '0' 
+        -ss '00:00:10' -threads '0' 
       # global input done
       video:
         -preset 'slow' -b:v '400k' -maxrate '400k' -bufsize '800k' -vf 'scale=0:480' -codec:v 'libx264' -profile:v 'main' 
@@ -248,7 +240,7 @@ bulk_video_converter.bash:
         -b:a '128k' -ac '2' -strict 'experimental' -codec:a 'aac' 
       # audio done
       global output:
-         -ss '00:00:10'  -to '00:00:30' 
+        -ss '00:00:10' -to '00:00:30' 
       # global output done
       passes:
         pass 1:
@@ -260,7 +252,7 @@ bulk_video_converter.bash:
   /home/user/Video/00001.MTS:
     profile virag_h264x1_480p_web:
       global input:
-         -ss '00:00:10'  -threads '0' 
+        -ss '00:00:10' -threads '0' 
       # global input done
       video:
         -preset 'slow' -b:v '500k' -maxrate '500k' -bufsize '1000k' -vf 'scale=0:480' -codec:v 'libx264' -profile:v 'main' 
@@ -269,7 +261,7 @@ bulk_video_converter.bash:
         -b:a '128k' -ac '2' -strict 'experimental' -codec:a 'aac' 
       # audio done
       global output:
-         -ss '00:00:10' -to '00:00:30' 
+        -ss '00:00:10' -to '00:00:30' 
       # global output done
       passes:
         pass 1:
@@ -281,7 +273,7 @@ bulk_video_converter.bash:
   /home/user/Video/00001.MTS:
     profile virag_h264x1_pal_sd:
       global input:
-         -ss '00:00:10' -threads '0' 
+        -ss '00:00:10' -threads '0' 
       # global input done
       video:
         -preset 'slower' -b:v '1000k' -vf 'scale=0:576' -codec:v 'libx264' -profile:v 'main' 
@@ -290,7 +282,7 @@ bulk_video_converter.bash:
         -b:a '196k' -ac '6' -strict 'experimental' -codec:a 'aac' 
       # audio done
       global output:
-         -ss '00:00:10' -to '00:00:30' 
+        -ss '00:00:10' -to '00:00:30' 
       # global output done
       passes:
       # NOTICE 527:  bulk_video_converter.bash creates directory /var/log/bulk_video_converter.bash/2016-05-02_05-14-20-695774334
