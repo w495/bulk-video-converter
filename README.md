@@ -7,6 +7,7 @@ from one (or more) input video.
 Each output file is created  according to `profile` subsection 
 in *YAML* configuration. See [examples](#quick-start-guide) below.
 
+\
 ## Table of contents
 
 * [Motivation](#motivation)
