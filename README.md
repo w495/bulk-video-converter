@@ -77,12 +77,20 @@ Check it if something's gone wrong.
 
 ### Conversion to one file
 
-For call 
+If you want to get one transcoded file from one source,
+you can only run this command.
+
 ```bash
 bulk_video_converter.bash -c config.yaml /path/to/video/file/00001.MTS
 ```
 
-with `config.yaml` like this
+Where:
+
+* `00001.MTS` — is you source video file.
+* `config.yaml` — is configuration that describes you transcoded file.
+
+#### Config example 
+
 ```yaml
 ffmpeg:
   bin: /usr/bin/ffmpeg
@@ -116,7 +124,12 @@ profile:
       bitrate: 320k
 ```
 
-It generates output log like this:
+
+With such configuration the converter will generate output log
+and perform two sequential ffmpeg passes.
+
+#### Output log example 
+
 ```yaml
 bulk_video_converter.bash:
   /home/user/Video/00001.MTS :
@@ -135,9 +148,10 @@ bulk_video_converter.bash:
 
 ```
 
-And perform 2 sequential commands for `ffmpeg`.
 
-* For the first pass:
+#### Performance example: pass 1
+
+
 ```bash
 /usr/bin/ffmpeg                                             \
     -ss '00:00:10'                                          \
@@ -164,7 +178,9 @@ And perform 2 sequential commands for `ffmpeg`.
     -y '/dev/null';
 ```
 
-* And for second one:
+
+#### Performance example: pass 2
+
 
 ```bash
 /usr/bin/ffmpeg                                             \
@@ -195,11 +211,8 @@ And perform 2 sequential commands for `ffmpeg`.
 
 ### Conversion to several files
 
-
-If you want to get several files from one source
-you shold describe several profiles in the config.
-
-For example, let we use profiles from 
+If you want to get several files from one source you should describe 
+several profiles in the config. For example, let we use profiles from 
 [H.264 web video encoding tutorial with FFmpeg.](https://www.virag.si/2012/01/web-video-encoding-tutorial-with-ffmpeg-0-9/)
 
 ```yaml
