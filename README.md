@@ -93,18 +93,18 @@ Where:
 
 ```yaml
 ffmpeg:
-  bin: /usr/bin/ffmpeg
-  threads: 0
-  start: 00:00:10
-  stop: 00:00:30
+  bin: /usr/bin/ffmpeg  # If you have several ffmpeg installations 
+  threads: 0            # 0 — use CPU autodetection
 profile:
   base:
     abstract: 1     # This profile will be used only for inheritance.
+    start: 00:00:10                 # Optional parametr.
+    stop: 00:00:30                  # Optional parametr.
     output_dir_name: ./out          # Optional parametr.
     pass_log_dir_name: ./pass_log   # Optional parametr.
   my_profile:
     extends: base   # Other options are inherited from `base`.
-    passes: 2
+    passes: 2       # Two passes of ffmpeg.
     video:
       preset: veryslow
       width: 1280
@@ -223,12 +223,12 @@ several profiles in the config. For example, let we use profiles from
 ffmpeg:
   bin: /usr/bin/ffmpeg
   threads: 0
-  start: 00:00:10
-  stop: 00:00:30
 profile:
   base:
     abstract: 1 # It will be used only for inheritance.
     source: /home/user/Video/*.MTS  # also you can set file names here.
+    start: 00:00:10
+    stop: 00:00:30
     output_dir_name: ./out
     pass_log_dir_name: ./pass_log
   virag_h264x1_pal_sd:                  # PAL SD video.
