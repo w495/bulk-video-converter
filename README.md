@@ -76,6 +76,9 @@ Check it if something's gone wrong.
 
 ## Quick start guide
 
+* [Conversion to one video](#conversion-to-one-video)
+* [Conversion to several videos](#conversion-to-several-videos)
+
 ### Conversion to one video
 
 If you want to get one transcoded file from one source,
