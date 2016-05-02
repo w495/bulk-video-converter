@@ -2,9 +2,11 @@
 
 ## Fast start
 
+### Conversion to one file
+
 For call 
 ```bash
-bulk_video_converter.bash -c config.yaml ~/Videos/input/00001.MTS
+bulk_video_converter.bash -c config.yaml /path/to/video/file/00001.MTS
 ```
 
 with `config.yaml` like this
@@ -16,11 +18,15 @@ ffmpeg:
   stop: 00:00:30
 profile:
   base:
-    abstract: 1 # It will be used only for inheritance.
-    output_dir_name: ./out
+    abstract: 1 
+        # This profile will be used only for inheritance.
+    output_dir_name: ./out 
+        # optional parametr.
     pass_log_dir_name: ./pass_log
+        # optional parametr.
   my_profile:
-    extends: base # Other options are inherited from `base`
+    extends: base 
+        # Other options are inherited from `base`.
     passes: 2
     video:
       preset: veryslow
@@ -67,7 +73,7 @@ And perform 2 sequential commands for `ffmpeg`.
 /usr/bin/ffmpeg                                             \
     -ss '00:00:10'                                          \
     -threads '0'                                            \
-    -i '~/Videos/input/00001.MTS'                           \
+    -i '/path/to/video/file/00001.MTS'                       \
     -preset 'veryslow'                                      \
     -b:v '2000k'                                            \
     -vf 'scale=1280:720'                                    \
@@ -95,7 +101,7 @@ And perform 2 sequential commands for `ffmpeg`.
 /usr/bin/ffmpeg                                             \
     -ss '00:00:10'                                          \
     -threads '0'                                            \
-    -i '~/Videos/input/00001.MTS'                           \
+    -i '/path/to/video/file/00001.MTS'                       \
     -preset 'veryslow'                                      \
     -b:v '2000k'                                            \
     -vf 'scale=1280:720'                                    \
@@ -115,5 +121,90 @@ And perform 2 sequential commands for `ffmpeg`.
     -to '00:00:30'                                          \
     -f 'mp4'                                                \
     -y './out/00001-my_profile.mp4';
+```
+
+
+### Conversion to several files
+
+If you want to get several files from one source
+you shold describe several profiles in the config.
+
+For example, let we use profiles from 
+[H.264 web video encoding tutorial with FFmpeg](https://www.virag.si/2012/01/web-video-encoding-tutorial-with-ffmpeg-0-9/)
+    
+```yaml
+ffmpeg:
+  bin: /usr/bin/ffmpeg
+  threads: 0
+  start: 00:00:10
+  stop: 00:00:30
+profile:
+  base:
+    abstract: 1 
+        # It will be used only for inheritance.
+    source: /path/to/video/files/*.MTS 
+        # also you can set names of files within config
+    output_dir_name: ./out
+    pass_log_dir_name: ./pass_log
+    
+  # High-quality SD video for archive/storage
+  # (PAL at 1Mbit/s in high profile):
+  virag_h264x1_pal_sd:
+    # Other options are inherited from `base`
+    extends:   base
+    passes: 1
+    video:
+      width:  0   # any
+      height: 576 # SD
+      preset: slower
+      codec:
+        profile: main
+      bitrate: 1000k
+    audio:
+      codec:
+        name: aac
+      channels: 5.1
+      bitrate: 196k
+
+  # Standard web video (480p at 500kbit/s)
+  virag_h264x1_480p_web:
+    extends: virag_h264x1_sd
+    video:
+      height: 480
+      preset: slow
+      bitrate: 500k
+      maxrate: 500k
+      bufsize: 1000k
+    audio:
+      bitrate: 128k
+      channels: stereo
+
+  # 480p video for iPads and tablets
+  # 480p at 400kbit/s in main profile
+  virag_h264x1_480p_tablet:
+    extends: virag_h264x1_480p_web
+    video:
+      codec:
+        profile: main
+      bitrate: 400k
+      maxrate: 400k
+      bufsize: 800k
+
+  # 360p video for older mobile phones
+  # (360p at 250kbit/s in baseline profile)
+  virag_h264x1_360p_mobile:
+    extends: virag_h264x1_480p_tablet
+    video:
+      height: 360
+      codec:
+        profile: baseline
+      bitrate: 250k
+      maxrate: 250k
+      bufsize: 500k
+    audio:
+      bitrate: 96k
+      channels: mono
+
+
 ```
 
