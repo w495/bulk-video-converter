@@ -1,6 +1,6 @@
 # Bulk Video Converter
 
-Simple configurable bulk `ffmpeg`-based video converter.
+**Simple configurable bulk ffmpeg-based video converter.**
 
 It uses **YAML** configuration for generating several output files 
 from one (or more) input video. 
