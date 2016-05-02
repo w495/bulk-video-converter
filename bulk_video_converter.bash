@@ -43,6 +43,7 @@ declare PASS_LOG_DIR_NAME="${TMP_DIR_NAME}/pass-log";
 
 declare -g  FFMPEG_BIN;
 declare -g  FFMPEG_START;
+declare -g  FFMPEG_STOP;
 declare -g  FFMPEG_DURATION;
 declare -g  FFMPEG_THREADS;
 declare -gA PROFILE_MAP;
@@ -305,7 +306,7 @@ handle_profile(){
     local input_file_name="${2}";
 
     local abstract=$(plain_profile ${profile_name} abstract);
-    local is_complex=$(plain_profile "${name}" 'is_complex');
+    local is_complex=$(plain_profile "${profile_name}" 'is_complex');
     if [[ -z ${abstract} ]]; then
         input_file_name=$(profile_default  \
             "${input_file_name}"                    \
@@ -679,8 +680,6 @@ handle_audio_options(){
         ${profile_name}     \
         ${input_file_name}  \
     );
-
-    common_options+=$(if_exists "-ac '%s'" ${channels})
 
     common_options+=$(if_exists "-filter:a '%s'" ${filter_options} )
 
