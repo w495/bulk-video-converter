@@ -9,147 +9,142 @@ profile:
     # you can mark profile as abstract
     # and it will be used only for inheritance.
     abstract: 1
-    source: /home/w495/Videos/input/00002.MTS
-  tvzavr_h264x2_base:
-    extends: base
-    abstract: 1
+    source: /home/w495/Videos/input/00001.MTS
+    output_dir_name: ./out
+
+  ## Semi-TVzavr's profile for SmartTV devices.
+  ## Check in the player on the https://www.tvzavr.ru/
+  tvzavr_h264x2_720p_hd:
+    # Other options are inherited from `base`
+    extends:   base
     passes: 2
     video:
       preset: veryslow
+      width:   1280
+      height:  720
+      bitrate: 2000k
       codec:
         name : h264
         weightp: 2
         bframes: 3
         opts: "keyint=96:min-keyint=96:no-scenecut"
-    audio:
-      codec:
-        name: aac
-
-  ## Semi-TVzavr's profile for SmartTV devices.
-  ## Check in the player on the https://www.tvzavr.ru/
-  tvzavr_h264x2_720p_hd:
-    # Other options are inherited from `tvzavr_h264x2_base`
-    extends: tvzavr_h264x2_base
-    video:
-      width: 1280
-      height:  720
-      bitrate: 2000k
-      codec:
         profile: high
         level: 3.1
     audio:
+      codec:
+        name: aac
       channels: 5.1
       bitrate: 320k
 #
-#  ## Semi-TVzavr's profile for Desctop Web Video.
-#  ## Check in the player on the https://www.tvzavr.ru/
-#  tvzavr_h264x2_480p_hi:
-#    # Other options are inherited from `tvzavr_h264x2_base`
-#    extends: tvzavr_h264x2_base
-#    video:
-#      width: 854
-#      height:  480
-#      bitrate: 1000k
-#      codec:
-#        profile: main
-#        level: 3.0
-#    audio:
-#      channels: 3 # stereo 3
-#      bitrate: 196k
-#
-#  ## Semi-TVzavr's profile for tablets.
-#  ## Check in the player on the https://www.tvzavr.ru/
-#  tvzavr_h264x2_360p_nr:
-#    # Other options are inherited from `tvzavr_h264x2_base`
-#    extends: tvzavr_h264x2_base
-#    video:
-#      width: 640
-#      height:  360
-#      bitrate: 600k
-#      codec:
-#        profile: main
-#        level: 3.0
-#    audio:
-#      channels: stereo
-#      bitrate: 128k
-#
-#  ## Semi-TVzavr's profile for old mobile devices
-#  ## Check in the player on the https://www.tvzavr.ru/.
-#  tvzavr_h264x2_270p_lw:
-#    # Other options are inherited from `tvzavr_h264x2_base`
-#    extends: tvzavr_h264x2_base
-#    video:
-#      width: 480
-#      height:  270
-#      bitrate: 250k
-#      codec:
-#        profile: baseline
-#        level: 3.0
-#    audio:
-#      channels: mono
-#      bitrate: 64k
-#
-#  # High-quality SD video for archive/storage
-#  # (PAL at 1Mbit/s in high profile):
-#  # from https://www.virag.si/2012/01/web-video-encoding-tutorial-with-ffmpeg-0-9/
-#  virag_h264x1_pal_sd:
-#    passes: 1
-#    video:
-#      width:  0   # any
-#      height: 576 # SD
-#      preset: slower
-#      codec:
-#        profile: main
-#      bitrate: 1000k
-#    audio:
-#      codec:
-#        name: aac
-#      channels: 5.1
-#      bitrate: 196k
-#
-#  # Standard web video (480p at 500kbit/s)
-#  # from https://www.virag.si/2012/01/web-video-encoding-tutorial-with-ffmpeg-0-9/
-#  virag_h264x1_480p_web:
-#    extends: virag_h264x1_sd
-#    video:
-#      height: 480
-#      preset: slow
-#      bitrate: 500k
-#      maxrate: 500k
-#      bufsize: 1000k
-#    audio:
-#      bitrate: 128k
-#      channels: stereo
-#
-#  # 480p video for iPads and tablets
-#  # 480p at 400kbit/s in main profile
-#  # from https://www.virag.si/2012/01/web-video-encoding-tutorial-with-ffmpeg-0-9/
-#  virag_h264x1_480p_tablet:
-#    extends: virag_h264x1_480p_web
-#    video:
-#      codec:
-#        profile: main
-#      bitrate: 400k
-#      maxrate: 400k
-#      bufsize: 800k
-#
-#  # High-quality SD video for archive/storage
-#  # (PAL at 1Mbit/s in high profile):
-#  # from https://www.virag.si/2012/01/web-video-encoding-tutorial-with-ffmpeg-0-9/
-#  virag_h264x1_360p_mobile:
-#    extends: virag_h264x1_480p_tablet
-#    video:
-#      height: 360
-#      codec:
-#        profile: baseline
-#      bitrate: 250k
-#      maxrate: 250k
-#      bufsize: 500k
-#    audio:
-#      bitrate: 96k
-#      channels: mono
+  ## Semi-TVzavr's profile for Desctop Web Video.
+  ## Check in the player on the https://www.tvzavr.ru/
+  tvzavr_h264x2_480p_hi:
+    # Other options are inherited from `tvzavr_h264x2_base`
+    extends: tvzavr_h264x2_720p_hd
+    video:
+      width:   854
+      height:  480
+      bitrate: 1000k
+      codec:
+        profile: main
+        level: 3.0
+    audio:
+      channels: 3 # stereo 3
+      bitrate: 196k
+
+  ## Semi-TVzavr's profile for tablets.
+  ## Check in the player on the https://www.tvzavr.ru/
+  tvzavr_h264x2_360p_nr:
+    # Other options are inherited from `tvzavr_h264x2_base`
+    extends: tvzavr_h264x2_480p_hi
+    video:
+      width:   640
+      height:  360
+      bitrate: 600k
+    audio:
+      channels: stereo
+      bitrate: 128k
+
+  ## Semi-TVzavr's profile for old mobile devices
+  ## Check in the player on the https://www.tvzavr.ru/.
+  tvzavr_h264x2_270p_lw:
+    # Other options are inherited from `tvzavr_h264x2_base`
+    extends: tvzavr_h264x2_360p_nr
+    video:
+      width:   480
+      height:  270
+      bitrate: 250k
+      codec:
+        profile: baseline0
+    audio:
+      channels: mono
+      bitrate: 64k
+
+  # High-quality SD video for archive/storage
+  # (PAL at 1Mbit/s in high profile):
+  # from https://www.virag.si/2012/01/web-video-encoding-tutorial-with-ffmpeg-0-9/
+  virag_h264x1_pal_sd:
+    # Other options are inherited from `base`
+    extends:   base
+    passes: 1
+    video:
+      width:  0   # any
+      height: 576 # SD
+      preset: slower
+      codec:
+        profile: main
+      bitrate: 1000k
+    audio:
+      codec:
+        name: aac
+      channels: 5.1
+      bitrate: 196k
+
+  # Standard web video (480p at 500kbit/s)
+  # from https://www.virag.si/2012/01/web-video-encoding-tutorial-with-ffmpeg-0-9/
+  virag_h264x1_480p_web:
+    extends: virag_h264x1_sd
+    video:
+      height: 480
+      preset: slow
+      bitrate: 500k
+      maxrate: 500k
+      bufsize: 1000k
+    audio:
+      bitrate: 128k
+      channels: stereo
+
+  # 480p video for iPads and tablets
+  # 480p at 400kbit/s in main profile
+  # from https://www.virag.si/2012/01/web-video-encoding-tutorial-with-ffmpeg-0-9/
+  virag_h264x1_480p_tablet:
+    extends: virag_h264x1_480p_web
+    video:
+      codec:
+        profile: main
+      bitrate: 400k
+      maxrate: 400k
+      bufsize: 800k
+
+  # 360p video for older mobile phones
+  # (360p at 250kbit/s in baseline profile)
+  # from https://www.virag.si/2012/01/web-video-encoding-tutorial-with-ffmpeg-0-9/
+  virag_h264x1_360p_mobile:
+    extends: virag_h264x1_480p_tablet
+    video:
+      height: 360
+      codec:
+        profile: baseline
+      bitrate: 250k
+      maxrate: 250k
+      bufsize: 500k
+    audio:
+      bitrate: 96k
+      channels: mono
 
 
+
+# Device capturing example
 profile_screen:
   screen_hd:
     source:
