@@ -4,7 +4,7 @@
 
 For call 
 ```bash
-bulk_video_converter.bash -c config.yaml  -d ~/Videos/input/00001.MTS
+bulk_video_converter.bash -c config.yaml ~/Videos/input/00001.MTS
 ```
 
 with `config.yaml` like this
@@ -48,91 +48,93 @@ profile:
 It generates output log like this:
 ```yaml
 bulk_video_converter.bash:
-# NOTICE 28:  bulk_video_converter.bash creates directory /tmp/bulk_video_converter.bash/1Ee1Z6T4
+# NOTICE 29:  bulk_video_converter.bash creates directory /tmp/bulk_video_converter.bash/lMbW6uid
   /home/w495/Videos/input/00001.MTS :
   # /home/w495/Videos/input/00001.MTS  done
   /home/w495/Videos/input/00001.MTS my_profile:
     profile my_profile:
       global input:
-          -ss 00:00:10   -threads 0 
+          -ss '00:00:10'   -threads '0' 
       # global input done
       video:
-         -preset veryslow  -b:v 2000k  -vf "scale=1280:720"  -codec:v libx264 -profile:v high  -level:v 3.1  -weightp 2  -bf 3  -x264opts "keyint=96:min-keyint=96:no-scenecut" 
+         -preset 'veryslow'  -b:v '2000k'  -vf 'scale=1280:720'  -codec:v 'libx264' -profile:v 'high'  -level:v '3.1'  -weightp '2'  -bf '3'  -x264opts 'keyint=96:min-keyint=96:no-scenecut' 
       # video done
       audio:
-         -b:a 320k -ac 6 -strict experimental -codec:a aac 
+         -b:a '320k' -ac '6' -strict 'experimental' -codec:a 'aac' 
       # audio done
       global output:
-          -ss 00:00:10   -to 00:00:30 
+          -ss '00:00:10'   -to '00:00:30' 
       # global output done
       passes:
-      # NOTICE 299:  bulk_video_converter.bash creates directory /var/log/bulk_video_converter.bash/2016-05-02_03-43-50-822839410
-        pass 1:
-          /usr/bin/ffmpeg -ss 00:00:10 -threads 0 -i /home/w495/Videos/input/00001.MTS -preset veryslow -b:v 2000k -vf "scale=1280:720" -codec:v libx264 -profile:v high -level:v 3.1 -weightp 2 -bf 3 -x264opts "keyint=96:min-keyint=96:no-scenecut" -pass 1 -passlogfile ./pass_log/00001-my_profile.mts -b:a 320k -ac 6 -strict experimental -codec:a aac -ss 00:00:10 -to 00:00:30 -f mp4 -y /dev/null 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-02_03-43-50-822839410/00001-my_profile-1-mp4.ffmpeg.log 1>&2;
+      # NOTICE 289:  bulk_video_converter.bash creates directory /var/log/bulk_video_converter.bash/2016-05-02_04-09-08-036081777
+        pass 1: /usr/bin/ffmpeg -ss '00:00:10' -threads '0' -i 
+        '/home/w495/Videos/input/00001.MTS' -preset 'veryslow' -b:v '2000k' -vf 'scale=1280:720' -codec:v 'libx264' -profile:v 'high' -level:v '3.1' -weightp '2' -bf '3' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -pass 1 -passlogfile ./pass_log/00001-my_profile.mts -b:a '320k' -ac '6' -strict 'experimental' -codec:a 'aac' -ss '00:00:10' -to '00:00:30' -f 'mp4' -y '/dev/null' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-02_04-09-08-036081777/00001-my_profile-1-mp4.ffmpeg.log 1>&2;
         # pass 1 done
-        pass 2:
-          /usr/bin/ffmpeg -ss 00:00:10 -threads 0 -i /home/w495/Videos/input/00001.MTS -preset veryslow -b:v 2000k -vf "scale=1280:720" -codec:v libx264 -profile:v high -level:v 3.1 -weightp 2 -bf 3 -x264opts "keyint=96:min-keyint=96:no-scenecut" -pass 2 -passlogfile ./pass_log/00001-my_profile.mts -b:a 320k -ac 6 -strict experimental -codec:a aac -ss 00:00:10 -to 00:00:30 -f mp4 -y ./out/00001-my_profile.mp4 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-02_03-43-50-822839410/00001-my_profile-2-mp4.ffmpeg.log 1>&2;
+        pass 2: /usr/bin/ffmpeg -ss '00:00:10' -threads '0' -i 
+        '/home/w495/Videos/input/00001.MTS' -preset 'veryslow' -b:v '2000k' -vf 'scale=1280:720' -codec:v 'libx264' -profile:v 'high' -level:v '3.1' -weightp '2' -bf '3' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -pass 2 -passlogfile ./pass_log/00001-my_profile.mts -b:a '320k' -ac '6' -strict 'experimental' -codec:a 'aac' -ss '00:00:10' -to '00:00:30' -f 'mp4' -y './out/00001-my_profile.mp4' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-02_04-09-08-036081777/00001-my_profile-2-mp4.ffmpeg.log 1>&2;
         # pass 2 done
       # passes done
     # profile my_profile done
   # /home/w495/Videos/input/00001.MTS my_profile done
-# NOTICE 332:  bulk_video_converter.bash deletes directory /tmp/bulk_video_converter.bash
+# NOTICE 325:  bulk_video_converter.bash deletes directory /tmp/bulk_video_converter.bash
 # bulk_video_converter.bash done
+
 ```
 
 And perform 2 sequential commands for `ffmpeg`.
 
 * For the first pass:
 ```bash
-/usr/bin/ffmpeg                                         \
-    -ss 00:00:10                                        \
-    -threads 0                                          \
-    -i /home/w495/Videos/input/00001.MTS                \
-    -preset veryslow                                    \
-    -b:v 2000k                                          \
-    -vf "scale=1280:720"                                \
-    -codec:v libx264                                    \
-    -profile:v high                                     \
-    -level:v 3.1                                        \
-    -weightp 2                                          \
-    -bf 3                                               \
-    -x264opts "keyint=96:min-keyint=96:no-scenecut"     \
-    -pass 1                                             \
-    -passlogfile ./pass_log/00001-my_profile.mts        \
-    -b:a 320k                                           \
-    -ac 6                                               \
-    -strict experimental                                \ 
-    -codec:a aac                                        \
-    -ss 00:00:10                                        \
-    -to 00:00:30                                        \
-    -f mp4                                              \
-    -y /dev/null;
+/usr/bin/ffmpeg                                             \
+    -ss '00:00:10'                                          \
+    -threads '0'                                            \
+    -i '~/Videos/input/00001.MTS'                           \
+    -preset 'veryslow'                                      \
+    -b:v '2000k'                                            \
+    -vf 'scale=1280:720'                                    \
+    -codec:v 'libx264'                                      \
+    -profile:v 'high'                                       \
+    -level:v '3.1'                                          \
+    -weightp '2'                                            \
+    -bf '3'                                                 \
+    -x264opts 'keyint=96:min-keyint=96:no-scenecut'         \
+    -pass '1'                                               \
+    -passlogfile './pass_log/00001-my_profile.mts'          \
+    -b:a '320k'                                             \
+    -ac '6'                                                 \
+    -strict 'experimental'                                  \ 
+    -codec:a 'aac'                                          \
+    -ss '00:00:10'                                          \
+    -to '00:00:30'                                          \
+    -f 'mp4'                                                \
+    -y '/dev/null';
 ```
 
 * And for second one:
 
 ```bash
-/usr/bin/ffmpeg                                         \
-    -ss 00:00:10                                        \
-    -threads 0                                          \
-    -i /home/w495/Videos/input/00001.MTS                \
-    -preset veryslow                                    \
-    -b:v 2000k                                          \
-    -vf "scale=1280:720"                                \
-    -codec:v libx264                                    \
-    -profile:v high                                     \
-    -level:v 3.1                                        \
-    -weightp 2                                          \
-    -bf 3                                               \
-    -x264opts "keyint=96:min-keyint=96:no-scenecut"     \
-    -pass 2                                             \
-    -passlogfile ./pass_log/00001-my_profile.mts        \
-    -b:a 320k                                           \
-    -ac 6                                               \
-    -strict experimental                                \ 
-    -codec:a aac                                        \
-    -ss 00:00:10                                        \
-    -to 00:00:30                                        \
-    -f mp4                                              \
-    -y ./out/00001-tvzavr_h264x2_720p_hd.mp4;
+/usr/bin/ffmpeg                                             \
+    -ss '00:00:10'                                          \
+    -threads '0'                                            \
+    -i '~/Videos/input/00001.MTS'                           \
+    -preset 'veryslow'                                      \
+    -b:v '2000k'                                            \
+    -vf 'scale=1280:720'                                    \
+    -codec:v 'libx264'                                      \
+    -profile:v 'high'                                       \
+    -level:v '3.1'                                          \
+    -weightp '2'                                            \
+    -bf '3'                                                 \
+    -x264opts 'keyint=96:min-keyint=96:no-scenecut'         \
+    -pass '2'                                               \
+    -passlogfile './pass_log/00001-my_profile.mts'          \
+    -b:a '320k'                                             \
+    -ac '6'                                                 \
+    -strict 'experimental'                                  \ 
+    -codec:a 'aac'                                          \
+    -ss '00:00:10'                                          \
+    -to '00:00:30'                                          \
+    -f 'mp4'                                                \
+    -y './out/00001-my_profile.mp4';
 ```
+

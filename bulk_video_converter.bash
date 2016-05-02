@@ -420,12 +420,13 @@ handle_concrete_profile(){
         verbose_run "pass ${pass}@%8s"  \
             ${FFMPEG_BIN} \
             ${global_input_options} \
-            -i ${input_file_name} \
+            "-i '${input_file_name}'" \
             ${video_options} \
             ${pass_options} \
             ${audio_options} \
             ${global_output_options}    \
-            -f ${output_format} -y ${output_pass_file_name} \
+            "-f '${output_format}'" \
+            "-y '${output_pass_file_name}'" \
             "2>&1 | tee ${log_file_name} 1>&${OUT_LOG_STREAM};"
     done
     verbose_end "passes@%6s";
@@ -448,8 +449,8 @@ handle_global_input_options(){
         start                                   \
     );
 
-    options+=$(if_exists ' -ss %s' ${start_position});
-    options+=$(if_exists ' -threads %s' ${FFMPEG_THREADS});
+    options+=$(if_exists " -ss '%s'" ${start_position});
+    options+=$(if_exists " -threads '%s'" ${FFMPEG_THREADS});
 
     if [[ $(is_device ${input_file_name}) ]]; then
         local device_options=$(handle_global_device_options    \
@@ -489,9 +490,9 @@ handle_global_output_options(){
         stop                                    \
     );
 
-    options+=$(if_exists ' -ss %s' ${start_position});
-    options+=$(if_exists ' -t %s' ${duration});
-    options+=$(if_exists ' -to %s' ${stop_position});
+    options+=$(if_exists " -ss '%s'" ${start_position});
+    options+=$(if_exists " -t '%s'" ${duration});
+    options+=$(if_exists " -to '%s'" ${stop_position});
 
     verbose_block "global output@%6s" "${options}";
     echo ${options};
@@ -588,13 +589,13 @@ handle_video_options(){
 
     local common_options=''
 
-    common_options+=$(if_exists '-preset %s' ${preset})
-    common_options+=$(if_exists '-b:v %s' ${bitrate})
-    common_options+=$(if_exists '-maxrate %s' ${maxrate})
-    common_options+=$(if_exists '-minrate %s' ${minrate})
-    common_options+=$(if_exists '-bufsize %s' ${bufsize})
+    common_options+=$(if_exists "-preset '%s'" ${preset})
+    common_options+=$(if_exists "-b:v '%s'" ${bitrate})
+    common_options+=$(if_exists "-maxrate '%s'" ${maxrate})
+    common_options+=$(if_exists "-minrate '%s'" ${minrate})
+    common_options+=$(if_exists "-bufsize '%s'" ${bufsize})
 
-    common_options+=$(if_exists '-vf "scale=%s:%s"' ${width} ${height})
+    common_options+=$(if_exists "-vf 'scale=%s:%s'" ${width} ${height})
 
     local options="${common_options} ${codec_options}";
     verbose_block "video@%6s" "${options}";
@@ -639,14 +640,14 @@ handle_video_h264_options(){
     local opts=$(profile ${profile_name} video codec opts)
 
 
-    codec_options+='-codec:v libx264';
-    codec_options+=$(if_exists '-profile:v %s' ${h264_profile});
-    codec_options+=$(if_exists '-level:v %s' ${level});
+    codec_options+="-codec:v 'libx264'";
+    codec_options+=$(if_exists "-profile:v '%s'" ${h264_profile});
+    codec_options+=$(if_exists "-level:v '%s'" ${level});
 
-    codec_options+=$(if_exists '-weightp %s' ${weightp});
-    codec_options+=$(if_exists '-bf %s' ${bframes});
+    codec_options+=$(if_exists "-weightp '%s'" ${weightp});
+    codec_options+=$(if_exists "-bf '%s'" ${bframes});
 
-    codec_options+=$(if_exists '-x264opts "%s"' ${opts});
+    codec_options+=$(if_exists "-x264opts '%s'" ${opts});
 
 
 
@@ -671,16 +672,16 @@ handle_audio_options(){
     );
     local common_options='';
 
-    common_options+=$(if_exists '-b:a %s' ${bitrate})
+    common_options+=$(if_exists "-b:a '%s'" ${bitrate})
 
     common_options+=$(handle_audio_channels_options \
         ${profile_name}     \
         ${input_file_name}  \
     );
 
-    common_options+=$(if_exists '-ac %s' ${channels})
+    common_options+=$(if_exists "-ac '%s'" ${channels})
 
-    common_options+=$(if_exists '-filter:a "%s"' ${filter_options} )
+    common_options+=$(if_exists "-filter:a '%s'" ${filter_options} )
 
     local codec_options=$(handle_audio_codec_options ${profile_name})
     local options="${common_options} ${codec_options}";
@@ -697,12 +698,12 @@ handle_audio_channels_options(){
     local channels="$(profile ${profile_name} audio channels)";
 
     case "${channels}" in
-        mono) channels='1';;
+        mono)   channels='1';;
         stereo) channels='2';;
-        5.1) channels='6';;
+        5.1)    channels='6';;
         *) ;;
     esac;
-    local channels_options=$(if_exists '-ac %s' ${channels})
+    local channels_options=$(if_exists "-ac '%s'" ${channels})
 
     echo ${channels_options}
 }
@@ -713,10 +714,9 @@ handle_audio_filter_options(){
 
     local volume="$(profile ${profile_name} audio volume)";
 
-
     local filter_options='';
 
-    filter_options+=$(if_exists 'volume=%s' ${volume})
+    filter_options+=$(if_exists "volume='%s'" ${volume})
 
     echo "${filter_options}"
 }
@@ -730,9 +730,8 @@ handle_audio_codec_options(){
 
     local codec_options='';
 
-    codec_options+="-strict experimental ";
-    codec_options+="-codec:a ${codec_name} ";
-
+    codec_options+="-strict 'experimental' ";
+    codec_options+="-codec:a '${codec_name}' ";
 
     echo "${codec_options}"
 }
