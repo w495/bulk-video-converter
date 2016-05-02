@@ -21,7 +21,6 @@ in *YAML* configuration. See [examples](#quick-start-guide) below.
 The main purpose of this tool is transcoding single source to several
 videos of different qualities and sizes. It is very helpful for 
 handling raw videos from amateur camera. 
-
 I use this tool to convert a great amout of `*.MTS` files to 
 web-compatible formats. That why, 
 historical name of it is **MTS converter**.
