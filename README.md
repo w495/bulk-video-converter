@@ -1,7 +1,6 @@
 # mts-converter
 
-Table of contents
-=================
+##Table of contents
 
   * [Table of contents](#table-of-contents)
   * [Fast start](#fast-start)
@@ -9,12 +8,10 @@ Table of contents
     * [Conversion to several files](#conversion-to-several-files)
 
 
-Fast start
-==========
+## Fast start
 
 
-Conversion to one file
-----------------------
+### Conversion to one file
 
 
 For call 
@@ -133,8 +130,8 @@ And perform 2 sequential commands for `ffmpeg`.
 ```
 
 
-Conversion to several files
----------------------------
+### Conversion to several files
+
 
 If you want to get several files from one source
 you shold describe several profiles in the config.
