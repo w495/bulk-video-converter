@@ -75,7 +75,7 @@ Check it if something's gone wrong.
 
 ## Quick start guide
 
-### Conversion to one file
+### Conversion to one video
 
 If you want to get one transcoded file from one source,
 you can only run this command.
@@ -210,9 +210,9 @@ bulk_video_converter.bash:
 ```
 
 
-### Conversion to several files
+### Conversion to several videos
 
-If you want to get several files from one source you should describe 
+If you want to get several videos from one source you should describe 
 several profiles in the config. For example, let we use profiles from 
 [H.264 web video encoding tutorial with FFmpeg.](https://www.virag.si/2012/01/web-video-encoding-tutorial-with-ffmpeg-0-9/)
 
