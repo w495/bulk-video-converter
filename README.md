@@ -1,6 +1,6 @@
 # Bulk Video Converter
 
-This is simple configurable bulk ffmpeg-based video converter.
+Simple configurable bulk ffmpeg-based video converter.
 
 It uses YAML configuration for generating several output files from
 one (or more) input video file. Each output file is created according
@@ -17,11 +17,13 @@ to `profile` subsection in YAML configuration. See examples below.
   
 ## Motivation
 
-The main purpose of this tool is transcoding single source
-to several videos of different qualities and sizes. 
-It is very helpful for handling raw videos from 
-amateur camera (especially `*.MTS` files).
+The main purpose of this tool is transcoding single source to several
+videos of different qualities and sizes. It is very helpful for 
+handling raw videos from amateur camera. 
 
+I use this tool to convert a great amout of `*.MTS` files 
+to web-compatible formats.
+ 
 ## Requirements
 
 ```
