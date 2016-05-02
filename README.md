@@ -202,6 +202,8 @@ profile:
 
 You can check what you will get with dry-run option (`-d`).
 So for virag's profiles you will have output with four ffmpeg-commands.
+All profiles will be handled in parallel way.
+It is same if you run ffmpeg four times at the same moment.
 
 ```bash
 [user@host ~]$ ./bulk_video_converter.bash -c config.yaml -d
