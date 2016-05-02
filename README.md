@@ -26,73 +26,52 @@ to web-compatible formats.
  
 ## Requirements
 
-```
-ffmpeg version 2.8.6 Copyright (c) 2000-2016 the FFmpeg developers
-built with gcc 5.1.1 (GCC) 20150618 (Red Hat 5.1.1-4)
-configuration: 
-    --prefix=/usr 
-    --bindir=/usr/bin 
-    --datadir=/usr/share/ffmpeg 
-    --incdir=/usr/include/ffmpeg 
-    --libdir=/usr/lib64 
-    --mandir=/usr/share/man 
-    --arch=x86_64 
-    --optflags='
-        -O2 
-        -g 
-        -pipe 
-        -Wall 
-        -Werror=format-security 
-        -Wp,
-        -D_FORTIFY_SOURCE=2 
-        -fexceptions 
-        -fstack-protector-strong 
-        --param=ssp-buffer-size=4 
-        -grecord-gcc-switches 
-        -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 
-        -m64 
-        -mtune=generic
-    ' 
-    --enable-bzlib 
-    --disable-crystalhd 
-    --enable-frei0r 
-    --enable-gnutls 
-    --enable-ladspa 
-    --enable-libass 
-    --enable-libcdio 
-    --enable-libdc1394 
-    --disable-indev=jack 
-    --enable-libfreetype 
-    --enable-libgsm 
-    --enable-libmp3lame 
-    --enable-openal 
-    --enable-libopencv 
-    --enable-libopenjpeg 
-    --enable-libopus 
-    --enable-libpulse 
-    --enable-libschroedinger 
-    --enable-libsoxr 
-    --enable-libspeex 
-    --enable-libtheora 
-    --enable-libvorbis 
-    --enable-libv4l2 
-    --enable-libvpx 
-    --enable-libx264 
-    --enable-libx265 
-    --enable-libxvid 
-    --enable-x11grab 
-    --enable-avfilter 
-    --enable-avresample 
-    --enable-postproc 
-    --enable-pthreads 
-    --disable-static 
-    --enable-shared 
-    --enable-gpl 
-    --disable-debug 
-    --disable-stripping 
-    --shlibdir=/usr/lib64 
-    --enable-runtime-cpudetect
-```
+It uses the latest version of standard ffmpeg pack.
+This is my ffmpeg configuration.
+Check it if something's gone wrong.
+    
+    ffmpeg version 2.8.6 Copyright (c) 2000-2016 the FFmpeg developers
+    built with gcc 5.1.1 (GCC) 20150618 (Red Hat 5.1.1-4)
+    configuration: 
+        ...
+        --arch=x86_64 
+        --enable-bzlib 
+        --disable-crystalhd 
+        --enable-frei0r 
+        --enable-gnutls 
+        --enable-ladspa 
+        --enable-libass 
+        --enable-libcdio 
+        --enable-libdc1394 
+        --disable-indev=jack 
+        --enable-libfreetype 
+        --enable-libgsm 
+        --enable-libmp3lame 
+        --enable-openal 
+        --enable-libopencv 
+        --enable-libopenjpeg 
+        --enable-libopus 
+        --enable-libpulse 
+        --enable-libschroedinger 
+        --enable-libsoxr 
+        --enable-libspeex 
+        --enable-libtheora 
+        --enable-libvorbis 
+        --enable-libv4l2 
+        --enable-libvpx 
+        --enable-libx264 
+        --enable-libx265 
+        --enable-libxvid 
+        --enable-x11grab 
+        --enable-avfilter 
+        --enable-avresample 
+        --enable-postproc 
+        --enable-pthreads 
+        --disable-static 
+        --enable-shared 
+        --enable-gpl 
+        --enable-runtime-cpudetect
+        ...
 
 ## Quick start guide
 
