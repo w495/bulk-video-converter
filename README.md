@@ -11,8 +11,8 @@ to `profile` subsection in YAML configuration. See examples below.
 * [Motivation](#motivation)
 * [Requirements](#requirements)
 * [Quick start guide](#quick-start-guide)
-    * [Conversion to one file](#conversion-to-one-file)
-    * [Conversion to several files](#conversion-to-several-files)
+    * [Conversion to one video](#conversion-to-one-video)
+    * [Conversion to several videos](#conversion-to-several-videos)
 * [TODO](#todo)
   
 ## Motivation
