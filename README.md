@@ -77,56 +77,56 @@ And perform 2 sequential commands for `ffmpeg`.
 * For the first pass:
 ```bash
 /usr/bin/ffmpeg                                             \
-  -ss '00:00:10'                                          \
-  -threads '0'                                            \
-  -i '/path/to/video/file/00001.MTS'                      \
-  -preset 'veryslow'                                      \
-  -b:v '2000k'                                            \
-  -vf 'scale=1280:720'                                    \
-  -codec:v 'libx264'                                      \
-  -profile:v 'high'                                       \
-  -level:v '3.1'                                          \
-  -weightp '2'                                            \
-  -bf '3'                                                 \
-  -x264opts 'keyint=96:min-keyint=96:no-scenecut'         \
-  -pass '1'                                               \
-  -passlogfile './pass_log/00001-my_profile.mts'          \
-  -b:a '320k'                                             \
-  -ac '6'                                                 \
-  -strict 'experimental'                                  \ 
-  -codec:a 'aac'                                          \
-  -ss '00:00:10'                                          \
-  -to '00:00:30'                                          \
-  -f 'mp4'                                                \
-  -y '/dev/null';
+    -ss '00:00:10'                                          \
+    -threads '0'                                            \
+    -i '/path/to/video/file/00001.MTS'                      \
+    -preset 'veryslow'                                      \
+    -b:v '2000k'                                            \
+    -vf 'scale=1280:720'                                    \
+    -codec:v 'libx264'                                      \
+    -profile:v 'high'                                       \
+    -level:v '3.1'                                          \
+    -weightp '2'                                            \
+    -bf '3'                                                 \
+    -x264opts 'keyint=96:min-keyint=96:no-scenecut'         \
+    -pass '1'                                               \
+    -passlogfile './pass_log/00001-my_profile.mts'          \
+    -b:a '320k'                                             \
+    -ac '6'                                                 \
+    -strict 'experimental'                                  \ 
+    -codec:a 'aac'                                          \
+    -ss '00:00:10'                                          \
+    -to '00:00:30'                                          \
+    -f 'mp4'                                                \
+    -y '/dev/null';
 ```
 
 * And for second one:
 
 ```bash
 /usr/bin/ffmpeg                                             \
-  -ss '00:00:10'                                          \
-  -threads '0'                                            \
-  -i '/path/to/video/file/00001.MTS'                      \
-  -preset 'veryslow'                                      \
-  -b:v '2000k'                                            \
-  -vf 'scale=1280:720'                                    \
-  -codec:v 'libx264'                                      \
-  -profile:v 'high'                                       \
-  -level:v '3.1'                                          \
-  -weightp '2'                                            \
-  -bf '3'                                                 \
-  -x264opts 'keyint=96:min-keyint=96:no-scenecut'         \
-  -pass '2'                                               \
-  -passlogfile './pass_log/00001-my_profile.mts'          \
-  -b:a '320k'                                             \
-  -ac '6'                                                 \
-  -strict 'experimental'                                  \ 
-  -codec:a 'aac'                                          \
-  -ss '00:00:10'                                          \
-  -to '00:00:30'                                          \
-  -f 'mp4'                                                \
-  -y './out/00001-my_profile.mp4';
+    -ss '00:00:10'                                          \
+    -threads '0'                                            \
+    -i '/path/to/video/file/00001.MTS'                      \
+    -preset 'veryslow'                                      \
+    -b:v '2000k'                                            \
+    -vf 'scale=1280:720'                                    \
+    -codec:v 'libx264'                                      \
+    -profile:v 'high'                                       \
+    -level:v '3.1'                                          \
+    -weightp '2'                                            \
+    -bf '3'                                                 \
+    -x264opts 'keyint=96:min-keyint=96:no-scenecut'         \
+    -pass '2'                                               \
+    -passlogfile './pass_log/00001-my_profile.mts'          \
+    -b:a '320k'                                             \
+    -ac '6'                                                 \
+    -strict 'experimental'                                  \ 
+    -codec:a 'aac'                                          \
+    -ss '00:00:10'                                          \
+    -to '00:00:30'                                          \
+    -f 'mp4'                                                \
+    -y './out/00001-my_profile.mp4';
 ```
 
 
