@@ -1,7 +1,9 @@
 ffmpeg:
   bin: /usr/bin/ffmpeg
   threads: 0
+
 profile:
+
   base:
     # you can mark profile as abstract
     # and it will be used only for inheritance.
@@ -9,11 +11,9 @@ profile:
     output_dir_name: ./out
     start: 00:00:10
     stop: 00:00:30
-
     ignore:
       duration:  00:00:30
       source: /home/w495/Videos/input/00001.MTS
-
 
   ## Semi-TVzavr's profile for SmartTV devices.
   ## Check in the player on the https://www.tvzavr.ru/
