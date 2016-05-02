@@ -10,9 +10,7 @@
 
 ## Fast start
 
-
 ### Conversion to one file
-
 
 For call 
 ```bash
