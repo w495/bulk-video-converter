@@ -1,11 +1,11 @@
 # Bulk Video Converter
 
-Simple configurable bulk ffmpeg-based video converter.
+Simple configurable bulk `ffmpeg`-based video converter.
 
-It uses YAML configuration for generating several output files from
-one (or more) input video file. Each output file is created according
-to `profile` subsection in YAML configuration. 
-See [examples](#quick-start-guide) below.
+It uses **YAML** configuration for generating several output files 
+from one (or more) input video. 
+Each output file is created  according to `profile` subsection 
+in *YAML* configuration. See [examples](#quick-start-guide) below.
 
 ## Table of contents
 
