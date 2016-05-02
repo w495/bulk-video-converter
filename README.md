@@ -82,7 +82,7 @@ And perform 2 sequential commands for `ffmpeg`.
 /usr/bin/ffmpeg                                             \
     -ss '00:00:10'                                          \
     -threads '0'                                            \
-    -i '/path/to/video/file/00001.MTS'                       \
+    -i '/path/to/video/file/00001.MTS'                      \
     -preset 'veryslow'                                      \
     -b:v '2000k'                                            \
     -vf 'scale=1280:720'                                    \
@@ -110,7 +110,7 @@ And perform 2 sequential commands for `ffmpeg`.
 /usr/bin/ffmpeg                                             \
     -ss '00:00:10'                                          \
     -threads '0'                                            \
-    -i '/path/to/video/file/00001.MTS'                       \
+    -i '/path/to/video/file/00001.MTS'                      \
     -preset 'veryslow'                                      \
     -b:v '2000k'                                            \
     -vf 'scale=1280:720'                                    \
