@@ -83,7 +83,28 @@ And perform 2 sequential commands for `ffmpeg`:
 
 
 ```(bash)
-/usr/bin/ffmpeg -ss 00:00:10 -threads 0 -i /home/w495/Videos/input/00001.MTS -preset veryslow -b:v 2000k -vf "scale=1280:720" -codec:v libx264 -profile:v high -level:v 3.1 -weightp 2 -bf 3 -x264opts "keyint=96:min-keyint=96:no-scenecut" -pass 1 -passlogfile ./pass_log/00001-tvzavr_h264x2_720p_hd.mts -b:a 320k -ac 6 -strict experimental -codec:a aac -ss 00:00:10 -to 00:00:30 -f mp4 -y /dev/null 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-02_03-43-50-822839410/00001-tvzavr_h264x2_720p_hd-1-mp4.ffmpeg.log 1>&2;
+/usr/bin/ffmpeg -ss 00:00:10 -threads 0 \
+-i /home/w495/Videos/input/00001.MTS \
+-preset veryslow \
+-b:v 2000k \
+-vf "scale=1280:720" \
+-codec:v libx264 \
+-profile:v high \
+-level:v 3.1 \
+-weightp 2 \
+-bf 3 \
+-x264opts "keyint=96:min-keyint=96:no-scenecut" \
+-pass 1 \
+-passlogfile ./pass_log/00001-tvzavr_h264x2_720p_hd.mts \
+-b:a 320k \
+-ac 6 \
+-strict experimental 
+-codec:a aac \
+-ss 00:00:10 \
+-to 00:00:30 \
+-f mp4 \
+-y /dev/null 2>&1 \
+| tee /var/log/bulk_video_converter.bash/2016-05-02_03-43-50-822839410/00001-tvzavr_h264x2_720p_hd-1-mp4.ffmpeg.log 1>&2;
 ```
 
 and 
