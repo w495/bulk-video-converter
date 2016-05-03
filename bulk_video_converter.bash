@@ -217,7 +217,7 @@ profile:
       codec:
         preset: veryfast
         name : h264
-        weightp: 2
+        weightp: smart
         bframes: 3
         opts: "keyint=96:min-keyint=96:no-scenecut"
     audio:
@@ -248,7 +248,8 @@ main(){
     # non-local function `configure` — sets global options of script.
     configure "${@}";
     $(start_up);
-    $(handle_file_sequence "${INPUT_FILE_NAME_LIST}");
+    $(handle_file_sequence "${INPUT_FILE_NAME_LIST}")
+    wait;
     $(clean_up);
     $(verbose_end "${SCRIPT_NAME}");
 }
@@ -256,18 +257,25 @@ main(){
 handle_file_sequence(){
     local file_name_sequence="${1}";
     local concrete_profile="${2}";
+    local profile_map_name="${3}";
     local file_log_prefix="${FILE_LOG_PREFIX}";
+
     if [[ -n ${concrete_profile} ]]; then
         file_log_prefix="${file_log_prefix}-${concrete_profile}"
     fi;
+    if [[ -n ${profile_map_name} ]]; then
+        file_log_prefix="${file_log_prefix}-${profile_map_name}"
+    fi;
+
     local -i file_index=1;
     for file_name in ${file_name_sequence} ; do
         # Handle each file in parallel.  But log about it sequentially.
         $(handle_file_async                                         \
             "${file_name}"                                          \
             "${file_index}"                                         \
-            "${file_log_prefix}-${file_index}"  \
+            "${file_log_prefix}-${file_index}"                      \
             "${concrete_profile}"                                   \
+            "${profile_map_name}"                                   \
         ) &
         file_index+=1
     done;
@@ -282,11 +290,13 @@ handle_file_async(){
     local file_index="${2}";
     local file_log="${3}";
     local concrete_profile="${4}";
+    local profile_map_name="${5}";
     (
         $(handle_file   \
             "${input_file_name}"    \
             "${file_index}"         \
             "${concrete_profile}"   \
+            "${profile_map_name}"   \
         );
     ) 2>"${file_log}.log" &
 }
@@ -295,6 +305,8 @@ handle_file(){
     local input_file_name="${1}";
     local file_index="${2}";
     local concrete_profile="${3}";
+    local profile_map_name="${4}";
+
     $(assert_exists                         \
         "${input_file_name}"                \
         "no such file: ${input_file_name}." \
@@ -310,6 +322,7 @@ handle_file(){
         $(handle_profile_sequence   \
             "${input_file_name}"    \
             "${file_index}"         \
+            "${profile_map_name}"   \
         );
     fi;
 }
@@ -317,9 +330,23 @@ handle_file(){
 handle_profile_sequence(){
     local input_file_name="${1}";
     local file_index="${2}";
+    local profile_map_name="${3}";
+
+    if [[ -z "${profile_map_name}" ]] ; then
+        profile_map_name='PROFILE_MAP'
+    fi;
+
+    local var_name=$(echo "\${!${profile_map_name}[@]}")
+    local profile_list=$(eval echo "${var_name}")
+
+
+    profile_list=$(echo "${profile_list}"|sed -E 's/IS_([A-Z]+)//gi');
+
+    debug "list of profiles = ${profile_list}"
+
     local profile_log_prefix="${PROFILE_LOG_PREFIX}-${file_index}";
     local -i profile_index=1;
-    for profile_name in "${!PROFILE_MAP[@]}"; do
+    for profile_name in ${profile_list}; do
         $(handle_profile_async                                      \
             "${profile_name}"                                       \
             "${input_file_name}"                                    \
@@ -344,7 +371,17 @@ handle_profile(){
     local profile_name="${1}";
     local input_file_name="${2}";
     local abstract=$(plain_profile ${profile_name} abstract);
+
     local is_complex=$(plain_profile "${profile_name}" 'is_complex');
+    local profile_map_name='';
+    local conrete_profile_name="${profile_name}";
+
+    ## Use is_complex=true for nested profiles
+    if [[ -n "${is_complex}" ]]; then
+        profile_map_name="PROFILE_${profile_name}_MAP"
+        conrete_profile_name=''
+    fi;
+
     if [[ -z ${abstract} ]]; then
         input_file_name=$(profile_default  \
             "${input_file_name}"                    \
@@ -364,7 +401,14 @@ handle_profile(){
             video                                   \
             device                                  \
         );
-        handle_file_sequence "${input_file_name}" "${profile_name}"
+
+        # Return to `handle_file_sequence`
+        # for files described inside profiles.
+        $(handle_file_sequence                      \
+            "${input_file_name}"                    \
+            "${conrete_profile_name}"               \
+            "${profile_map_name}"                   \
+        );
     fi;
 }
 
@@ -775,9 +819,9 @@ handle_video_h264_options(){
     codec_options+="-codec:v 'libx264'";
 
     local codec_profile=$(profile ${profile_name} video codec profile)
-    local weightp=$(profile ${profile_name} video codec weightp)
-
     codec_options+=$(if_exists "-profile:v '%s'" ${codec_profile});
+
+    local weightp=$(profile ${profile_name} video codec weightp)
     codec_options+=$(if_exists "-weightp '%s'" ${weightp});
 
 
@@ -1258,16 +1302,16 @@ parse_options (){
             *) wrong_usage "Unknown parameter '${1}'.";;
         esac;
     done;
-    readonly VERBOSE;
-    readonly CONFIG_FILE_NAME;
-    readonly OUTPUT_DIR_NAME;
-    readonly OUTPUT_FILE_NAME;
-    readonly LOG_DIR_NAME;
-    readonly PASS_LOG_DIR_NAME;
+    declare -rg VERBOSE;
+    declare -rg CONFIG_FILE_NAME;
+    declare -rg OUTPUT_DIR_NAME;
+    declare -rg OUTPUT_FILE_NAME;
+    declare -rg LOG_DIR_NAME;
+    declare -rg PASS_LOG_DIR_NAME;
     if [[ -z "${INPUT_FILE_NAME_LIST}" ]]; then
         INPUT_FILE_NAME_LIST="${FROM_CONFIG_FILE_FLAG}"
     fi;
-    readonly INPUT_FILE_NAME_LIST;
+    declare -rg INPUT_FILE_NAME_LIST;
 }
 
 handle_config() {

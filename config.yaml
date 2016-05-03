@@ -14,30 +14,30 @@ profile:
       stop: 00:00:30
       duration:  00:00:30
       source: /home/w495/Videos/input/00003.MTS
-#
-#  ## Semi-TVzavr's profile for SmartTV devices.
-#  ## Check in the player on the https://www.tvzavr.ru/
-#  tvzavr_h264_x2_720p_hd:
-#    # Other options are inherited from `base`
-#    extends:   base
-#    passes: 2
-#    video:
-#      width:   1280
-#      height:  720
-#      bitrate: 2000k
-#      codec:
-#        preset: veryslow
-#        name : h264
-#        weightp: smart
-#        bframes: 3
-#        opts: "keyint=96:min-keyint=96:no-scenecut"
-#        profile: high
-#        level: 3.1
-#    audio:
-#      codec:
-#        name: aac
-#      channels: 5.1
-#      bitrate: 320k
+
+  ## Semi-TVzavr's profile for SmartTV devices.
+  ## Check in the player on the https://www.tvzavr.ru/
+  tvzavr_h264_x2_720p_hd:
+    # Other options are inherited from `base`
+    extends:   base
+    passes: 2
+    video:
+      width:   1280
+      height:  720
+      bitrate: 2000k
+      codec:
+        preset: veryslow
+        name : h264
+        weightp: smart
+        bframes: 3
+        opts: "keyint=96:min-keyint=96:no-scenecut"
+        profile: high
+        level: 3.1
+    audio:
+      codec:
+        name: aac
+      channels: 5.1
+      bitrate: 320k
 #
 #  ## Semi-TVzavr's profile for Desctop Web Video.
 #  ## Check in the player on the https://www.tvzavr.ru/
@@ -173,45 +173,47 @@ profile:
 #      channels: 5.1
 #      bitrate: 196k
 #
-  exp_h263_x1_pal_sd:
-    # Other options are inherited from `base`
-    extends:   base
-    passes: 1
-    format: flv
-    extention: flv
-    video:
-      width:  -1  # 1024 for 16:9
-      height: 576 # SD
-      preset: slower
-      codec:
-        name: flv
-      bitrate: 1200k
-      maxrate: 1200k
-      bufsize: 2400k
-    audio:
-      codec:
-        name: mp3
-      # For flv with mp3 — (44100, 22050, 11025)
-      framerate: 22050
-      channels: mono
-      bitrate: 64k
-
-#  exp_dirac_x1_pal_sd:
+#  exp_h263_x1_pal_sd:
 #    # Other options are inherited from `base`
 #    extends:   base
 #    passes: 1
-#    format: mov
+#    format: flv
+#    extention: flv
 #    video:
 #      width:  -1  # 1024 for 16:9
 #      height: 576 # SD
+#      preset: slower
 #      codec:
-#        name: dirac
-#        qscale: 0
+#        name: flv
+#      bitrate: 1200k
+#      maxrate: 1200k
+#      bufsize: 2400k
 #    audio:
 #      codec:
-#        name: aac
+#        name: mp3
+#      # For flv with mp3 — (44100, 22050, 11025)
+#      framerate: 22050
 #      channels: mono
 #      bitrate: 64k
+#
+#  exp_10:
+#    is_complex: 1
+#    exp_dirac_x1_pal_sd:
+#      # Other options are inherited from `base`
+#      extends:   base
+#      passes: 1
+#      format: mov
+#      video:
+#        width:  -1  # 1024 for 16:9
+#        height: 576 # SD
+#        codec:
+#          name: dirac
+#          qscale: 0
+#      audio:
+#        codec:
+#          name: aac
+#        channels: mono
+#        bitrate: 64k
 
 #  exp_hevc_x1_pal_gray_sd:
 #    # Other options are inherited from `base`
@@ -238,26 +240,26 @@ profile:
 #      channels: 5.1
 #      bitrate: 196k
 
-
-  exp_xvid_x1_pal_gray_sd:
-    # Other options are inherited from `base`
-    extends:   base
-    passes: 1
-    format: mp4
-    video:
-      width:  -1  # 1024 for 16:9
-      height: 576 # SD
-      codec:
-        name: xvid
-      bitrate: 1000k
-      maxrate: 1000k
-      bufsize: 2000k
-    audio:
-      codec:
-        name: mp3
-      channels: 5.1
-      bitrate: 196k
-
+#
+#  exp_xvid_x1_pal_gray_sd:
+#    # Other options are inherited from `base`
+#    extends:   base
+#    passes: 1
+#    format: mp4
+#    video:
+#      width:  -1  # 1024 for 16:9
+#      height: 576 # SD
+#      codec:
+#        name: xvid
+#      bitrate: 1000k
+#      maxrate: 1000k
+#      bufsize: 2000k
+#    audio:
+#      codec:
+#        name: mp3
+#      channels: 5.1
+#      bitrate: 196k
+#
 
 profile_screen:
   screen_hd:
