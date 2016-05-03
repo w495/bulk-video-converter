@@ -22,8 +22,7 @@ readonly SCRIPT_NAME=$(basename $0);
 # Internal constants.
 readonly TMP_DIR_BASE_NAME="/tmp/${SCRIPT_NAME}"
 readonly TMP_DIR_NAME="${TMP_DIR_BASE_NAME}/${RANDOM_STING}";
-readonly FILE_LOG_PREFIX="${TMP_DIR_NAME}/file-log";
-readonly PROFILE_LOG_PREFIX="${TMP_DIR_NAME}/profile-log";
+
 
 # ------------------------------------------------------------
 # Default options:
@@ -33,6 +32,10 @@ readonly PROFILE_LOG_PREFIX="${TMP_DIR_NAME}/profile-log";
 
 readonly LOG_DIR_BASE_NAME="/var/log/${SCRIPT_NAME}";
 declare LOG_DIR_NAME="${LOG_DIR_BASE_NAME}/${START_TIME_STRING}"
+
+readonly FILE_LOG_PREFIX="${LOG_DIR_NAME}/file-log";
+readonly PROFILE_LOG_PREFIX="${LOG_DIR_NAME}/profile-log";
+
 declare PASS_LOG_DIR_NAME="${TMP_DIR_NAME}/pass-log";
 
 declare VERBOSE='true';
@@ -209,9 +212,9 @@ ffmpeg:
   duration: 00:00:10
 profile:
   base:
-    # you can mark profile as abstract
+    # you can mark profile as is_abstract
     # and it will be used only for inheritance.
-    abstract: 1
+    is_abstract: 1
     passes: 2
     video:
       codec:
@@ -249,8 +252,7 @@ main(){
     configure "${@}";
     $(start_up);
     $(handle_file_sequence "${INPUT_FILE_NAME_LIST}")
-    wait;
-    $(clean_up);
+    # $(clean_up);
     $(verbose_end "${SCRIPT_NAME}");
 }
 
@@ -332,7 +334,7 @@ handle_profile_sequence(){
     local file_index="${2}";
     local profile_map_name="${3}";
 
-    if [[ -z "${profile_map_name}" ]] ; then
+    if [[ -z "${profile_map_name}" ]]; then
         profile_map_name='PROFILE_MAP'
     fi;
 
@@ -370,7 +372,7 @@ handle_profile_async(){
 handle_profile(){
     local profile_name="${1}";
     local input_file_name="${2}";
-    local abstract=$(plain_profile ${profile_name} abstract);
+    local is_abstract=$(plain_profile ${profile_name} is_abstract);
 
     local is_complex=$(plain_profile "${profile_name}" 'is_complex');
     local profile_map_name='';
@@ -382,7 +384,7 @@ handle_profile(){
         conrete_profile_name=''
     fi;
 
-    if [[ -z ${abstract} ]]; then
+    if [[ -z ${is_abstract} ]]; then
         input_file_name=$(profile_default  \
             "${input_file_name}"                    \
             "${profile_name}"                       \
@@ -1060,7 +1062,7 @@ handle_audio_mp3_options(){
 profile_if_exists() {
     local output_format="${1}";
     local value=$(profile ${@:2});
-    if [[ -n "${value}" && "${value}" != "null" ]] ; then
+    if [[ -n "${value}" && "${value}" != "null" ]]; then
         printf " ${output_format} " "${value}";
     fi;
 }
@@ -1069,11 +1071,11 @@ if_exists() {
     local output_format="${1}";
     local value="${@:2}";
     for var in "${@:2}" ;do
-        if [[ -z "${var}" || "${var}" == "null" ]] ; then
+        if [[ -z "${var}" || "${var}" == "null" ]]; then
             value='null';
         fi;
     done
-    if [[ -n "${value}" && "${value}" != "null" ]] ; then
+    if [[ -n "${value}" && "${value}" != "null" ]]; then
         printf " ${output_format} " ${value};
     fi;
 }
@@ -1081,7 +1083,7 @@ if_exists() {
 profile_default () {
     local default="${1}";
     local value=$(profile "${@:2}");
-    if [[ -z "${value}" ]] ; then
+    if [[ -z "${value}" ]]; then
         echo "${default}";
     else
         echo "${value}";
@@ -1091,10 +1093,15 @@ profile_default () {
 profile () {
     local name="${1}";
     local value=$(plain_profile "${name}" "${@:2}")
-    if [[ -z "${value}" ]] ; then
-        local parent=$(plain_profile "${name}" 'extends');
-        if [[ -n "${parent}" ]] ; then
-            value=$(profile "${parent}" "${@:2}");
+    if [[ -z "${value}" ]]; then
+        local parent_list=$(plain_profile "${name}" 'extends');
+        if [[ -n "${parent_list}" ]]; then
+            for parent in ${parent_list}; do
+                local mb_value=$(profile "${parent}" "${@:2}");
+                if [[ -n "${mb_value}" ]]; then
+                    value="${mb_value}";
+                fi;
+            done;
         fi;
     fi;
     echo "${value}";
@@ -1120,7 +1127,7 @@ get () {
 
 compute_if_empty (){
     local out_file_name="${1}";
-    if [[ -z "${out_file_name}" ]] ; then
+    if [[ -z "${out_file_name}" ]]; then
         local initial_file_name="${2}";
         if [[ $(is_device ${initial_file_name}) ]]; then
             initial_file_name=$(echo ${initial_file_name} \
@@ -1134,7 +1141,7 @@ compute_if_empty (){
         assert_not_empty "${initial_file_name}" "empty base name";
         local base_file_name=$(basename "${initial_file_name}");
         local base_name="${base_file_name%.*}";
-        if [[ -z "${extention}" ]] ; then
+        if [[ -z "${extention}" ]]; then
             extention="${base_file_name##*.}"
             extention=$(echo "${extention}" \
                 | tr '[:upper:]' '[:lower:]');
@@ -1150,7 +1157,7 @@ compute_if_empty (){
             base_name="${out_dir_name}/${base_name}"
         fi;
         out_file_name="${base_name}.${extention}"
-        if [[ -n "${suffix}" ]] ; then
+        if [[ -n "${suffix}" ]]; then
             out_file_name="${base_name}-${suffix}.${extention}"
         fi;
     fi;
@@ -1158,14 +1165,16 @@ compute_if_empty (){
 }
 
 start_up (){
-    if [[ ! -d "${TMP_DIR_NAME}" ]] ; then
+    if [[ ! -d "${TMP_DIR_NAME}" ]]; then
         notice "creates directory ${TMP_DIR_NAME}"
         mkdir -p "${TMP_DIR_NAME}";
+        notice "creates directory ${LOG_DIR_NAME}"
+        mkdir -p "${LOG_DIR_NAME}";
     fi;
 }
 
 clean_up (){
-    if [[ -d "${TMP_DIR_BASE_NAME}" ]] ; then
+    if [[ -d "${TMP_DIR_BASE_NAME}" ]]; then
         notice "deletes directory ${TMP_DIR_BASE_NAME}"
         rm -rf "${TMP_DIR_BASE_NAME}";
     fi;
@@ -1174,7 +1183,7 @@ clean_up (){
 assert_not_empty () {
     local out_file_name="${1}";
     local message="${2}";
-    if [[ -z "${out_file_name}" ]] ; then
+    if [[ -z "${out_file_name}" ]]; then
         wrong_usage "${message}";
     fi;
 }
@@ -1184,9 +1193,9 @@ assert_exists () {
     local message="${2}";
     if [[ $(is_device ${file_name}) ]]; then
         notice "uses display '${file_name}' as a file name"
-    elif [[ "${file_name}" == "${FROM_CONFIG_FILE_FLAG}" ]] ; then
+    elif [[ "${file_name}" == "${FROM_CONFIG_FILE_FLAG}" ]]; then
         notice "gets file names from config";
-    elif [[ ! -f "${file_name}" ]] ; then
+    elif [[ ! -f "${file_name}" ]]; then
         wrong_usage "${message}";
     fi;
 }
@@ -1232,7 +1241,7 @@ parse_options (){
         -- "${@}");
     eval set -- ${OPTIONS};
 
-    while [[ -n ${OPTIONS} ]] ; do
+    while [[ -n ${OPTIONS} ]]; do
         case ${1} in
             -h|--help)
                 show_usage;
@@ -1422,7 +1431,7 @@ wrong_usage(){
 }
 
 verbose() {
-    if [[ "${VERBOSE}" == "true" ]] ; then
+    if [[ "${VERBOSE}" == "true" ]]; then
         printf "${@}\n"  \
             1>& ${OUT_LOG_STREAM};
     fi
