@@ -520,13 +520,14 @@ handle_global_input_options(){
     local profile_name="${1}";
     local input_file_name="${2}";
     local options='';
+    options+=$(if_exists "-threads '%s'" ${FFMPEG_THREADS});
+
     local start_position=$(profile_default      \
         "${FFMPEG_START}"                       \
         ${profile_name}                         \
         start                                   \
     );
-    options+=$(if_exists " -ss '%s'" ${start_position});
-    options+=$(if_exists " -threads '%s'" ${FFMPEG_THREADS});
+    options+=$(if_exists "-ss '%s'" ${start_position});
     if [[ $(is_device ${input_file_name}) ]]; then
         local device_options=$(handle_global_device_options    \
             "${profile_name}"                                   \
@@ -560,7 +561,9 @@ handle_global_output_options(){
     options+=$(if_exists "-ss '%s'" ${start_position});
     options+=$(if_exists "-t '%s'" ${duration});
     options+=$(if_exists "-to '%s'" ${stop_position});
-    verbose_block "global output@%6s" "${options}";
+    if [[ -n "${options}" ]]; then
+        verbose_block "global output@%6s" "${options}";
+    fi;
     echo ${options};
 }
 
@@ -582,7 +585,7 @@ handle_output_format_options(){
 
     options+=$(if_exists "-movflags '%s'" ${movflags});
     options+=$(if_exists "-f '%s'" ${output_format});
-
+    verbose_block "format@%6s" "${options}";
     echo "${options}"
 }
 
@@ -1151,7 +1154,7 @@ compute_if_empty (){
             base_dir_name=$(basename "${initial_dir_name}");
             local out_dir_name="${parent_dir_name}/${base_dir_name}";
             if [[ ! -d "${out_dir_name}" ]]; then
-                notice "creates directory ${out_dir_name}"
+                notice "creates directory '${out_dir_name}'."
                 mkdir -p "${out_dir_name}";
             fi;
             base_name="${out_dir_name}/${base_name}"
@@ -1165,11 +1168,17 @@ compute_if_empty (){
 }
 
 start_up (){
-    if [[ ! -d "${TMP_DIR_NAME}" ]]; then
-        notice "creates directory ${TMP_DIR_NAME}"
+    if [[ -n ${TMP_DIR_NAME} && ! -d "${TMP_DIR_NAME}" ]]; then
+        notice "creates directory '${TMP_DIR_NAME}' at start up."
         mkdir -p "${TMP_DIR_NAME}";
-        notice "creates directory ${LOG_DIR_NAME}"
+    fi;
+    if [[ -n ${LOG_DIR_NAME} && ! -d "${LOG_DIR_NAME}" ]]; then
+        notice "creates directory '${LOG_DIR_NAME}' at start up.";
         mkdir -p "${LOG_DIR_NAME}";
+    fi;
+    if [[ -n ${OUTPUT_DIR_NAME} && ! -d "${OUTPUT_DIR_NAME}" ]]; then
+        notice "creates directory '${OUTPUT_DIR_NAME}' at start up.";
+        mkdir -p "${OUTPUT_DIR_NAME}";
     fi;
 }
 
@@ -1468,11 +1477,22 @@ verbose_block (){
     local string=$1;
     local delimiter='@';
     local offset=$(awk -F "$delimiter" '{print $2}' <<< "$string")
-    local value=${@:2}
+    local value=${@:2};
+    value=$(strip_string "${value}");
     verbose_start "${string}"
     verbose_inside "${offset}"\
     "${COLOR_BOLD}${COLOR_DARK_CYAN}${value}${COLOR_OFF}";
     verbose_end "${string}";
+}
+
+
+strip_string(){
+    local value=${1};
+    value=$(echo "${value}" \
+        | sed -E 's/\s+/ /gi' \
+        | sed -E 's/^\s+//gi' \
+    );
+    echo "${value}";
 }
 
 verbose_run (){
