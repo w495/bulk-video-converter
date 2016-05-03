@@ -191,7 +191,7 @@ ${COLOR_REVERSE} Options:${C0}
           ${WC}There is no reason to set this option
           in a common situation.${C0}
 ${COLOR_REVERSE} Version:${C0}
-    2016-05-02_05-52-20-984679666
+    2016-05-03_03-10-26-488850202
 ${COLOR_REVERSE} Authors:${C0}
     Ilya w495 Nikitin.
     Report bugs to:
