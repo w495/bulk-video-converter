@@ -214,8 +214,8 @@ profile:
     abstract: 1
     passes: 2
     video:
-      preset: veryfast
       codec:
+        preset: veryfast
         name : h264
         weightp: 2
         bframes: 3
@@ -386,7 +386,7 @@ handle_concrete_profile(){
     local passes=$(profile_default      \
         '1' "${profile_name}" 'passes');
     local output_format=$(profile_default \
-        'mp4' "${profile_name}" 'output_format');
+        'mp4' "${profile_name}" 'format');
     local extention=$(profile_default \
         "$output_format" "${profile_name}" 'extention');
     local output_dir_name=$(profile_default             \
@@ -428,6 +428,11 @@ handle_concrete_profile(){
         "${profile_name}"                           \
         "${input_file_name}"                        \
     );
+    local output_format_options=$(handle_output_format_options    \
+        "${profile_name}"                           \
+        "${input_file_name}"                        \
+        "${output_format}"                           \
+    );
     verbose_start "passes@%6s";
     for pass in $(seq 1 ${passes}); do
         local pass_options='';
@@ -453,7 +458,7 @@ handle_concrete_profile(){
             ${pass_options} \
             ${audio_options} \
             ${global_output_options}    \
-            "-f '${output_format}'" \
+            ${output_format_options}    \
             "-y '${output_pass_file_name}'" \
             "2>&1 | tee ${log_file_name} 1>&${OUT_LOG_STREAM};"
     done
@@ -506,11 +511,33 @@ handle_global_output_options(){
         ${profile_name}                         \
         stop                                    \
     );
-    options+=$(if_exists " -ss '%s'" ${start_position});
-    options+=$(if_exists " -t '%s'" ${duration});
-    options+=$(if_exists " -to '%s'" ${stop_position});
+    options+=$(if_exists "-ss '%s'" ${start_position});
+    options+=$(if_exists "-t '%s'" ${duration});
+    options+=$(if_exists "-to '%s'" ${stop_position});
     verbose_block "global output@%6s" "${options}";
     echo ${options};
+}
+
+
+handle_output_format_options(){
+    local profile_name="${1}";
+    local input_file_name="${2}";
+    local output_format="${3}";
+
+    local options='';
+    local movflags='';
+
+    case "${output_format}" in
+        'mov'|'mp4'|'ismv')  movflags+='+faststart';;
+        'stereo') channels='2';;
+        '5.1')    channels='6';;
+        *) ;;
+    esac;
+
+    options+=$(if_exists "-movflags '%s'" ${movflags});
+    options+=$(if_exists "-f '%s'" ${output_format});
+
+    echo "${options}"
 }
 
 handle_global_device_options(){
@@ -556,42 +583,34 @@ handle_global_device_options(){
 # ------------------------------------------------------------
 
 handle_video_options(){
-    # DEFAULT_video_options_265
-    #     -codec:v libx265
-    #     -preset veryslow
-    #     -b:v 500k
-    #     -maxrate 500k
-    #     -bufsize 1000k
-    #     -vf scale=-1:720
-    #
-    #
-    # DEFAULT_video_options_264
-    #     -codec:v libx264
-    #     -preset veryslow
-    #     -b:v 500k
-    #     -maxrate 500k
-    #     -bufsize 1000k
-    #     -vf scale=-1:720
-    #     -profile:v high
-
     local profile_name="${1}";
     local input_file_name="${2}";
     local codec_options=$(handle_video_codec_options ${profile_name});
-    local preset="$(profile ${profile_name} video preset)";
+
+    local framerate="$(profile ${profile_name} video framerate)";
+    local rate_factor="$(profile ${profile_name} video rate_factor)";
     local bitrate="$(profile ${profile_name} video bitrate)";
     local bufsize="$(profile ${profile_name} video bufsize)";
     local maxrate="$(profile ${profile_name} video maxrate)";
     local minrate="$(profile ${profile_name} video minrate)";
     local width="$(profile ${profile_name} video width)";
     local height="$(profile ${profile_name} video height)";
+
+    local aspect="$(profile ${profile_name} video aspect)";
+
     local common_options=''
-    common_options+=$(if_exists "-preset '%s'" ${preset})
+
     common_options+=$(if_exists "-b:v '%s'" ${bitrate})
+    common_options+=$(if_exists "-crf '%s'" ${rate_factor})
+    common_options+=$(if_exists "-r:v '%s'" ${framerate})
     common_options+=$(if_exists "-maxrate '%s'" ${maxrate})
     common_options+=$(if_exists "-minrate '%s'" ${minrate})
     common_options+=$(if_exists "-bufsize '%s'" ${bufsize})
+    common_options+=$(if_exists "-aspect:v '%s'" ${aspect})
+
+
     common_options+=$(if_exists "-vf 'scale=%s:%s'" ${width} ${height})
-    local options="${common_options} ${codec_options}";
+    local options="${codec_options} ${common_options}";
     verbose_block "video@%6s" "${options}";
     echo ${options}
 }
@@ -604,28 +623,263 @@ handle_video_codec_options(){
         ${profile_name} video codec name
     );
     local codec_options='';
-    if [[ "$codec_name" == "h264" ]]; then
-        codec_options+=$(handle_video_h264_options ${profile_name});
-    fi;
+
+    case "${codec_name}" in
+        'flv')
+            codec_options+=$(                                       \
+                handle_video_flv_options                           \
+                ${profile_name}                                     \
+            );;
+        'h263')
+            codec_options+=$(                                       \
+                handle_video_h263_options                           \
+                ${profile_name}                                     \
+            );;
+        'h263p')
+            codec_options+=$(                                       \
+                handle_video_h263p_options                           \
+                ${profile_name}                                     \
+            );;
+        'cinepak')
+            codec_options+=$(                                       \
+                handle_video_cinepak_options                           \
+                ${profile_name}                                     \
+            );;
+        'mpeg4'|'xvid')
+            codec_options+=$(                                       \
+                handle_video_xvid_options                           \
+                ${profile_name}                                     \
+            );;
+        'h264'|'x264')
+            codec_options+=$(                                       \
+                handle_video_h264_options                           \
+                ${profile_name}                                     \
+            );;
+        'hevc'|'x265')
+            codec_options+=$(                                       \
+                handle_video_hevc_options                           \
+                ${profile_name}                                     \
+            );;
+        'theora')
+            codec_options+=$(                                       \
+                handle_video_theora_options                           \
+                ${profile_name}                                     \
+            );;
+        'vp8')
+            codec_options+=$(                                       \
+                handle_video_vp8_options                            \
+                ${profile_name}                                     \
+            );;
+        'vp9')
+            codec_options+=$(                                       \
+                handle_video_vp9_options                            \
+                ${profile_name}                                     \
+            );;
+        'snow')
+            codec_options+=$(                                       \
+                handle_video_snow_options                           \
+                ${profile_name}                                     \
+            );;
+        'dirac')
+            codec_options+=$(                                       \
+                handle_video_dirac_options                           \
+                ${profile_name}                                     \
+            );;
+        'jpeg2000')
+            codec_options+=$(                                       \
+                handle_video_jpeg2000_options                           \
+                ${profile_name}                                     \
+            );;
+        *) ;;
+    esac;
+
+    local qscale="$(profile ${profile_name} video qscale)";
+    qscale=$(profile_default    \
+        "${qscale}"               \
+        "${profile_name}"         \
+        video codec qscale      \
+    );
+
+    codec_options+=$(if_exists "-qscale:v '%s'" ${qscale})
+
+    local compression_level=$(profile ${profile_name} video codec compression_level)
+    codec_options+=$(if_exists "-compression_level '%s'" ${compression_level})
+
+    echo "${codec_options}"
+}
+
+handle_video_flv_options(){
+    local profile_name="${1}";
+    local input_file_name="${2}";
+    local codec_options='';
+    codec_options+="-codec:v 'flashsv'";
+    echo "${codec_options}"
+}
+
+handle_video_h263_options(){
+    # Valid sizes for h263 are
+    #   128x96, 176x144, 352x288, 704x576, and 1408x1152.
+    local profile_name="${1}";
+    local input_file_name="${2}";
+    local codec_options='';
+    codec_options+="-codec:v 'h263'";
+    echo "${codec_options}"
+}
+
+handle_video_h263p_options(){
+    local profile_name="${1}";
+    local input_file_name="${2}";
+    local codec_options='';
+    codec_options+="-codec:v 'h263p'";
+    echo "${codec_options}"
+}
+
+handle_video_cinepak_options(){
+    local profile_name="${1}";
+    local input_file_name="${2}";
+    local codec_options='';
+    codec_options+="-codec:v 'cinepak'";
+    echo "${codec_options}"
+}
+
+handle_video_xvid_options(){
+    local profile_name="${1}";
+    local input_file_name="${2}";
+    local codec_options='';
+
+
+    codec_options+="-codec:v 'libxvid' ";
+    codec_options+="-vtag 'xvid'";
+
+    local flags=$(profile ${profile_name} video codec flags);
+    codec_options+=$(if_exists "-flags '%s'" ${flags})
+
+    echo "${codec_options}"
+}
+
+handle_video_theora_options(){
+    local profile_name="${1}";
+    local input_file_name="${2}";
+    local codec_options='';
+    codec_options+="-codec:v 'libtheora'";
     echo "${codec_options}"
 }
 
 handle_video_h264_options(){
     # -profile:v = baseline, main, high, high10, high422, high444
+    # See https://www.ffmpeg.org/ffmpeg-codecs.html#Video-Encoders
     local profile_name="${1}";
     local input_file_name="${2}";
     local codec_options='';
-    local h264_profile=$(profile ${profile_name} video codec profile)
+
+    codec_options+="-codec:v 'libx264'";
+
+    local codec_profile=$(profile ${profile_name} video codec profile)
+    local weightp=$(profile ${profile_name} video codec weightp)
+
+    codec_options+=$(if_exists "-profile:v '%s'" ${codec_profile});
+    codec_options+=$(if_exists "-weightp '%s'" ${weightp});
+
+
+    codec_options+=$(                                       \
+        handle_video_h26X_options                           \
+        ${profile_name}                                     \
+    );
+
+    local qmin=$(profile ${profile_name} video codec qmin)
+    local qmax=$(profile ${profile_name} video codec qmax)
+    local opts=$(profile ${profile_name} video codec opts)
+
+    codec_options+=$(if_exists "-qmin '%s'" ${qmin});
+    codec_options+=$(if_exists "-qmax '%s'" ${qmax});
+    codec_options+=$(if_exists "-x264opts '%s'" ${opts});
+
+    echo "${codec_options}"
+}
+
+handle_video_hevc_options(){
+    # See https://www.ffmpeg.org/ffmpeg-codecs.html#Video-Encoders
+
+    local profile_name="${1}";
+    local input_file_name="${2}";
+    local codec_options="-codec:v 'libx265' ";
+
+    codec_options+=$(                                       \
+        handle_video_h26X_options                           \
+        ${profile_name}                                     \
+    );
+
+    local opts=$(profile ${profile_name} video codec opts)
+    codec_options+=$(if_exists "-x265-params '%s'" ${opts});
+    echo "${codec_options}"
+}
+
+
+
+handle_video_h26X_options(){
+    local profile_name="${1}";
+    local input_file_name="${2}";
+
+    local preset=$(profile ${profile_name} video codec preset);
     local level=$(profile ${profile_name} video codec level)
     local weightp=$(profile ${profile_name} video codec weightp)
     local bframes=$(profile ${profile_name} video codec bframes)
-    local opts=$(profile ${profile_name} video codec opts)
-    codec_options+="-codec:v 'libx264'";
-    codec_options+=$(if_exists "-profile:v '%s'" ${h264_profile});
+
+    codec_options='';
+    codec_options+=$(if_exists "-preset '%s'" ${preset})
     codec_options+=$(if_exists "-level:v '%s'" ${level});
-    codec_options+=$(if_exists "-weightp '%s'" ${weightp});
     codec_options+=$(if_exists "-bf '%s'" ${bframes});
-    codec_options+=$(if_exists "-x264opts '%s'" ${opts});
+
+    echo "${codec_options}"
+}
+
+handle_video_vp8_options(){
+    local profile_name="${1}";
+    local input_file_name="${2}";
+    local codec_options='';
+    local quality=$(profile ${profile_name} video codec quality)
+    local qmin=$(profile ${profile_name} video codec qmin)
+    local qmax=$(profile ${profile_name} video codec qmax)
+    codec_options+="-codec:v 'libvpx'";
+    codec_options+=$(if_exists "-quality '%s'" ${quality});
+    codec_options+="-cpu-used '0' ";
+    codec_options+=$(if_exists "-qmin '%s'" ${qmin});
+    codec_options+=$(if_exists "-qmax '%s'" ${qmax});
+    echo "${codec_options}"
+
+}
+
+handle_video_vp9_options(){
+    local profile_name="${1}";
+    local input_file_name="${2}";
+    local codec_options='';
+    codec_options+="-codec:v 'libvpx-vp9'";
+    echo "${codec_options}"
+}
+
+
+handle_video_snow_options(){
+    local profile_name="${1}";
+    local input_file_name="${2}";
+    local codec_options='';
+    codec_options+="-codec:v 'snow'";
+    echo "${codec_options}"
+}
+
+handle_video_dirac_options(){
+    local profile_name="${1}";
+    local input_file_name="${2}";
+    local codec_options='';
+    codec_options+="-codec:v 'dirac'";
+    echo "${codec_options}"
+}
+
+
+handle_video_jpeg2000_options(){
+    local profile_name="${1}";
+    local input_file_name="${2}";
+    local codec_options='';
+    codec_options+="-codec:v 'jpeg2000'";
     echo "${codec_options}"
 }
 
@@ -638,19 +892,26 @@ handle_audio_options(){
     local input_file_name="${2}";
     local bitrate="$(profile ${profile_name} audio bitrate)";
     local volume="$(profile ${profile_name} audio volume)";
+
+    local framerate="$(profile ${profile_name} audio framerate)";
+
     local filter_options=$(handle_audio_filter_options \
        "${profile_name}"    \
        "${input_file_name}" \
     );
     local common_options='';
+
+    common_options+=$(if_exists "-ar '%s'" ${framerate})
     common_options+=$(if_exists "-b:a '%s'" ${bitrate})
+
     common_options+=$(handle_audio_channels_options \
         ${profile_name}     \
         ${input_file_name}  \
     );
+
     common_options+=$(if_exists "-filter:a '%s'" ${filter_options} )
     local codec_options=$(handle_audio_codec_options ${profile_name})
-    local options="${common_options} ${codec_options}";
+    local options="${codec_options} ${common_options}";
     verbose_block "audio@%6s" "${options}";
     echo ${options}
 }
@@ -684,10 +945,69 @@ handle_audio_codec_options(){
     local codec_name=$(profile_default \
         'aac' ${profile_name} audio codec name);
     local codec_options='';
+
+
+    case "${codec_name}" in
+        'mp3')
+            codec_options+=$(                                       \
+                handle_audio_mp3_options                            \
+                ${profile_name}                                     \
+            );;
+        'aac')
+            codec_options+=$(                                       \
+                handle_audio_aac_options                            \
+                ${profile_name}                                     \
+            );;
+        'vorbis')
+            codec_options+=$(                                       \
+                handle_audio_vorbis_options                         \
+                ${profile_name}                                     \
+            );;
+        *) ;;
+    esac;
+
+    local qscale="$(profile ${profile_name} audio qscale)";
+    qscale=$(profile_default                            \
+        "${qscale}"                                     \
+        "${profile_name}"                               \
+        audio codec qscale                              \
+    );
+
+    codec_options+=$(if_exists "-qscale:a '%s'" ${qscale})
+
+    echo "${codec_options}"
+
+}
+
+handle_audio_aac_options(){
+    local profile_name="${1}";
+    local input_file_name="${2}";
+
+    local codec_options='';
     codec_options+="-strict 'experimental' ";
-    codec_options+="-codec:a '${codec_name}' ";
+    codec_options+="-codec:a 'aac' ";
     echo "${codec_options}"
 }
+
+handle_audio_vorbis_options(){
+    local profile_name="${1}";
+    local input_file_name="${2}";
+
+    local codec_options='';
+    codec_options+="-codec:a 'libvorbis' ";
+    echo "${codec_options}"
+}
+
+handle_audio_mp3_options(){
+    local profile_name="${1}";
+    local input_file_name="${2}";
+
+    local codec_options='';
+    codec_options+="-codec:a 'libmp3lame' ";
+    echo "${codec_options}"
+}
+
+
 
 # ------------------------------------------------------------
 # Profile fields access functions
