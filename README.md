@@ -296,9 +296,9 @@ It is same if you run ffmpeg four times at the same moment.
 bulk_video_converter.bash:
 # NOTICE 31:  bulk_video_converter.bash creates directory '/tmp/bulk_video_converter.bash/5WBGWhT3' at start up.
 # NOTICE 34:  bulk_video_converter.bash creates directory '/var/log/bulk_video_converter.bash/2016-05-09_02-24-32-972095100' at start up.
-  /home/w495/Videos/input/00001.MTS:
+  /home/user/Video/00001.MTS:
 # DEBUG 50:  bulk_video_converter.bash list of profiles = BASE VIRAG_H264X1_PAL_SD VIRAG_H264X1_480P_WEB VIRAG_H264X1_480P_TABLET VIRAG_H264X1_360P_MOBILE
-    virag_h264x1_pal_sd X '/home/w495/Videos/input/00001.MTS':
+    virag_h264x1_pal_sd X '/home/user/Video/00001.MTS':
       virag_h264x1_pal_sd:
         global input:
           -threads '0' -ss '00:00:10' 
@@ -317,12 +317,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -ss '00:00:10' -i '/home/w495/Videos/input/00001.MTS' -codec:v 'libx264' -profile:v 'main' -b:v '1000k' -vf 'scale=0:576' -strict 'experimental' -codec:a 'aac' -b:a '196k' -ac '6' -ss '00:00:10' -to '00:00:30' -movflags '+faststart' -f 'mp4' -y './out/00001-virag_h264x1_pal_sd.mp4' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-09_02-24-32-972095100/00001-virag_h264x1_pal_sd-1-mp4.ffmpeg.log 1>&2;
+            /usr/bin/ffmpeg -threads '0' -ss '00:00:10' -i '/home/user/Video/00001.MTS' -codec:v 'libx264' -profile:v 'main' -b:v '1000k' -vf 'scale=0:576' -strict 'experimental' -codec:a 'aac' -b:a '196k' -ac '6' -ss '00:00:10' -to '00:00:30' -movflags '+faststart' -f 'mp4' -y './out/00001-virag_h264x1_pal_sd.mp4' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-09_02-24-32-972095100/00001-virag_h264x1_pal_sd-1-mp4.ffmpeg.log 1>&2;
           # pass 1 done
         # passes done
       # virag_h264x1_pal_sd done
-    # virag_h264x1_pal_sd X '/home/w495/Videos/input/00001.MTS' done
-    virag_h264x1_480p_web X '/home/w495/Videos/input/00001.MTS':
+    # virag_h264x1_pal_sd X '/home/user/Video/00001.MTS' done
+    virag_h264x1_480p_web X '/home/user/Video/00001.MTS':
       virag_h264x1_480p_web:
         global input:
           -threads '0' -ss '00:00:10' 
@@ -341,12 +341,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -ss '00:00:10' -i '/home/w495/Videos/input/00001.MTS' -codec:v 'libx264' -profile:v 'main' -b:v '500k' -maxrate '500k' -bufsize '1000k' -vf 'scale=0:480' -strict 'experimental' -codec:a 'aac' -b:a '128k' -ac '2' -ss '00:00:10' -to '00:00:30' -movflags '+faststart' -f 'mp4' -y './out/00001-virag_h264x1_480p_web.mp4' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-09_02-24-32-972095100/00001-virag_h264x1_480p_web-1-mp4.ffmpeg.log 1>&2;
+            /usr/bin/ffmpeg -threads '0' -ss '00:00:10' -i '/home/user/Video/00001.MTS' -codec:v 'libx264' -profile:v 'main' -b:v '500k' -maxrate '500k' -bufsize '1000k' -vf 'scale=0:480' -strict 'experimental' -codec:a 'aac' -b:a '128k' -ac '2' -ss '00:00:10' -to '00:00:30' -movflags '+faststart' -f 'mp4' -y './out/00001-virag_h264x1_480p_web.mp4' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-09_02-24-32-972095100/00001-virag_h264x1_480p_web-1-mp4.ffmpeg.log 1>&2;
           # pass 1 done
         # passes done
       # virag_h264x1_480p_web done
-    # virag_h264x1_480p_web X '/home/w495/Videos/input/00001.MTS' done
-    virag_h264x1_480p_tablet X '/home/w495/Videos/input/00001.MTS':
+    # virag_h264x1_480p_web X '/home/user/Video/00001.MTS' done
+    virag_h264x1_480p_tablet X '/home/user/Video/00001.MTS':
       virag_h264x1_480p_tablet:
         global input:
           -threads '0' -ss '00:00:10' 
@@ -365,12 +365,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -ss '00:00:10' -i '/home/w495/Videos/input/00001.MTS' -codec:v 'libx264' -profile:v 'main' -b:v '400k' -maxrate '400k' -bufsize '800k' -vf 'scale=0:480' -strict 'experimental' -codec:a 'aac' -b:a '128k' -ac '2' -ss '00:00:10' -to '00:00:30' -movflags '+faststart' -f 'mp4' -y './out/00001-virag_h264x1_480p_tablet.mp4' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-09_02-24-32-972095100/00001-virag_h264x1_480p_tablet-1-mp4.ffmpeg.log 1>&2;
+            /usr/bin/ffmpeg -threads '0' -ss '00:00:10' -i '/home/user/Video/00001.MTS' -codec:v 'libx264' -profile:v 'main' -b:v '400k' -maxrate '400k' -bufsize '800k' -vf 'scale=0:480' -strict 'experimental' -codec:a 'aac' -b:a '128k' -ac '2' -ss '00:00:10' -to '00:00:30' -movflags '+faststart' -f 'mp4' -y './out/00001-virag_h264x1_480p_tablet.mp4' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-09_02-24-32-972095100/00001-virag_h264x1_480p_tablet-1-mp4.ffmpeg.log 1>&2;
           # pass 1 done
         # passes done
       # virag_h264x1_480p_tablet done
-    # virag_h264x1_480p_tablet X '/home/w495/Videos/input/00001.MTS' done
-    virag_h264x1_360p_mobile X '/home/w495/Videos/input/00001.MTS':
+    # virag_h264x1_480p_tablet X '/home/user/Video/00001.MTS' done
+    virag_h264x1_360p_mobile X '/home/user/Video/00001.MTS':
       virag_h264x1_360p_mobile:
         global input:
           -threads '0' -ss '00:00:10' 
@@ -389,16 +389,79 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -ss '00:00:10' -i '/home/w495/Videos/input/00001.MTS' -codec:v 'libx264' -profile:v 'baseline' -b:v '250k' -maxrate '250k' -bufsize '500k' -vf 'scale=0:360' -strict 'experimental' -codec:a 'aac' -b:a '96k' -ac '1' -ss '00:00:10' -to '00:00:30' -movflags '+faststart' -f 'mp4' -y './out/00001-virag_h264x1_360p_mobile.mp4' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-09_02-24-32-972095100/00001-virag_h264x1_360p_mobile-1-mp4.ffmpeg.log 1>&2;
+            /usr/bin/ffmpeg -threads '0' -ss '00:00:10' -i '/home/user/Video/00001.MTS' -codec:v 'libx264' -profile:v 'baseline' -b:v '250k' -maxrate '250k' -bufsize '500k' -vf 'scale=0:360' -strict 'experimental' -codec:a 'aac' -b:a '96k' -ac '1' -ss '00:00:10' -to '00:00:30' -movflags '+faststart' -f 'mp4' -y './out/00001-virag_h264x1_360p_mobile.mp4' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-09_02-24-32-972095100/00001-virag_h264x1_360p_mobile-1-mp4.ffmpeg.log 1>&2;
           # pass 1 done
         # passes done
       # virag_h264x1_360p_mobile done
-    # virag_h264x1_360p_mobile X '/home/w495/Videos/input/00001.MTS' done
-  # /home/w495/Videos/input/00001.MTS done
+    # virag_h264x1_360p_mobile X '/home/user/Video/00001.MTS' done
+  # /home/user/Video/00001.MTS done
 # bulk_video_converter.bash done
 [user@host ~]$ 
 ```
 
+This is fine formed YAML and can be represented with JSON:
+
+```bash
+[user@host ~]$ ./bulk_video_converter.bash -c config.yaml -d 2>&1 \
+| yaml2json -p - 
+```
+```json
+{
+  "bulk_video_converter.bash": {
+    "/home/user/Video/00001.MTS": {
+      "virag_h264x1_pal_sd X '/home/user/Video/00001.MTS'": {
+        "virag_h264x1_pal_sd": {
+          "global input": "-threads '0' -ss '00:00:10'",
+          "video": "-codec:v 'libx264' -profile:v 'main' -b:v '1000k' -vf 'scale=0:576'",
+          "audio": "-strict 'experimental' -codec:a 'aac' -b:a '196k' -ac '6'",
+          "global output": "-ss '00:00:10' -to '00:00:30'",
+          "format": "-movflags '+faststart' -f 'mp4'",
+          "passes": {
+            "pass 1": "/usr/bin/ffmpeg -threads '0' -ss '00:00:10' -i '/home/user/Video/00001.MTS' -codec:v 'libx264' -profile:v 'main' -b:v '1000k' -vf 'scale=0:576' -strict 'experimental' -codec:a 'aac' -b:a '196k' -ac '6' -ss '00:00:10' -to '00:00:30' -movflags '+faststart' -f 'mp4' -y './out/00001-virag_h264x1_pal_sd.mp4' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-09_02-26-13-319926892/00001-virag_h264x1_pal_sd-1-mp4.ffmpeg.log 1>&2;"
+          }
+        }
+      },
+      "virag_h264x1_480p_web X '/home/user/Video/00001.MTS'": {
+        "virag_h264x1_480p_web": {
+          "global input": "-threads '0' -ss '00:00:10'",
+          "video": "-codec:v 'libx264' -profile:v 'main' -b:v '500k' -maxrate '500k' -bufsize '1000k' -vf 'scale=0:480'",
+          "audio": "-strict 'experimental' -codec:a 'aac' -b:a '128k' -ac '2'",
+          "global output": "-ss '00:00:10' -to '00:00:30'",
+          "format": "-movflags '+faststart' -f 'mp4'",
+          "passes": {
+            "pass 1": "/usr/bin/ffmpeg -threads '0' -ss '00:00:10' -i '/home/user/Video/00001.MTS' -codec:v 'libx264' -profile:v 'main' -b:v '500k' -maxrate '500k' -bufsize '1000k' -vf 'scale=0:480' -strict 'experimental' -codec:a 'aac' -b:a '128k' -ac '2' -ss '00:00:10' -to '00:00:30' -movflags '+faststart' -f 'mp4' -y './out/00001-virag_h264x1_480p_web.mp4' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-09_02-26-13-319926892/00001-virag_h264x1_480p_web-1-mp4.ffmpeg.log 1>&2;"
+          }
+        }
+      },
+      "virag_h264x1_480p_tablet X '/home/user/Video/00001.MTS'": {
+        "virag_h264x1_480p_tablet": {
+          "global input": "-threads '0' -ss '00:00:10'",
+          "video": "-codec:v 'libx264' -profile:v 'main' -b:v '400k' -maxrate '400k' -bufsize '800k' -vf 'scale=0:480'",
+          "audio": "-strict 'experimental' -codec:a 'aac' -b:a '128k' -ac '2'",
+          "global output": "-ss '00:00:10' -to '00:00:30'",
+          "format": "-movflags '+faststart' -f 'mp4'",
+          "passes": {
+            "pass 1": "/usr/bin/ffmpeg -threads '0' -ss '00:00:10' -i '/home/user/Video/00001.MTS' -codec:v 'libx264' -profile:v 'main' -b:v '400k' -maxrate '400k' -bufsize '800k' -vf 'scale=0:480' -strict 'experimental' -codec:a 'aac' -b:a '128k' -ac '2' -ss '00:00:10' -to '00:00:30' -movflags '+faststart' -f 'mp4' -y './out/00001-virag_h264x1_480p_tablet.mp4' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-09_02-26-13-319926892/00001-virag_h264x1_480p_tablet-1-mp4.ffmpeg.log 1>&2;"
+          }
+        }
+      },
+      "virag_h264x1_360p_mobile X '/home/user/Video/00001.MTS'": {
+        "virag_h264x1_360p_mobile": {
+          "global input": "-threads '0' -ss '00:00:10'",
+          "video": "-codec:v 'libx264' -profile:v 'baseline' -b:v '250k' -maxrate '250k' -bufsize '500k' -vf 'scale=0:360'",
+          "audio": "-strict 'experimental' -codec:a 'aac' -b:a '96k' -ac '1'",
+          "global output": "-ss '00:00:10' -to '00:00:30'",
+          "format": "-movflags '+faststart' -f 'mp4'",
+          "passes": {
+            "pass 1": "/usr/bin/ffmpeg -threads '0' -ss '00:00:10' -i '/home/user/Video/00001.MTS' -codec:v 'libx264' -profile:v 'baseline' -b:v '250k' -maxrate '250k' -bufsize '500k' -vf 'scale=0:360' -strict 'experimental' -codec:a 'aac' -b:a '96k' -ac '1' -ss '00:00:10' -to '00:00:30' -movflags '+faststart' -f 'mp4' -y './out/00001-virag_h264x1_360p_mobile.mp4' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-09_02-26-13-319926892/00001-virag_h264x1_360p_mobile-1-mp4.ffmpeg.log 1>&2;"
+          }
+        }
+      }
+    }
+  }
+}
+
+```
 
 ## TODO
 
