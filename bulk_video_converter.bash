@@ -264,9 +264,10 @@ handle_file_sequence(){
 
     if [[ -n ${concrete_profile} ]]; then
         file_log_prefix="${file_log_prefix}-${concrete_profile}"
-    fi;
-    if [[ -n ${profile_map_name} ]]; then
+    elif [[ -n ${profile_map_name} ]]; then
         file_log_prefix="${file_log_prefix}-${profile_map_name}"
+    else
+        file_log_prefix="${file_log_prefix}-all"
     fi;
 
     local -i file_index=1;
@@ -282,9 +283,8 @@ handle_file_sequence(){
         file_index+=1
     done;
     wait;
-    if [[ -z ${concrete_profile} ]]; then
-        cat ${file_log_prefix}* 1>& ${OUT_LOG_STREAM}
-    fi;
+    cat ${file_log_prefix}* 1>& ${OUT_LOG_STREAM}
+
 }
 
 handle_file_async(){
@@ -293,6 +293,8 @@ handle_file_async(){
     local file_log="${3}";
     local concrete_profile="${4}";
     local profile_map_name="${5}";
+    local pid_suffix="$$-${BASH_SUBSHELL}-${BASHPID}";
+
     (
         $(handle_file   \
             "${input_file_name}"    \
@@ -300,7 +302,7 @@ handle_file_async(){
             "${concrete_profile}"   \
             "${profile_map_name}"   \
         );
-    ) 2>"${file_log}.log" &
+    ) 2> "${file_log}-${pid_suffix}.log"
 }
 
 handle_file(){
@@ -313,20 +315,28 @@ handle_file(){
         "${input_file_name}"                \
         "no such file: ${input_file_name}." \
     );
+
     if [[ -n ${concrete_profile} ]]; then
-        $(verbose_start "${input_file_name}@%2s");
+        $(verbose_start                                               \
+            "${concrete_profile,,} X '${input_file_name}'@%4s"      \
+        );
         $(handle_concrete_profile   \
             "${concrete_profile}"       \
             "${input_file_name}"    \
         )
-        $(verbose_end "${input_file_name}@%2s");
+        $(verbose_end                                                 \
+            "${concrete_profile,,} X '${input_file_name}'@%4s"      \
+        );
     else
+        $(verbose_start "${input_file_name}@%2s");
         $(handle_profile_sequence   \
             "${input_file_name}"    \
             "${file_index}"         \
             "${profile_map_name}"   \
         );
+        $(verbose_end "${input_file_name}@%2s");
     fi;
+
 }
 
 handle_profile_sequence(){
@@ -335,24 +345,34 @@ handle_profile_sequence(){
     local profile_map_name="${3}";
 
     if [[ -z "${profile_map_name}" ]]; then
-        profile_map_name='PROFILE_MAP'
+        profile_map_name='PROFILE_KEYS'
     fi;
 
-    local var_name=$(echo "\${!${profile_map_name}[@]}")
+    local var_name=$(echo "\${${profile_map_name}[@]}")
     local profile_list=$(eval echo "${var_name}")
 
-
-    profile_list=$(echo "${profile_list}"|sed -E 's/IS_([A-Z]+)//gi');
+    profile_list=$(                 \
+        echo "${profile_list}"      \
+        |sed -E 's/IS_([A-Z]+)//gi' \
+     );
+    #profile_list=$(                 \
+    #    echo "${profile_list}"      \
+    #    | xargs -n1                 \
+    #    | sort -u                   \
+    #    | xargs                     \
+    #);
 
     debug "list of profiles = ${profile_list}"
 
     local profile_log_prefix="${PROFILE_LOG_PREFIX}-${file_index}";
     local -i profile_index=1;
+
+
     for profile_name in ${profile_list}; do
         $(handle_profile_async                                      \
             "${profile_name}"                                       \
             "${input_file_name}"                                    \
-            "${profile_log_prefix}-${profile_index}"  \
+            "${profile_log_prefix}-${profile_index}"                \
         ) &
         profile_index+=1
     done;
@@ -364,9 +384,12 @@ handle_profile_async(){
     local profile_name="${1}";
     local input_file_name="${2}";
     local profile_log="${3}";
+
+    local pid_suffix="$$-${BASH_SUBSHELL}-${BASHPID}";
+
     (
         $(handle_profile "${profile_name}" "${input_file_name}")
-    ) 2>"${profile_log}.log"
+    ) 2> "${profile_log}-${pid_suffix}.log"
 }
 
 handle_profile(){
@@ -380,7 +403,7 @@ handle_profile(){
 
     ## Use is_complex=true for nested profiles
     if [[ -n "${is_complex}" ]]; then
-        profile_map_name="PROFILE_${profile_name}_MAP"
+        profile_map_name="PROFILE_${profile_name}_KEYS"
         conrete_profile_name=''
     fi;
 
@@ -410,7 +433,7 @@ handle_profile(){
             "${input_file_name}"                    \
             "${conrete_profile_name}"               \
             "${profile_map_name}"                   \
-        );
+        )
     fi;
 }
 
@@ -423,7 +446,7 @@ handle_concrete_profile(){
     local input_file_name="${2}";
     local step_name=$(echo "${profile_name}" \
         | tr '[:upper:]' '[:lower:]');
-    verbose_start "profile ${step_name}@%4s";
+    verbose_start "${step_name}@%6s";
     local suffix=$(profile_default  \
         "${step_name}"              \
         "${profile_name}"           \
@@ -479,7 +502,7 @@ handle_concrete_profile(){
         "${input_file_name}"                        \
         "${output_format}"                           \
     );
-    verbose_start "passes@%6s";
+    verbose_start "passes@%8s";
     for pass in $(seq 1 ${passes}); do
         local pass_options='';
         local output_pass_file_name="${output_file_name}";
@@ -496,20 +519,21 @@ handle_concrete_profile(){
             "${suffix}-${pass}-${extention}" \
             "ffmpeg.log"                    \
         );
-        verbose_run "pass ${pass}@%8s"  \
-            ${FFMPEG_BIN} \
-            ${global_input_options} \
-            "-i '${input_file_name}'" \
-            ${video_options} \
-            ${pass_options} \
-            ${audio_options} \
-            ${global_output_options}    \
-            ${output_format_options}    \
-            "-y '${output_pass_file_name}'" \
-            "2>&1 | tee ${log_file_name} 1>&${OUT_LOG_STREAM};"
+        $(verbose_run "pass ${pass}@%10s"                            \
+            ${FFMPEG_BIN}                                           \
+            ${global_input_options}                                 \
+            "-i '${input_file_name}'"                               \
+            ${video_options}                                        \
+            ${pass_options}                                         \
+            ${audio_options}                                        \
+            ${global_output_options}                                \
+            ${output_format_options}                                \
+            "-y '${output_pass_file_name}'"                         \
+            "2>&1 | tee ${log_file_name} 1>&${OUT_LOG_STREAM};"     \
+        );
     done
-    verbose_end "passes@%6s";
-    verbose_end "profile ${step_name}@%4s";
+    verbose_end "passes@%8s";
+    verbose_end "${step_name}@%6s";
 }
 
 # ------------------------------------------------------------
@@ -535,7 +559,7 @@ handle_global_input_options(){
         );
         options+="${device_options}"
     fi;
-    verbose_block "global input@%6s" "${options}";
+    verbose_block "global input@%8s" "${options}";
     echo ${options};
 }
 
@@ -562,7 +586,7 @@ handle_global_output_options(){
     options+=$(if_exists "-t '%s'" ${duration});
     options+=$(if_exists "-to '%s'" ${stop_position});
     if [[ -n "${options}" ]]; then
-        verbose_block "global output@%6s" "${options}";
+        verbose_block "global output@%8s" "${options}";
     fi;
     echo ${options};
 }
@@ -585,7 +609,7 @@ handle_output_format_options(){
 
     options+=$(if_exists "-movflags '%s'" ${movflags});
     options+=$(if_exists "-f '%s'" ${output_format});
-    verbose_block "format@%6s" "${options}";
+    verbose_block "format@%8s" "${options}";
     echo "${options}"
 }
 
@@ -660,7 +684,7 @@ handle_video_options(){
 
     common_options+=$(if_exists "-vf 'scale=%s:%s'" ${width} ${height})
     local options="${codec_options} ${common_options}";
-    verbose_block "video@%6s" "${options}";
+    verbose_block "video@%8s" "${options}";
     echo ${options}
 }
 
@@ -961,7 +985,7 @@ handle_audio_options(){
     common_options+=$(if_exists "-filter:a '%s'" ${filter_options} )
     local codec_options=$(handle_audio_codec_options ${profile_name})
     local options="${codec_options} ${common_options}";
-    verbose_block "audio@%6s" "${options}";
+    verbose_block "audio@%8s" "${options}";
     echo ${options}
 }
 
@@ -1339,7 +1363,6 @@ handle_config() {
     #    echo -e ${res} | sed 's/; /;\n/gi';
     #fi;
     eval "${res}";
-
 }
 
 parse_config() {
@@ -1368,10 +1391,13 @@ parse_config() {
             vnn = vname[i+1]
             if (!(vn in varray)){
                 printf("declare -gA %sMAP; ", vn);
+                printf("declare -ga %sKEYS; ", vn, vnn);
             }
             varray[vn] = 1
             if (!((vn,vnn) in varray)){
                 printf("%sMAP[\"%s\"]=\"%s\"; ", vn, vnn, $3);
+                printf("%sKEYS+=(\"%s\"); ", vn,  vnn);
+
             }
             varray[vn,vnn] = 1
         }
@@ -1452,7 +1478,7 @@ verbose_offset (){
 }
 
 verbose_inside (){
-    verbose_offset "${1}  " "${2}";
+    $(verbose_offset "${1}  "   "${2}");
 }
 
 verbose_start (){
@@ -1477,14 +1503,13 @@ verbose_block (){
     local string=$1;
     local delimiter='@';
     local offset=$(awk -F "$delimiter" '{print $2}' <<< "$string")
-    local value=${@:2};
+    local value="${@:2}";
     value=$(strip_string "${value}");
     verbose_start "${string}"
     verbose_inside "${offset}"\
     "${COLOR_BOLD}${COLOR_DARK_CYAN}${value}${COLOR_OFF}";
     verbose_end "${string}";
 }
-
 
 strip_string(){
     local value=${1};
@@ -1502,16 +1527,18 @@ verbose_run (){
     local offset=$(awk -F "$delimiter" '{print $2}' <<< "$string");
     local value="${@:2}";
     local COLOR_ON="${COLOR_BOLD}${COLOR_LIGHT_YELLOW}"
-    verbose_start "${string}"
-    verbose_inside "${offset}"\
-    "${COLOR_ON}${value}${COLOR_OFF}";
+    verbose_start "${string}";
+    $(verbose_inside                        \
+        "${offset}"                         \
+        "${COLOR_ON}${value}${COLOR_OFF}"   \
+    );
     if [[ "${DRY_RUN}" == "false" ]]; then
         if [[ "${VERBOSE}" == "true" ]]; then
             $(eval "${value}");
         fi;
         if [[ "${VERBOSE}" == "false" ]]; then
             $(eval "${value}") 2> /dev/null
-        fi;
+        fi
     fi;
     verbose_end "${string}";
 }
