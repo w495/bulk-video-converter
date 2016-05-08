@@ -402,8 +402,7 @@ bulk_video_converter.bash:
 This is fine formed YAML and can be represented with JSON:
 
 ```bash
-[user@host ~]$ ./bulk_video_converter.bash -c config.yaml -d 2>&1 \
-| yaml2json -p - 
+[user@host ~]$ ./bulk_video_converter.bash -c config.yaml -d 2>&1  yaml2json -p - 
 ```
 ```json
 {
