@@ -399,11 +399,14 @@ bulk_video_converter.bash:
 [user@host ~]$ 
 ```
 
-This is fine formed YAML and can be represented with JSON:
+This is fine formed YAML and can be represented with JSON.
 
 ```bash
 [user@host ~]$ ./bulk_video_converter.bash -c config.yaml -d 2>&1  yaml2json -p - 
 ```
+
+The result will be:
+
 ```json
 {
   "bulk_video_converter.bash": {
