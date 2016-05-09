@@ -327,8 +327,11 @@ handle_file(){
     );
 
     if [[ -n ${concrete_profile} ]]; then
+
+        local profile_name=$(lower_name "${concrete_profile}");
+
         $(verbose_start                                         \
-            "${concrete_profile,,} for ${input_file_name}@%4s"    \
+            "${profile_name} for ${input_file_name}@%4s"    \
         );
 
         $(handle_concrete_profile       \
@@ -338,7 +341,7 @@ handle_file(){
         );
 
         $(verbose_end                                           \
-            "${concrete_profile,,} for ${input_file_name}@%4s"    \
+            "${profile_name} for ${input_file_name}@%4s"    \
         );
     else
         $(verbose_start "${input_file_name}@%2s");
@@ -381,11 +384,9 @@ handle_profile_sequence(){
     local profile_log_prefix="${PROFILE_LOG_PREFIX}-${file_index}";
     local -i profile_index=1;
 
-
-
-    for pname in ${profile_list}; do
+    for name in ${profile_list}; do
         $(handle_profile_async                                      \
-            "${pname}"                                       \
+            "${name}"                                       \
             "${input_file_name}"                                    \
             "${profile_log_prefix}-${profile_index}"                \
         ) &
@@ -400,23 +401,23 @@ handle_profile_sequence(){
 reorder_profile_sequence(){
     local profile_list="${1}";
 
-    for pname in ${profile_list}; do
-        local is_abstract=$(plain_profile "${pname}" 'is_abstract');
+    for name in ${profile_list}; do
+        local is_abstract=$(plain_profile "${name}" 'is_abstract');
         if [[ -n "${is_abstract}" ]]; then
             profile_list=$(                     \
                 echo "${profile_list}"          \
-                | sed "s/${pname}//gi"          \
+                | sed "s/${name}//gi"          \
             );
         fi;
-        local depon=$(plain_profile "${pname}" 'depends');
-        if [[ -n "${depon}" ]]; then
+        local prev=$(plain_profile "${name}" 'depends');
+        if [[ -n "${prev}" ]]; then
             profile_list=$(                     \
                 echo "${profile_list}"          \
-                | sed "s/\<${pname}\>//gi"          \
+                | sed "s/\<${name}\>//gi"          \
             );
             profile_list=$(                     \
                 echo "${profile_list}"          \
-                | sed "s/\<${depon}\>/${depon^^} ${pname}/gi"   \
+                | sed "s/\<${prev}\>/${prev^^} ${name}/gi"   \
             );
         fi;
     done;
@@ -446,12 +447,12 @@ handle_profile(){
 
 
     local profile_map_name='';
-    local conrete_profile_name="${profile_name}";
+    local concrete_profile_name="${profile_name}";
 
     ## Use is_complex=true for nested profiles
     if [[ -n "${is_complex}" ]]; then
         profile_map_name="PROFILE_${profile_name}_KEYS"
-        conrete_profile_name=''
+        concrete_profile_name=''
     fi;
 
 
@@ -478,7 +479,7 @@ handle_profile(){
     # for files described inside profiles.
     $(handle_file_sequence                      \
         "${input_file_name}"                    \
-        "${conrete_profile_name}"               \
+        "${concrete_profile_name}"               \
         "${profile_map_name}"                   \
     )
 
@@ -513,16 +514,16 @@ handle_profile_depends(){
     local file_index="${3}"
     local depends=$(plain_profile "${profile}" 'depends');
     if [[ -n "${depends}" ]]; then
-        local pred_prof=$(profile_mark  \
+        local prev=$(profile_mark  \
             "${depends}"             \
             "${file_name}"              \
             "${file_index}"             \
         );
-        while [[ ! -f "${pred_prof}" ]]; do
+        while [[ ! -f "${prev}" ]]; do
             sleep 1;
-            $(notice "NO ${pred_prof}. Wait ... ");
+            $(notice "NO ${prev}. Wait ... ");
         done;
-        $(notice "${pred_prof} exists");
+        $(notice "${prev} exists");
     fi;
 }
 
@@ -531,20 +532,22 @@ make_profile_mark(){
     local file_name="${2}";
     local file_index="${3}"
 
-    local pmark=$(profile_mark      \
+    local mark=$(profile_mark      \
         "${profile}"                 \
         "${file_name}"               \
         "${file_index}"              \
     );
 
-    $(touch "${pmark}");
+    $(touch "${mark}");
 }
 
 profile_mark(){
     local profile="${1}";
     local file_name="${2}";
     local file_index="${3}";
-    echo "${TMP_DIR_NAME}/${profile,,}-${file_index}.profile";
+    local name=$(lower_name "${profile}");
+
+    echo "${TMP_DIR_NAME}/${name}-${file_index}.profile";
 }
 
 
@@ -553,14 +556,23 @@ profile_mark(){
 # Function for handling one profile item
 # ------------------------------------------------------------
 
+lower_name(){
+    local profile_name="${1}";
+    local name=$(                  \
+        echo "${profile_name}"          \
+        | tr '[:upper:]' '[:lower:]'    \
+    );
+    echo "${name}"
+}
+
 run_concrete_profile(){
     local profile_name="${1}";
     local input_file_name="${2}";
-    local step_name=$(echo "${profile_name}" \
-        | tr '[:upper:]' '[:lower:]');
-    verbose_start "${step_name}@%6s";
+    local lower_profile_name=$(lower_name "${profile_name}");
+
+    verbose_start "${lower_profile_name}@%6s";
     local suffix=$(profile_default  \
-        "${step_name}"              \
+        "${lower_profile_name}"              \
         "${profile_name}"           \
         'suffix'
     );
@@ -645,7 +657,7 @@ run_concrete_profile(){
         );
     done
     verbose_end "passes@%8s";
-    verbose_end "${step_name}@%6s";
+    verbose_end "${lower_profile_name}@%6s";
 }
 
 # ------------------------------------------------------------
@@ -1186,7 +1198,6 @@ handle_audio_vorbis_options(){
 handle_audio_mp3_options(){
     local profile_name="${1}";
     local input_file_name="${2}";
-
     local codec_options='';
     codec_options+="-codec:a 'libmp3lame' ";
     echo "${codec_options}"
