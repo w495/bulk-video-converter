@@ -10,10 +10,10 @@ profile:
 
   high_quality:           # high from low
     depends: low_quality  # waiting for `low_quality` results
-    source: ./out/d-1-30-low_quality.mp4
+    source: ./out/*-low_quality.mp4
     output_dir_name: ./out
     video:
-      width:   -1  # 1920 # for 16:9
+      width:   -1
       height:  1080
       bitrate: 2000k
       codec:
