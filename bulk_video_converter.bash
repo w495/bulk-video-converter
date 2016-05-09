@@ -14,10 +14,11 @@ readonly RANDOM_STING=$(cat /dev/urandom \
 # Time of script start for time based naming.
 readonly START_TIME_STRING=$(date "+%Y-%m-%d_%H-%M-%S-%N");
 readonly START_TIME_NS=$(($(date +%s%N)));
-readonly FROM_CONFIG_FILE_FLAG="FROM-CONFIG-${RANDOM_STING}"
 
 # Self name.
 readonly SCRIPT_NAME=$(basename $0);
+
+readonly VERSION='0.1462751725';
 
 # Internal constants.
 readonly TMP_DIR_BASE_NAME="/tmp/${SCRIPT_NAME}"
@@ -63,6 +64,9 @@ declare -A PROFILE_MAP;
 # Internal global variables for color stderr printing
 #   They are not `readonly` because they are redefined below.
 # ------------------------------------------------------------
+
+readonly FROM_CONFIG_FILE_NAME="input/files/are/from/config";
+declare FROM_CONFIG_FLAG='';
 
 # All log-output into `stderr`
 readonly OUT_LOG_STREAM=2;
@@ -194,7 +198,7 @@ ${COLOR_REVERSE} Options:${C0}
           ${WC}There is no reason to set this option
           in a common situation.${C0}
 ${COLOR_REVERSE} Version:${C0}
-    2016-05-03_03-10-26-488850202
+    ${VERSION}
 ${COLOR_REVERSE} Authors:${C0}
     Ilya w495 Nikitin.
     Report bugs to:
@@ -248,6 +252,9 @@ EOF
 
 main(){
     $(verbose_start "${SCRIPT_NAME}");
+
+    $(verbose_block "version@%2s" "${VERSION}");
+
     # non-local function `configure` — sets global options of script.
     configure "${@}";
     $(start_up);
@@ -295,6 +302,8 @@ handle_file_async(){
     local profile_map_name="${5}";
     local pid_suffix="$$-${BASH_SUBSHELL}-${BASHPID}";
 
+    #$(notice "handles file async with PID ${pid_suffix}");
+
     (
         $(handle_file   \
             "${input_file_name}"    \
@@ -303,6 +312,7 @@ handle_file_async(){
             "${profile_map_name}"   \
         );
     ) 2> "${file_log}-${pid_suffix}.log"
+
 }
 
 handle_file(){
@@ -317,15 +327,15 @@ handle_file(){
     );
 
     if [[ -n ${concrete_profile} ]]; then
-        $(verbose_start                                               \
-            "${concrete_profile,,} X '${input_file_name}'@%4s"      \
+        $(verbose_start                                         \
+            "${concrete_profile,,} for ${input_file_name}@%4s"    \
         );
-        $(handle_concrete_profile   \
+        $(handle_concrete_profile       \
             "${concrete_profile}"       \
-            "${input_file_name}"    \
-        )
-        $(verbose_end                                                 \
-            "${concrete_profile,,} X '${input_file_name}'@%4s"      \
+            "${input_file_name}"        \
+        );
+        $(verbose_end                                           \
+            "${concrete_profile,,} for ${input_file_name}@%4s"    \
         );
     else
         $(verbose_start "${input_file_name}@%2s");
@@ -362,8 +372,6 @@ handle_profile_sequence(){
     #    | xargs                     \
     #);
 
-    debug "list of profiles = ${profile_list}"
-
     local profile_log_prefix="${PROFILE_LOG_PREFIX}-${file_index}";
     local -i profile_index=1;
 
@@ -386,6 +394,8 @@ handle_profile_async(){
     local profile_log="${3}";
 
     local pid_suffix="$$-${BASH_SUBSHELL}-${BASHPID}";
+
+    #$(notice  "handles profile async with PID ${pid_suffix}");
 
     (
         $(handle_profile "${profile_name}" "${input_file_name}")
@@ -1226,7 +1236,7 @@ assert_exists () {
     local message="${2}";
     if [[ $(is_device ${file_name}) ]]; then
         notice "uses display '${file_name}' as a file name"
-    elif [[ "${file_name}" == "${FROM_CONFIG_FILE_FLAG}" ]]; then
+    elif [[ "${file_name}" == "${FROM_CONFIG_FILE_NAME}" ]]; then
         notice "gets file names from config";
     elif [[ ! -f "${file_name}" ]]; then
         wrong_usage "${message}";
@@ -1351,7 +1361,8 @@ parse_options (){
     declare -rg LOG_DIR_NAME;
     declare -rg PASS_LOG_DIR_NAME;
     if [[ -z "${INPUT_FILE_NAME_LIST}" ]]; then
-        INPUT_FILE_NAME_LIST="${FROM_CONFIG_FILE_FLAG}"
+        INPUT_FILE_NAME_LIST="${FROM_CONFIG_FILE_NAME}"
+        FROM_CONFIG_FLAG='true';
     fi;
     declare -rg INPUT_FILE_NAME_LIST;
 }

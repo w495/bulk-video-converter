@@ -1,0 +1,116 @@
+bulk_video_converter.bash:
+  version:
+    0.1462751725
+  # version done
+# NOTICE 48:  bulk_video_converter.bash creates directory '/tmp/bulk_video_converter.bash/rT03vGYj' at start up.
+# NOTICE 51:  bulk_video_converter.bash creates directory '/var/log/bulk_video_converter.bash/2016-05-09_03-52-45-326288851' at start up.
+# NOTICE 56:  bulk_video_converter.bash handles file async with PID 1846-2-1910
+  /home/w495/Videos/input/00001.MTS:
+# DEBUG 70:  bulk_video_converter.bash list of profiles = BASE VIRAG_H264X1_PAL_SD VIRAG_H264X1_480P_WEB VIRAG_H264X1_480P_TABLET VIRAG_H264X1_360P_MOBILE
+# NOTICE 75:  bulk_video_converter.bash handles profile async with PID 1846-6-1961
+# NOTICE 75:  bulk_video_converter.bash handles profile async with PID 1846-6-1974
+# NOTICE 76:  bulk_video_converter.bash handles profile async with PID 1846-6-1976
+# NOTICE 76:  bulk_video_converter.bash handles profile async with PID 1846-6-1968
+# NOTICE 75:  bulk_video_converter.bash handles profile async with PID 1846-6-1971
+# NOTICE 133:  bulk_video_converter.bash handles file async with PID 1846-10-2369
+    virag_h264x1_pal_sd for /home/w495/Videos/input/00001.MTS:
+      virag_h264x1_pal_sd:
+        global input:
+          -threads '0' -ss '00:00:10' 
+        # global input done
+        video:
+          -codec:v 'libx264' -profile:v 'main' -b:v '1000k' -vf 'scale=0:576' 
+        # video done
+        audio:
+          -strict 'experimental' -codec:a 'aac' -b:a '196k' -ac '6'
+        # audio done
+        global output:
+          -ss '00:00:10' -to '00:00:30' 
+        # global output done
+        format:
+          -movflags '+faststart' -f 'mp4' 
+        # format done
+        passes:
+          pass 1:
+            /usr/bin/ffmpeg -threads '0' -ss '00:00:10' -i '/home/w495/Videos/input/00001.MTS' -codec:v 'libx264' -profile:v 'main' -b:v '1000k' -vf 'scale=0:576' -strict 'experimental' -codec:a 'aac' -b:a '196k' -ac '6' -ss '00:00:10' -to '00:00:30' -movflags '+faststart' -f 'mp4' -y './out/00001-virag_h264x1_pal_sd.mp4' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-09_03-52-45-326288851/00001-virag_h264x1_pal_sd-1-mp4.ffmpeg.log 1>&2;
+          # pass 1 done
+        # passes done
+      # virag_h264x1_pal_sd done
+    # virag_h264x1_pal_sd for /home/w495/Videos/input/00001.MTS done
+# NOTICE 147:  bulk_video_converter.bash handles file async with PID 1846-10-2453
+    virag_h264x1_480p_web for /home/w495/Videos/input/00001.MTS:
+      virag_h264x1_480p_web:
+        global input:
+          -threads '0' -ss '00:00:10' 
+        # global input done
+        video:
+          -codec:v 'libx264' -profile:v 'main' -b:v '500k' -maxrate '500k' -bufsize '1000k' -vf 'scale=0:480' 
+        # video done
+        audio:
+          -strict 'experimental' -codec:a 'aac' -b:a '128k' -ac '2'
+        # audio done
+        global output:
+          -ss '00:00:10' -to '00:00:30' 
+        # global output done
+        format:
+          -movflags '+faststart' -f 'mp4' 
+        # format done
+        passes:
+          pass 1:
+            /usr/bin/ffmpeg -threads '0' -ss '00:00:10' -i '/home/w495/Videos/input/00001.MTS' -codec:v 'libx264' -profile:v 'main' -b:v '500k' -maxrate '500k' -bufsize '1000k' -vf 'scale=0:480' -strict 'experimental' -codec:a 'aac' -b:a '128k' -ac '2' -ss '00:00:10' -to '00:00:30' -movflags '+faststart' -f 'mp4' -y './out/00001-virag_h264x1_480p_web.mp4' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-09_03-52-45-326288851/00001-virag_h264x1_480p_web-1-mp4.ffmpeg.log 1>&2;
+          # pass 1 done
+        # passes done
+      # virag_h264x1_480p_web done
+    # virag_h264x1_480p_web for /home/w495/Videos/input/00001.MTS done
+# NOTICE 167:  bulk_video_converter.bash handles file async with PID 1846-10-2561
+    virag_h264x1_480p_tablet for /home/w495/Videos/input/00001.MTS:
+      virag_h264x1_480p_tablet:
+        global input:
+          -threads '0' -ss '00:00:10' 
+        # global input done
+        video:
+          -codec:v 'libx264' -profile:v 'main' -b:v '400k' -maxrate '400k' -bufsize '800k' -vf 'scale=0:480' 
+        # video done
+        audio:
+          -strict 'experimental' -codec:a 'aac' -b:a '128k' -ac '2'
+        # audio done
+        global output:
+          -ss '00:00:10' -to '00:00:30' 
+        # global output done
+        format:
+          -movflags '+faststart' -f 'mp4' 
+        # format done
+        passes:
+          pass 1:
+            /usr/bin/ffmpeg -threads '0' -ss '00:00:10' -i '/home/w495/Videos/input/00001.MTS' -codec:v 'libx264' -profile:v 'main' -b:v '400k' -maxrate '400k' -bufsize '800k' -vf 'scale=0:480' -strict 'experimental' -codec:a 'aac' -b:a '128k' -ac '2' -ss '00:00:10' -to '00:00:30' -movflags '+faststart' -f 'mp4' -y './out/00001-virag_h264x1_480p_tablet.mp4' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-09_03-52-45-326288851/00001-virag_h264x1_480p_tablet-1-mp4.ffmpeg.log 1>&2;
+          # pass 1 done
+        # passes done
+      # virag_h264x1_480p_tablet done
+    # virag_h264x1_480p_tablet for /home/w495/Videos/input/00001.MTS done
+# NOTICE 185:  bulk_video_converter.bash handles file async with PID 1846-10-2665
+    virag_h264x1_360p_mobile for /home/w495/Videos/input/00001.MTS:
+      virag_h264x1_360p_mobile:
+        global input:
+          -threads '0' -ss '00:00:10' 
+        # global input done
+        video:
+          -codec:v 'libx264' -profile:v 'baseline' -b:v '250k' -maxrate '250k' -bufsize '500k' -vf 'scale=0:360' 
+        # video done
+        audio:
+          -strict 'experimental' -codec:a 'aac' -b:a '96k' -ac '1'
+        # audio done
+        global output:
+          -ss '00:00:10' -to '00:00:30' 
+        # global output done
+        format:
+          -movflags '+faststart' -f 'mp4' 
+        # format done
+        passes:
+          pass 1:
+            /usr/bin/ffmpeg -threads '0' -ss '00:00:10' -i '/home/w495/Videos/input/00001.MTS' -codec:v 'libx264' -profile:v 'baseline' -b:v '250k' -maxrate '250k' -bufsize '500k' -vf 'scale=0:360' -strict 'experimental' -codec:a 'aac' -b:a '96k' -ac '1' -ss '00:00:10' -to '00:00:30' -movflags '+faststart' -f 'mp4' -y './out/00001-virag_h264x1_360p_mobile.mp4' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-09_03-52-45-326288851/00001-virag_h264x1_360p_mobile-1-mp4.ffmpeg.log 1>&2;
+          # pass 1 done
+        # passes done
+      # virag_h264x1_360p_mobile done
+    # virag_h264x1_360p_mobile for /home/w495/Videos/input/00001.MTS done
+  # /home/w495/Videos/input/00001.MTS done
+# bulk_video_converter.bash done
