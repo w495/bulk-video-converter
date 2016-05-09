@@ -726,8 +726,6 @@ handle_output_format_options(){
 
     case "${output_format}" in
         'mov'|'mp4'|'ismv')  movflags+='+faststart';;
-        'stereo') channels='2';;
-        '5.1')    channels='6';;
         *) ;;
     esac;
 
