@@ -1,0 +1,48 @@
+self:
+  compatibility:
+    from: 0.1462762887
+
+ffmpeg:
+  bin: /usr/bin/ffmpeg
+  threads: 0
+
+profile:
+
+  high_quality:           # high from low
+    depends: low_quality  # waiting for `low_quality` results
+    source: ./out/d-1-30-low_quality.mp4
+    output_dir_name: ./out
+    video:
+      width:   -1  # 1920 # for 16:9
+      height:  1080
+      bitrate: 2000k
+      codec:
+        name : h264
+        preset: veryfast
+        profile: high
+        weightp: smart
+        bframes: 3
+        level: 3.1
+    audio:
+      codec:
+        name: aac
+      channels: 5.1
+      bitrate: 124k
+
+  low_quality:
+    source: /home/w495/Videos/input/d-1-30.mp4
+    output_dir_name: ./out
+    video:
+      width:   -1  # 1920 # for 16:9
+      height:  120
+      codec:
+        name : h264
+        preset: veryfast
+        profile: baseline
+        level: 3.0
+    audio:
+      codec:
+        name: mp3
+      channels: mono
+      bitrate: 64k
+
