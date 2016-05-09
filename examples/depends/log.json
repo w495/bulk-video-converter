@@ -1,0 +1,29 @@
+{
+  "bulk_video_converter.bash": {
+    "version": 0.1462762887,
+    "input/files/are/from/config": {
+      "low_quality for /home/w495/Videos/input/d-1-30.mp4": {
+        "low_quality": {
+          "global input": "-threads '0'",
+          "video": "-codec:v 'libx264' -profile:v 'baseline' -preset 'veryfast' -level:v '3.0' -vf 'scale=-1:120'",
+          "audio": "-codec:a 'libmp3lame' -b:a '64k' -ac '1'",
+          "format": "-movflags '+faststart' -f 'mp4'",
+          "passes": {
+            "pass 1": "/usr/bin/ffmpeg -threads '0' -i '/home/w495/Videos/input/d-1-30.mp4' -codec:v 'libx264' -profile:v 'baseline' -preset 'veryfast' -level:v '3.0' -vf 'scale=-1:120' -codec:a 'libmp3lame' -b:a '64k' -ac '1' -movflags '+faststart' -f 'mp4' -y './out/d-1-30-low_quality.mp4' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-09_06-17-18-647984577/d-1-30-low_quality-1-mp4.ffmpeg.log 1>&2;"
+          }
+        }
+      },
+      "high_quality for ./out/d-1-30-low_quality.mp4": {
+        "high_quality": {
+          "global input": "-threads '0'",
+          "video": "-codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryfast' -level:v '3.1' -bf '3' -b:v '2000k' -vf 'scale=-1:1080'",
+          "audio": "-strict 'experimental' -codec:a 'aac' -b:a '124k' -ac '6'",
+          "format": "-movflags '+faststart' -f 'mp4'",
+          "passes": {
+            "pass 1": "/usr/bin/ffmpeg -threads '0' -i './out/d-1-30-low_quality.mp4' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryfast' -level:v '3.1' -bf '3' -b:v '2000k' -vf 'scale=-1:1080' -strict 'experimental' -codec:a 'aac' -b:a '124k' -ac '6' -movflags '+faststart' -f 'mp4' -y './out/d-1-30-low_quality-high_quality.mp4' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-09_06-17-18-647984577/d-1-30-low_quality-high_quality-1-mp4.ffmpeg.log 1>&2;"
+          }
+        }
+      }
+    }
+  }
+}

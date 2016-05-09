@@ -1,0 +1,55 @@
+bulk_video_converter.bash:
+  version:
+    0.1462762887
+  # version done
+# NOTICE 52:  bulk_video_converter.bash creates directory '/tmp/bulk_video_converter.bash/DXRmPFe4' at start up.
+# NOTICE 55:  bulk_video_converter.bash creates directory '/var/log/bulk_video_converter.bash/2016-05-09_06-17-18-647984577' at start up.
+# NOTICE 61:  bulk_video_converter.bash gets file names from config
+  input/files/are/from/config:
+    low_quality for /home/w495/Videos/input/d-1-30.mp4:
+      low_quality:
+      # NOTICE 162:  bulk_video_converter.bash creates directory '/tmp/bulk_video_converter.bash/DXRmPFe4/pass-log'.
+        global input:
+          -threads '0' 
+        # global input done
+        video:
+          -codec:v 'libx264' -profile:v 'baseline' -preset 'veryfast' -level:v '3.0' -vf 'scale=-1:120' 
+        # video done
+        audio:
+          -codec:a 'libmp3lame' -b:a '64k' -ac '1'
+        # audio done
+        format:
+          -movflags '+faststart' -f 'mp4' 
+        # format done
+        passes:
+          pass 1:
+            /usr/bin/ffmpeg -threads '0' -i '/home/w495/Videos/input/d-1-30.mp4' -codec:v 'libx264' -profile:v 'baseline' -preset 'veryfast' -level:v '3.0' -vf 'scale=-1:120' -codec:a 'libmp3lame' -b:a '64k' -ac '1' -movflags '+faststart' -f 'mp4' -y './out/d-1-30-low_quality.mp4' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-09_06-17-18-647984577/d-1-30-low_quality-1-mp4.ffmpeg.log 1>&2;
+          # pass 1 done
+        # passes done
+      # low_quality done
+    # low_quality for /home/w495/Videos/input/d-1-30.mp4 done
+    high_quality for ./out/d-1-30-low_quality.mp4:
+# NOTICE 1123:  bulk_video_converter.bash NO /tmp/bulk_video_converter.bash/DXRmPFe4/low_quality-1.profile. Wait ... 
+# NOTICE 1127:  bulk_video_converter.bash /tmp/bulk_video_converter.bash/DXRmPFe4/low_quality-1.profile exists
+      high_quality:
+        global input:
+          -threads '0' 
+        # global input done
+        video:
+          -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryfast' -level:v '3.1' -bf '3' -b:v '2000k' -vf 'scale=-1:1080' 
+        # video done
+        audio:
+          -strict 'experimental' -codec:a 'aac' -b:a '124k' -ac '6'
+        # audio done
+        format:
+          -movflags '+faststart' -f 'mp4' 
+        # format done
+        passes:
+          pass 1:
+            /usr/bin/ffmpeg -threads '0' -i './out/d-1-30-low_quality.mp4' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryfast' -level:v '3.1' -bf '3' -b:v '2000k' -vf 'scale=-1:1080' -strict 'experimental' -codec:a 'aac' -b:a '124k' -ac '6' -movflags '+faststart' -f 'mp4' -y './out/d-1-30-low_quality-high_quality.mp4' 2>&1 | tee /var/log/bulk_video_converter.bash/2016-05-09_06-17-18-647984577/d-1-30-low_quality-high_quality-1-mp4.ffmpeg.log 1>&2;
+          # pass 1 done
+        # passes done
+      # high_quality done
+    # high_quality for ./out/d-1-30-low_quality.mp4 done
+  # input/files/are/from/config done
+# bulk_video_converter.bash done
