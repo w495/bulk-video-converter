@@ -118,7 +118,7 @@ profile:
   ## Semi-TVzavr's profile for small devices
   tvzavr_h264_x2_0120p_lw:
     extends: tvzavr_h264_x2_0240p_lw
-    depends_on: tvzavr_h264_x2_0120p_lwXXX
+    depends_on: tvzavr_h264_x2_0120p_pre
     video:
       width:   -1
       height:  120
@@ -126,9 +126,8 @@ profile:
     audio:
       bitrate: 32k
 
-
   ## Semi-TVzavr's profile for small devices
-  tvzavr_h264_x2_0120p_lwXXX:
+  tvzavr_h264_x2_0120p_pre:
     extends: tvzavr_h264_x2_0240p_lw
     video:
       width:   -1

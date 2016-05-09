@@ -330,10 +330,13 @@ handle_file(){
         $(verbose_start                                         \
             "${concrete_profile,,} for ${input_file_name}@%4s"    \
         );
+
         $(handle_concrete_profile       \
             "${concrete_profile}"       \
             "${input_file_name}"        \
+            "${file_index}"             \
         );
+
         $(verbose_end                                           \
             "${concrete_profile,,} for ${input_file_name}@%4s"    \
         );
@@ -481,11 +484,76 @@ handle_profile(){
 
 }
 
+handle_concrete_profile(){
+    local profile="${1}";
+    local file_name="${2}";
+    local file_index="${3}"
+
+    $(handle_profile_depends            \
+        "${profile}"                    \
+        "${file_name}"                  \
+        "${file_index}"                 \
+    );
+
+    $(run_concrete_profile              \
+        "${profile}"                    \
+        "${file_name}"                  \
+    );
+
+    $(make_profile_mark                 \
+        "${profile}"                    \
+        "${file_name}"                  \
+        "${file_index}"                 \
+    );
+}
+
+handle_profile_depends(){
+    local profile="${1}";
+    local file_name="${2}";
+    local file_index="${3}"
+    local depends_on=$(plain_profile "${profile}" 'depends_on');
+    if [[ -n "${depends_on}" ]]; then
+        local pred_prof=$(profile_mark  \
+            "${depends_on}"             \
+            "${file_name}"              \
+            "${file_index}"             \
+        );
+        while [[ ! -f "${pred_prof}" ]]; do
+            sleep 1;
+            $(notice "NO ${pred_prof}. Wait ... ");
+        done;
+        $(notice "${pred_prof} exists");
+    fi;
+}
+
+make_profile_mark(){
+    local profile="${1}";
+    local file_name="${2}";
+    local file_index="${3}"
+
+    local pmark=$(profile_mark      \
+        "${profile}"                 \
+        "${file_name}"               \
+        "${file_index}"              \
+    );
+
+    $(touch "${pmark}");
+}
+
+profile_mark(){
+    local profile="${1}";
+    local file_name="${2}";
+    local file_index="${3}";
+    echo "${TMP_DIR_NAME}/${profile,,}-${file_index}.profile";
+}
+
+
+
 # ------------------------------------------------------------
 # Function for handling one profile item
 # ------------------------------------------------------------
 
-handle_concrete_profile(){
+run_concrete_profile(){
     local profile_name="${1}";
     local input_file_name="${2}";
     local step_name=$(echo "${profile_name}" \
