@@ -891,10 +891,10 @@ handle_video_codec_options(){
     esac;
 
     local qscale="$(profile ${profile_name} video qscale)";
-    qscale=$(profile_default    \
-        "${qscale}"               \
-        "${profile_name}"         \
-        video codec qscale      \
+    qscale=$(profile_default        \
+        "${qscale}"                 \
+        "${profile_name}"           \
+        video codec qscale          \
     );
 
     codec_options+=$(if_exists "-qscale:v '%s'" ${qscale})
