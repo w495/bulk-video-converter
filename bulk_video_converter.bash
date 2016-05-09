@@ -795,18 +795,18 @@ handle_video_options(){
 
     local aspect="$(profile ${profile_name} video aspect)";
 
-    local common_options=''
+    local common_options='';
 
-    common_options+=$(if_exists "-b:v '%s'" ${bitrate})
-    common_options+=$(if_exists "-crf '%s'" ${rate_factor})
-    common_options+=$(if_exists "-r:v '%s'" ${framerate})
-    common_options+=$(if_exists "-maxrate '%s'" ${maxrate})
-    common_options+=$(if_exists "-minrate '%s'" ${minrate})
-    common_options+=$(if_exists "-bufsize '%s'" ${bufsize})
-    common_options+=$(if_exists "-aspect:v '%s'" ${aspect})
+    common_options+=$(if_exists "-b:v '%s'" ${bitrate});
+    common_options+=$(if_exists "-crf '%s'" ${rate_factor});
+    common_options+=$(if_exists "-r:v '%s'" ${framerate});
+    common_options+=$(if_exists "-maxrate '%s'" ${maxrate});
+    common_options+=$(if_exists "-minrate '%s'" ${minrate});
+    common_options+=$(if_exists "-bufsize '%s'" ${bufsize});
+    common_options+=$(if_exists "-aspect:v '%s'" ${aspect});
 
 
-    common_options+=$(if_exists "-vf 'scale=%s:%s'" ${width} ${height})
+    common_options+=$(if_exists "-vf 'scale=%s:%s'" ${width} ${height});
     local options="${codec_options} ${common_options}";
     verbose_block "video@%8s" "${options}";
     echo ${options}
