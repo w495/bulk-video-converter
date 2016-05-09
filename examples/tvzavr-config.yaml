@@ -25,7 +25,7 @@ profile:
     # Other options are inherited from `base`
     extends: base
     is_abstract: true
-    passes: 1
+    passes: 2
     video:
       width:   -1  # 1920 # for 16:9
       height:  1080
@@ -117,18 +117,6 @@ profile:
 
   ## Semi-TVzavr's profile for small devices
   tvzavr_h264_x2_0120p_lw:
-    extends: tvzavr_h264_x2_0240p_lw
-    depends_on: tvzavr_h264_x2_0120p_lwXXX
-    video:
-      width:   -1
-      height:  120
-      bitrate: 100k
-    audio:
-      bitrate: 32k
-
-
-  ## Semi-TVzavr's profile for small devices
-  tvzavr_h264_x2_0120p_lwXXX:
     extends: tvzavr_h264_x2_0240p_lw
     video:
       width:   -1

@@ -18,7 +18,7 @@ readonly START_TIME_NS=$(($(date +%s%N)));
 # Self name.
 readonly SCRIPT_NAME=$(basename $0);
 
-readonly VERSION='0.1462751725';
+readonly VERSION='0.1462758222';
 
 # Internal constants.
 readonly TMP_DIR_BASE_NAME="/tmp/${SCRIPT_NAME}"
@@ -265,14 +265,14 @@ main(){
 
 handle_file_sequence(){
     local file_name_sequence="${1}";
-    local concrete_profile="${2}";
+    local concrete_prof="${2}";
     local profile_map_name="${3}";
     local file_log_prefix="${FILE_LOG_PREFIX}";
 
-    if [[ -n ${concrete_profile} ]]; then
-        file_log_prefix="${file_log_prefix}-${concrete_profile}"
+    if [[ -n ${concrete_prof} ]]; then
+        file_log_prefix="${file_log_prefix}-${concrete_prof}_cp"
     elif [[ -n ${profile_map_name} ]]; then
-        file_log_prefix="${file_log_prefix}-${profile_map_name}"
+        file_log_prefix="${file_log_prefix}-${profile_map_name}_pnm"
     else
         file_log_prefix="${file_log_prefix}-all"
     fi;
@@ -284,7 +284,7 @@ handle_file_sequence(){
             "${file_name}"                                          \
             "${file_index}"                                         \
             "${file_log_prefix}-${file_index}"                      \
-            "${concrete_profile}"                                   \
+            "${concrete_prof}"                                   \
             "${profile_map_name}"                                   \
         ) &
         file_index+=1
@@ -364,7 +364,10 @@ handle_profile_sequence(){
     profile_list=$(                 \
         echo "${profile_list}"      \
         |sed -E 's/IS_([A-Z]+)//gi' \
-     );
+    );
+
+    profile_list=$(reorder_profile_sequence "${profile_list}");
+
     #profile_list=$(                 \
     #    echo "${profile_list}"      \
     #    | xargs -n1                 \
@@ -376,9 +379,10 @@ handle_profile_sequence(){
     local -i profile_index=1;
 
 
-    for profile_name in ${profile_list}; do
+
+    for pname in ${profile_list}; do
         $(handle_profile_async                                      \
-            "${profile_name}"                                       \
+            "${pname}"                                       \
             "${input_file_name}"                                    \
             "${profile_log_prefix}-${profile_index}"                \
         ) &
@@ -387,6 +391,35 @@ handle_profile_sequence(){
     wait;
     cat ${profile_log_prefix}* 1>& ${OUT_LOG_STREAM}
 }
+
+
+
+reorder_profile_sequence(){
+    local profile_list="${1}";
+
+    for pname in ${profile_list}; do
+        local is_abstract=$(plain_profile "${pname}" 'is_abstract');
+        if [[ -n "${is_abstract}" ]]; then
+            profile_list=$(                     \
+                echo "${profile_list}"          \
+                | sed "s/${pname}//gi"          \
+            );
+        fi;
+        local depon=$(plain_profile "${pname}" 'depends_on');
+        if [[ -n "${depon}" ]]; then
+            profile_list=$(                     \
+                echo "${profile_list}"          \
+                | sed "s/\<${pname}\>//gi"          \
+            );
+            profile_list=$(                     \
+                echo "${profile_list}"          \
+                | sed "s/\<${depon}\>/${depon^^} ${pname}/gi"   \
+            );
+        fi;
+    done;
+    echo "${profile_list}";
+}
+
 
 handle_profile_async(){
     local profile_name="${1}";
@@ -405,9 +438,10 @@ handle_profile_async(){
 handle_profile(){
     local profile_name="${1}";
     local input_file_name="${2}";
-    local is_abstract=$(plain_profile ${profile_name} is_abstract);
-
+    local is_abstract=$(plain_profile "${profile_name}" 'is_abstract');
     local is_complex=$(plain_profile "${profile_name}" 'is_complex');
+
+
     local profile_map_name='';
     local conrete_profile_name="${profile_name}";
 
@@ -417,34 +451,34 @@ handle_profile(){
         conrete_profile_name=''
     fi;
 
-    if [[ -z ${is_abstract} ]]; then
-        input_file_name=$(profile_default  \
-            "${input_file_name}"                    \
-            "${profile_name}"                       \
-            source                                  \
-        );
-        input_file_name=$(profile_default  \
-            "${input_file_name}"                    \
-            "${profile_name}"                       \
-            source                                  \
-            video                                   \
-        );
-        input_file_name=$(profile_default  \
-            "${input_file_name}"                    \
-            "${profile_name}"                       \
-            source                                  \
-            video                                   \
-            device                                  \
-        );
 
-        # Return to `handle_file_sequence`
-        # for files described inside profiles.
-        $(handle_file_sequence                      \
-            "${input_file_name}"                    \
-            "${conrete_profile_name}"               \
-            "${profile_map_name}"                   \
-        )
-    fi;
+    input_file_name=$(profile_default  \
+        "${input_file_name}"                    \
+        "${profile_name}"                       \
+        source                                  \
+    );
+    input_file_name=$(profile_default  \
+        "${input_file_name}"                    \
+        "${profile_name}"                       \
+        source                                  \
+        video                                   \
+    );
+    input_file_name=$(profile_default  \
+        "${input_file_name}"                    \
+        "${profile_name}"                       \
+        source                                  \
+        video                                   \
+        device                                  \
+    );
+
+    # Return to `handle_file_sequence`
+    # for files described inside profiles.
+    $(handle_file_sequence                      \
+        "${input_file_name}"                    \
+        "${conrete_profile_name}"               \
+        "${profile_map_name}"                   \
+    )
+
 }
 
 # ------------------------------------------------------------
