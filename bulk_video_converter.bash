@@ -284,7 +284,7 @@ handle_file_sequence(){
             "${file_name}"                                          \
             "${file_index}"                                         \
             "${file_log_prefix}-${file_index}"                      \
-            "${concrete_prof}"                                   \
+            "${concrete_prof}"                                      \
             "${profile_map_name}"                                   \
         ) &
         file_index+=1
@@ -305,7 +305,7 @@ handle_file_async(){
     #$(notice "handles file async with PID ${pid_suffix}");
 
     (
-        $(handle_file   \
+        $(handle_file               \
             "${input_file_name}"    \
             "${file_index}"         \
             "${concrete_profile}"   \
@@ -331,7 +331,7 @@ handle_file(){
         local profile_name=$(lower_name "${concrete_profile}");
 
         $(verbose_start                                         \
-            "${profile_name} for ${input_file_name}@%4s"    \
+            "${profile_name} for ${input_file_name}@%4s"        \
         );
 
         $(handle_concrete_profile       \
@@ -386,7 +386,7 @@ handle_profile_sequence(){
 
     for name in ${profile_list}; do
         $(handle_profile_async                                      \
-            "${name}"                                       \
+            "${name}"                                               \
             "${input_file_name}"                                    \
             "${profile_log_prefix}-${profile_index}"                \
         ) &
@@ -397,27 +397,26 @@ handle_profile_sequence(){
 }
 
 
-
 reorder_profile_sequence(){
     local profile_list="${1}";
 
     for name in ${profile_list}; do
         local is_abstract=$(plain_profile "${name}" 'is_abstract');
         if [[ -n "${is_abstract}" ]]; then
-            profile_list=$(                     \
-                echo "${profile_list}"          \
-                | sed "s/${name}//gi"          \
+            profile_list=$(                                     \
+                echo "${profile_list}"                          \
+                | sed "s/${name}//gi"                           \
             );
         fi;
         local prev=$(plain_profile "${name}" 'depends');
         if [[ -n "${prev}" ]]; then
-            profile_list=$(                     \
-                echo "${profile_list}"          \
-                | sed "s/\<${name}\>//gi"          \
+            profile_list=$(                                     \
+                echo "${profile_list}"                          \
+                | sed "s/\<${name}\>//gi"                       \
             );
-            profile_list=$(                     \
-                echo "${profile_list}"          \
-                | sed "s/\<${prev}\>/${prev^^} ${name}/gi"   \
+            profile_list=$(                                     \
+                echo "${profile_list}"                          \
+                | sed "s/\<${prev}\>/${prev^^} ${name}/gi"      \
             );
         fi;
     done;
@@ -445,7 +444,6 @@ handle_profile(){
     local is_abstract=$(plain_profile "${profile_name}" 'is_abstract');
     local is_complex=$(plain_profile "${profile_name}" 'is_complex');
 
-
     local profile_map_name='';
     local concrete_profile_name="${profile_name}";
 
@@ -455,19 +453,18 @@ handle_profile(){
         concrete_profile_name=''
     fi;
 
-
-    input_file_name=$(profile_default  \
+    input_file_name=$(profile_default           \
         "${input_file_name}"                    \
         "${profile_name}"                       \
         source                                  \
     );
-    input_file_name=$(profile_default  \
+    input_file_name=$(profile_default           \
         "${input_file_name}"                    \
         "${profile_name}"                       \
         source                                  \
         video                                   \
     );
-    input_file_name=$(profile_default  \
+    input_file_name=$(profile_default           \
         "${input_file_name}"                    \
         "${profile_name}"                       \
         source                                  \
@@ -479,7 +476,7 @@ handle_profile(){
     # for files described inside profiles.
     $(handle_file_sequence                      \
         "${input_file_name}"                    \
-        "${concrete_profile_name}"               \
+        "${concrete_profile_name}"              \
         "${profile_map_name}"                   \
     )
 
@@ -495,12 +492,10 @@ handle_concrete_profile(){
         "${file_name}"                  \
         "${file_index}"                 \
     );
-
     $(run_concrete_profile              \
         "${profile}"                    \
         "${file_name}"                  \
     );
-
     $(make_profile_mark                 \
         "${profile}"                    \
         "${file_name}"                  \
@@ -1384,7 +1379,7 @@ configure () {
 parse_options (){
     local OPTIONS=$(getopt \
         -o                                          \
-            'i:o:c:O:P:F:hvqd'                        \
+            'i:o:c:O:P:F:hvqd'                      \
         --long                                      \
             'input:,                                \
             output:,                                \
