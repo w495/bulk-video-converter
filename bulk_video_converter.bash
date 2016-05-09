@@ -899,8 +899,12 @@ handle_video_codec_options(){
 
     codec_options+=$(if_exists "-qscale:v '%s'" ${qscale})
 
-    local compression_level=$(profile ${profile_name} video codec compression_level)
-    codec_options+=$(if_exists "-compression_level '%s'" ${compression_level})
+    local compression_level=$(profile "${profile_name}"     \
+        video codec compression_level                       \
+    );
+    codec_options+=$(if_exists                              \
+        "-compression_level '%s'" ${compression_level}      \
+    );
 
     echo "${codec_options}"
 }
