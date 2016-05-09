@@ -571,16 +571,16 @@ run_concrete_profile(){
     local lower_profile_name=$(lower_name "${profile_name}");
 
     verbose_start "${lower_profile_name}@%6s";
-    local suffix=$(profile_default  \
-        "${lower_profile_name}"              \
-        "${profile_name}"           \
+    local suffix=$(profile_default              \
+        "${lower_profile_name}"                 \
+        "${profile_name}"                       \
         'suffix'
     );
-    local passes=$(profile_default      \
+    local passes=$(profile_default                      \
         '1' "${profile_name}" 'passes');
-    local output_format=$(profile_default \
+    local output_format=$(profile_default               \
         'mp4' "${profile_name}" 'format');
-    local extention=$(profile_default \
+    local extention=$(profile_default                   \
         "$output_format" "${profile_name}" 'extention');
     local output_dir_name=$(profile_default             \
         "${OUTPUT_DIR_NAME}"                            \
@@ -606,8 +606,8 @@ run_concrete_profile(){
         "${suffix}"                                     \
     );
     local global_input_options=$(handle_global_input_options    \
-        "${profile_name}"                           \
-        "${input_file_name}"                        \
+        "${profile_name}"                                       \
+        "${input_file_name}"                                    \
     );
     local video_options=$(handle_video_options  \
         "${profile_name}"                       \
@@ -617,33 +617,34 @@ run_concrete_profile(){
         "${profile_name}"                       \
         "${input_file_name}"                    \
     );
-    local global_output_options=$(handle_global_output_options    \
-        "${profile_name}"                           \
-        "${input_file_name}"                        \
+    local global_output_options=$(handle_global_output_options      \
+        "${profile_name}"                                           \
+        "${input_file_name}"                                        \
     );
-    local output_format_options=$(handle_output_format_options    \
-        "${profile_name}"                           \
-        "${input_file_name}"                        \
-        "${output_format}"                           \
+    local output_format_options=$(handle_output_format_options      \
+        "${profile_name}"                                           \
+        "${input_file_name}"                                        \
+        "${output_format}"                                          \
     );
     verbose_start "passes@%8s";
     for pass in $(seq 1 ${passes}); do
         local pass_options='';
         local output_pass_file_name="${output_file_name}";
         if [[ ${passes} > 1 ]]; then
-            pass_options="-pass ${pass} -passlogfile  ${pass_log_file_prefix}";
+            pass_options+="-pass ${pass} "
+            pass_options+="-passlogfile ${pass_log_file_prefix}";
             if [[ ${pass} <  ${passes} ]]; then
                 output_pass_file_name="/dev/null"
             fi;
         fi;
-        local log_file_name=$(compute_if_empty \
-            "${OUTPUT_FILE_NAME}" \
-            "${input_file_name}" \
-            "${LOG_DIR_NAME}"  \
-            "${suffix}-${pass}-${extention}" \
-            "ffmpeg.log"                    \
+        local log_file_name=$(compute_if_empty  \
+            "${OUTPUT_FILE_NAME}"               \
+            "${input_file_name}"                \
+            "${LOG_DIR_NAME}"                   \
+            "${suffix}-${pass}-${extention}"    \
+            "ffmpeg.log"                        \
         );
-        $(verbose_run "pass ${pass}@%10s"                            \
+        $(verbose_run "pass ${pass}@%10s"                           \
             ${FFMPEG_BIN}                                           \
             ${global_input_options}                                 \
             "-i '${input_file_name}'"                               \
@@ -677,7 +678,7 @@ handle_global_input_options(){
     );
     options+=$(if_exists "-ss '%s'" ${start_position});
     if [[ $(is_device ${input_file_name}) ]]; then
-        local device_options=$(handle_global_device_options    \
+        local device_options=$(handle_global_device_options     \
             "${profile_name}"                                   \
             "${input_file_name}"                                \
         );
@@ -973,10 +974,10 @@ handle_video_h264_options(){
 
     codec_options+="-codec:v 'libx264'";
 
-    local codec_profile=$(profile ${profile_name} video codec profile)
+    local codec_profile=$(profile ${profile_name} video codec profile);
     codec_options+=$(if_exists "-profile:v '%s'" ${codec_profile});
 
-    local weightp=$(profile ${profile_name} video codec weightp)
+    local weightp=$(profile ${profile_name} video codec weightp);
     codec_options+=$(if_exists "-weightp '%s'" ${weightp});
 
 
@@ -985,9 +986,9 @@ handle_video_h264_options(){
         ${profile_name}                                     \
     );
 
-    local qmin=$(profile ${profile_name} video codec qmin)
-    local qmax=$(profile ${profile_name} video codec qmax)
-    local opts=$(profile ${profile_name} video codec opts)
+    local qmin=$(profile ${profile_name} video codec qmin);
+    local qmax=$(profile ${profile_name} video codec qmax);
+    local opts=$(profile ${profile_name} video codec opts);
 
     codec_options+=$(if_exists "-qmin '%s'" ${qmin});
     codec_options+=$(if_exists "-qmax '%s'" ${qmax});
@@ -1020,12 +1021,12 @@ handle_video_h26X_options(){
     local input_file_name="${2}";
 
     local preset=$(profile ${profile_name} video codec preset);
-    local level=$(profile ${profile_name} video codec level)
-    local weightp=$(profile ${profile_name} video codec weightp)
-    local bframes=$(profile ${profile_name} video codec bframes)
+    local level=$(profile ${profile_name} video codec level);
+    local weightp=$(profile ${profile_name} video codec weightp);
+    local bframes=$(profile ${profile_name} video codec bframes);
 
     codec_options='';
-    codec_options+=$(if_exists "-preset '%s'" ${preset})
+    codec_options+=$(if_exists "-preset '%s'" ${preset});
     codec_options+=$(if_exists "-level:v '%s'" ${level});
     codec_options+=$(if_exists "-bf '%s'" ${bframes});
 
@@ -1036,15 +1037,15 @@ handle_video_vp8_options(){
     local profile_name="${1}";
     local input_file_name="${2}";
     local codec_options='';
-    local quality=$(profile ${profile_name} video codec quality)
-    local qmin=$(profile ${profile_name} video codec qmin)
-    local qmax=$(profile ${profile_name} video codec qmax)
+    local quality=$(profile ${profile_name} video codec quality);
+    local qmin=$(profile ${profile_name} video codec qmin);
+    local qmax=$(profile ${profile_name} video codec qmax);
     codec_options+="-codec:v 'libvpx'";
     codec_options+=$(if_exists "-quality '%s'" ${quality});
     codec_options+="-cpu-used '0' ";
     codec_options+=$(if_exists "-qmin '%s'" ${qmin});
     codec_options+=$(if_exists "-qmax '%s'" ${qmax});
-    echo "${codec_options}"
+    echo "${codec_options}";
 
 }
 
@@ -1053,7 +1054,7 @@ handle_video_vp9_options(){
     local input_file_name="${2}";
     local codec_options='';
     codec_options+="-codec:v 'libvpx-vp9'";
-    echo "${codec_options}"
+    echo "${codec_options}";
 }
 
 
@@ -1070,7 +1071,7 @@ handle_video_dirac_options(){
     local input_file_name="${2}";
     local codec_options='';
     codec_options+="-codec:v 'dirac'";
-    echo "${codec_options}"
+    echo "${codec_options}";
 }
 
 
@@ -1079,7 +1080,7 @@ handle_video_jpeg2000_options(){
     local input_file_name="${2}";
     local codec_options='';
     codec_options+="-codec:v 'jpeg2000'";
-    echo "${codec_options}"
+    echo "${codec_options}";
 }
 
 # ------------------------------------------------------------
@@ -1094,25 +1095,25 @@ handle_audio_options(){
 
     local framerate="$(profile ${profile_name} audio framerate)";
 
-    local filter_options=$(handle_audio_filter_options \
-       "${profile_name}"    \
-       "${input_file_name}" \
+    local filter_options=$(handle_audio_filter_options  \
+       "${profile_name}"                                \
+       "${input_file_name}"                             \
     );
     local common_options='';
 
-    common_options+=$(if_exists "-ar '%s'" ${framerate})
-    common_options+=$(if_exists "-b:a '%s'" ${bitrate})
+    common_options+=$(if_exists "-ar '%s'" ${framerate});
+    common_options+=$(if_exists "-b:a '%s'" ${bitrate});
 
     common_options+=$(handle_audio_channels_options \
-        ${profile_name}     \
-        ${input_file_name}  \
+        ${profile_name}                             \
+        ${input_file_name}                          \
     );
 
-    common_options+=$(if_exists "-filter:a '%s'" ${filter_options} )
-    local codec_options=$(handle_audio_codec_options ${profile_name})
+    common_options+=$(if_exists "-filter:a '%s'" ${filter_options});
+    local codec_options=$(handle_audio_codec_options ${profile_name});
     local options="${codec_options} ${common_options}";
     verbose_block "audio@%8s" "${options}";
-    echo ${options}
+    echo ${options};
 }
 
 handle_audio_channels_options(){

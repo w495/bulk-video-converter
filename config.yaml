@@ -25,7 +25,7 @@ profile:
     # Other options are inherited from `base`
     extends: base
     is_abstract: true
-    passes: 1
+    passes: 2
     video:
       width:   -1  # 1920 # for 16:9
       height:  1080
