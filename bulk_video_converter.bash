@@ -253,7 +253,9 @@ EOF
 main(){
     $(verbose_start "${SCRIPT_NAME}");
 
+
     $(verbose_block "version@%2s" "${VERSION}");
+    $(verbose_block "datetime@%2s" "'$(date '+%Y:%m:%d %H.%M.%S')'");
 
     # non-local function `configure` — sets global options of script.
     configure "${@}";
@@ -1589,8 +1591,7 @@ wrong_usage(){
 
 verbose() {
     if [[ "${VERBOSE}" == "true" ]]; then
-        printf "${@}\n"  \
-            1>& ${OUT_LOG_STREAM};
+        printf "${@}\n" 1>& ${OUT_LOG_STREAM};
     fi
 }
 
