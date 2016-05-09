@@ -824,7 +824,7 @@ handle_video_codec_options(){
     case "${codec_name}" in
         'flv')
             codec_options+=$(                                       \
-                handle_video_flv_options                           \
+                handle_video_flv_options                            \
                 ${profile_name}                                     \
             );;
         'h263')
@@ -834,12 +834,12 @@ handle_video_codec_options(){
             );;
         'h263p')
             codec_options+=$(                                       \
-                handle_video_h263p_options                           \
+                handle_video_h263p_options                          \
                 ${profile_name}                                     \
             );;
         'cinepak')
             codec_options+=$(                                       \
-                handle_video_cinepak_options                           \
+                handle_video_cinepak_options                        \
                 ${profile_name}                                     \
             );;
         'mpeg4'|'xvid')
@@ -859,7 +859,7 @@ handle_video_codec_options(){
             );;
         'theora')
             codec_options+=$(                                       \
-                handle_video_theora_options                           \
+                handle_video_theora_options                         \
                 ${profile_name}                                     \
             );;
         'vp8')
@@ -879,12 +879,12 @@ handle_video_codec_options(){
             );;
         'dirac')
             codec_options+=$(                                       \
-                handle_video_dirac_options                           \
+                handle_video_dirac_options                          \
                 ${profile_name}                                     \
             );;
         'jpeg2000')
             codec_options+=$(                                       \
-                handle_video_jpeg2000_options                           \
+                handle_video_jpeg2000_options                       \
                 ${profile_name}                                     \
             );;
         *) ;;
