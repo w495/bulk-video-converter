@@ -18,7 +18,7 @@ readonly START_TIME_NS=$(($(date +%s%N)));
 # Self name.
 readonly SCRIPT_NAME=$(basename $0);
 
-readonly VERSION='0.1462758222';
+readonly VERSION='0.1462762887';
 
 # Internal constants.
 readonly TMP_DIR_BASE_NAME="/tmp/${SCRIPT_NAME}"
@@ -408,7 +408,7 @@ reorder_profile_sequence(){
                 | sed "s/${pname}//gi"          \
             );
         fi;
-        local depon=$(plain_profile "${pname}" 'depends_on');
+        local depon=$(plain_profile "${pname}" 'depends');
         if [[ -n "${depon}" ]]; then
             profile_list=$(                     \
                 echo "${profile_list}"          \
@@ -511,10 +511,10 @@ handle_profile_depends(){
     local profile="${1}";
     local file_name="${2}";
     local file_index="${3}"
-    local depends_on=$(plain_profile "${profile}" 'depends_on');
-    if [[ -n "${depends_on}" ]]; then
+    local depends=$(plain_profile "${profile}" 'depends');
+    if [[ -n "${depends}" ]]; then
         local pred_prof=$(profile_mark  \
-            "${depends_on}"             \
+            "${depends}"             \
             "${file_name}"              \
             "${file_index}"             \
         );
