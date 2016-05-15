@@ -9,22 +9,17 @@ profile:
     # and it will be used only for inheritance.
     is_abstract: true
     output_dir_name: ./out
+    source: /home/w495/Videos/input/0000*.MTS
     ignore:
       start: 00:00:00
       stop: 00:00:30
       duration:  00:00:30
-      source: /home/w495/Videos/input/00003.MTS
-
-  tvzavr_x1:
-    is_abstract: true
-    passes: 1
 
   ## Semi-TVzavr's profile for HDTV devices.
   ## Check in the player on the https://www.tvzavr.ru/
   tvzavr_h264_x2_1080p_hd:
     # Other options are inherited from `base`
     extends: base
-    is_abstract: true
     passes: 2
     video:
       width:   -1  # 1920 # for 16:9
@@ -57,7 +52,6 @@ profile:
   ## Check in the player on the https://www.tvzavr.ru/
   tvzavr_h264_x2_0576p_hi:
     extends: tvzavr_h264_x2_0720p_hd
-    is_abstract: true
     video:
       width:  -1  # 1024 # for 16:9
       height: 576 # SD
@@ -73,7 +67,6 @@ profile:
   ## Check in the player on the https://www.tvzavr.ru/
   tvzavr_h264_x2_0480p_hi:
     extends: tvzavr_h264_x2_0576p_hi
-    is_abstract: true
     video:
       width:   -1 # 854 # for 16:9
       height:  480
@@ -82,7 +75,6 @@ profile:
   ## Check in the player on the https://www.tvzavr.ru/
   tvzavr_h264_x2_0360p_nr:
     extends: tvzavr_h264_x2_0480p_hi
-    is_abstract: true
     video:
       width:   -1 # 640 # for 16:9
       height:  360
@@ -95,7 +87,6 @@ profile:
   ## Check in the player on the https://www.tvzavr.ru/.
   tvzavr_h264_x2_0270p_lw:
     extends: tvzavr_h264_x2_0360p_nr
-    is_abstract: true
     video:
       width:   -1 # 480 # for 16:9
       height:  270
@@ -109,7 +100,6 @@ profile:
   ## Semi-TVzavr's casted profile for old mobile devices
   tvzavr_h264_x2_0240p_lw:
     extends: tvzavr_h264_x2_0270p_lw
-    is_abstract: true
     video:
       width:   -1
       height:  240
@@ -118,7 +108,6 @@ profile:
   ## Semi-TVzavr's profile for small devices
   tvzavr_h264_x2_0120p_lw:
     extends: tvzavr_h264_x2_0240p_lw
-    depends_on: tvzavr_h264_x2_0120p_pre
     video:
       width:   -1
       height:  120
@@ -126,15 +115,6 @@ profile:
     audio:
       bitrate: 32k
 
-  ## Semi-TVzavr's profile for small devices
-  tvzavr_h264_x2_0120p_pre:
-    extends: tvzavr_h264_x2_0240p_lw
-    video:
-      width:   -1
-      height:  120
-      bitrate: 100k
-    audio:
-      bitrate: 32k
 
 
 #
