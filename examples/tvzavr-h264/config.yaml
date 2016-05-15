@@ -1,3 +1,7 @@
+self:
+  compatibility:
+    from: 0.1462762887
+
 ffmpeg:
   bin: /usr/bin/ffmpeg
   threads: 0

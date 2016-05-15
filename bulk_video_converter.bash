@@ -18,7 +18,7 @@ readonly START_TIME_NS=$(($(date +%s%N)));
 # Self name.
 readonly SCRIPT_NAME=$(basename $0);
 
-readonly VERSION='0.1462762887';
+readonly VERSION='0.1463339970';
 
 # Internal constants.
 readonly TMP_DIR_BASE_NAME="/tmp/${SCRIPT_NAME}"
@@ -802,6 +802,11 @@ handle_video_options(){
     common_options+=$(if_exists "-aspect:v '%s'" ${aspect});
 
 
+
+    local pixel_format=$(profile ${profile_name} video pixel_format);
+    common_options+=$(pix_fmt "-pix_fmt '%s'" ${pixel_format})
+
+
     common_options+=$(if_exists "-vf 'scale=%s:%s'" ${width} ${height});
     local options="${codec_options} ${common_options}";
     verbose_block "video@%8s" "${options}";
@@ -902,6 +907,9 @@ handle_video_codec_options(){
         "-compression_level '%s'" ${compression_level}      \
     );
 
+    local flags=$(profile ${profile_name} video codec flags);
+    codec_options+=$(if_exists "-flags '%s'" ${flags})
+
     echo "${codec_options}"
 }
 
@@ -947,9 +955,6 @@ handle_video_xvid_options(){
 
     codec_options+="-codec:v 'libxvid' ";
     codec_options+="-vtag 'xvid'";
-
-    local flags=$(profile ${profile_name} video codec flags);
-    codec_options+=$(if_exists "-flags '%s'" ${flags})
 
     echo "${codec_options}"
 }
@@ -1090,7 +1095,7 @@ handle_audio_options(){
     local bitrate="$(profile ${profile_name} audio bitrate)";
     local volume="$(profile ${profile_name} audio volume)";
 
-    local framerate="$(profile ${profile_name} audio framerate)";
+    local samplerate="$(profile ${profile_name} audio samplerate)";
 
     local filter_options=$(handle_audio_filter_options  \
        "${profile_name}"                                \
@@ -1098,7 +1103,7 @@ handle_audio_options(){
     );
     local common_options='';
 
-    common_options+=$(if_exists "-ar '%s'" ${framerate});
+    common_options+=$(if_exists "-ar '%s'" ${samplerate});
     common_options+=$(if_exists "-b:a '%s'" ${bitrate});
 
     common_options+=$(handle_audio_channels_options \
