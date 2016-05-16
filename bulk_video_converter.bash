@@ -18,7 +18,7 @@ readonly START_TIME_NS=$(($(date +%s%N)));
 # Self name.
 readonly SCRIPT_NAME=$(basename $0);
 
-readonly VERSION='0.1463339970';
+readonly VERSION='0.1463347060';
 
 # Internal constants.
 readonly TMP_DIR_BASE_NAME="/tmp/${SCRIPT_NAME}"
@@ -410,7 +410,7 @@ reorder_profile_sequence(){
                 | sed "s/${name}//gi"                           \
             );
         fi;
-        local prev=$(plain_profile "${name}" 'depends');
+        local prev=$(plain_profile "${name}" 'after');
         if [[ -n "${prev}" ]]; then
             profile_list=$(                                     \
                 echo "${profile_list}"                          \
@@ -509,18 +509,23 @@ handle_profile_depends(){
     local profile="${1}";
     local file_name="${2}";
     local file_index="${3}"
-    local depends=$(plain_profile "${profile}" 'depends');
-    if [[ -n "${depends}" ]]; then
-        local prev=$(profile_mark  \
-            "${depends}"             \
-            "${file_name}"              \
-            "${file_index}"             \
-        );
-        while [[ ! -f "${prev}" ]]; do
-            sleep 1;
-            $(notice "NO ${prev}. Wait ... ");
+
+    local depends_list=$(plain_profile "${profile}" 'depends');
+    if [[ -n "${depends_list}" ]]; then
+         for depends in ${depends_list}; do
+            local prev=$(profile_mark  \
+                "${depends}"             \
+                "${file_name}"              \
+                "${file_index}"             \
+            );
+            if [[ -n "${prev}" ]]; then
+                while [[ ! -f "${prev}" ]]; do
+                    sleep 1;
+                    $(notice "NO ${prev}. Wait ... ");
+                done;
+                $(notice "${prev} exists");
+            fi;
         done;
-        $(notice "${prev} exists");
     fi;
 }
 
@@ -786,8 +791,7 @@ handle_video_options(){
     local bufsize="$(profile ${profile_name} video bufsize)";
     local maxrate="$(profile ${profile_name} video maxrate)";
     local minrate="$(profile ${profile_name} video minrate)";
-    local width="$(profile ${profile_name} video width)";
-    local height="$(profile ${profile_name} video height)";
+
 
     local aspect="$(profile ${profile_name} video aspect)";
 
@@ -801,17 +805,42 @@ handle_video_options(){
     common_options+=$(if_exists "-bufsize '%s'" ${bufsize});
     common_options+=$(if_exists "-aspect:v '%s'" ${aspect});
 
-
-
+    # TODO: think about compatibility with progressive \ interlaced
     local pixel_format=$(profile ${profile_name} video pixel_format);
-    common_options+=$(pix_fmt "-pix_fmt '%s'" ${pixel_format})
+    common_options+=$(if_exists "-pix_fmt '%s'" ${pixel_format})
 
+    local filter=$(handle_video_filter_options "${profile_name}")
+    common_options+=$(if_exists "-filter:v '%s'" "${filter}");
 
-    common_options+=$(if_exists "-vf 'scale=%s:%s'" ${width} ${height});
     local options="${codec_options} ${common_options}";
     verbose_block "video@%8s" "${options}";
     echo ${options}
 }
+
+handle_video_filter_options(){
+    local profile_name="${1}";
+    local input_file_name="${2}";
+
+    local filter_options='';
+
+    local progressive=$(profile_default \
+        'true' \
+        "${profile_name}" \
+        video \
+        progressive \
+    );
+    filter_options+=$(if_exists ", yadif=1:-1:0" ${progressive});
+
+    local width="$(profile ${profile_name} video width)";
+    local height="$(profile ${profile_name} video height)";
+    filter_options+=$(if_exists ", scale=%s:%s" ${width} ${height});
+
+    filter_options=$(echo "${filter_options}" | sed -E 's/\s//gi');
+
+    filter_options=${filter_options:1};
+    echo "${filter_options}";
+}
+
 
 handle_video_codec_options(){
     local profile_name="${1}";
@@ -891,14 +920,27 @@ handle_video_codec_options(){
         *) ;;
     esac;
 
+    codec_options+=$(handle_video_codec_common_options ${profile_name});
+    codec_options+=$(handle_video_codec_gop_options ${profile_name});
+    codec_options+=$(handle_video_codec_flags_options ${profile_name});
+
+    echo "${codec_options}"
+}
+
+handle_video_codec_common_options(){
+    local profile_name="${1}";
+    local input_file_name="${2}";
+
+    local codec_options='';
+
     local qscale="$(profile ${profile_name} video qscale)";
     qscale=$(profile_default        \
         "${qscale}"                 \
         "${profile_name}"           \
         video codec qscale          \
     );
-
     codec_options+=$(if_exists "-qscale:v '%s'" ${qscale})
+
 
     local compression_level=$(profile "${profile_name}"     \
         video codec compression_level                       \
@@ -907,10 +949,52 @@ handle_video_codec_options(){
         "-compression_level '%s'" ${compression_level}      \
     );
 
-    local flags=$(profile ${profile_name} video codec flags);
-    codec_options+=$(if_exists "-flags '%s'" ${flags})
 
-    echo "${codec_options}"
+    echo "${codec_options}";
+}
+
+
+handle_video_codec_gop_options(){
+    local profile_name="${1}";
+    local input_file_name="${2}";
+    local gop_options='';
+    local gop_size=$(profile "${profile_name}"  video codec gop size);
+    gop_options+=$(if_exists "-g '%s'" ${gop_size});
+    local min_size=$(profile "${profile_name}"  video codec gop min);
+    gop_options+=$(if_exists "-keyint_min '%s'" ${min_size});
+    local gop_closed=$(profile ${profile_name} video codec gop closed);
+    gop_options+=$(if_exists "-flags '+cgop'" ${gop_closed})
+    local no_scenecut=$(profile \
+        "${profile_name}"       \
+        video                   \
+        codec                   \
+        gop                     \
+        no_scenecut             \
+    );
+    gop_options+=$(if_exists "-sc_threshold '0'" ${no_scenecut});
+    local scenecut=$(profile    \
+        "${profile_name}"       \
+        video                   \
+        codec                   \
+        gop                     \
+        scenecut                \
+    );
+    gop_options+=$(if_exists "-sc_threshold '%s'" ${scenecut});
+    echo "${gop_options}";
+}
+
+handle_video_codec_flags_options(){
+    local profile_name="${1}";
+    local input_file_name="${2}";
+
+    local flag_options='';
+
+    local flags=$(profile ${profile_name} video codec flags)
+    for flag in $flags; do
+        flag_options+=$(if_exists "-flags '%s'" ${flag})
+    done;
+
+    echo "$flag_options";
 }
 
 handle_video_flv_options(){
@@ -951,11 +1035,8 @@ handle_video_xvid_options(){
     local profile_name="${1}";
     local input_file_name="${2}";
     local codec_options='';
-
-
     codec_options+="-codec:v 'libxvid' ";
     codec_options+="-vtag 'xvid'";
-
     echo "${codec_options}"
 }
 
@@ -988,13 +1069,78 @@ handle_video_h264_options(){
         ${profile_name}                                     \
     );
 
-    local qmin=$(profile ${profile_name} video codec qmin);
-    local qmax=$(profile ${profile_name} video codec qmax);
-    local opts=$(profile ${profile_name} video codec opts);
 
+    # Minimum quantizer. Doesn't need to be changed.
+    # Recommended default: -qmin 10
+    local qmin=$(profile ${profile_name} video codec qmin);
     codec_options+=$(if_exists "-qmin '%s'" ${qmin});
+
+    # Maximum quantizer. Doesn't need to be changed.
+    # Recommended default: -qmax 51
+    local qmax=$(profile ${profile_name} video codec qmax);
     codec_options+=$(if_exists "-qmax '%s'" ${qmax});
-    codec_options+=$(if_exists "-x264opts '%s'" ${opts});
+
+    # Qscale difference between P-frames and B-frames.
+    local b_qfactor=$(profile ${profile_name} video codec b_qfactor);
+    codec_options+=$(if_exists "-i_qfactor '%s'" ${b_qfactor});
+
+    # Qscale difference between I-frames and P-frames.
+    # Recommended: -i_qfactor 0.71
+    local i_qfactor=$(profile ${profile_name} video codec i_qfactor);
+    codec_options+=$(if_exists "-i_qfactor '%s'" ${i_qfactor});
+
+    # Set max QP step. Recommended default: -qdiff 4
+    local qdiff=$(profile ${profile_name} video codec qdiff);
+    codec_options+=$(if_exists "-qdiff '%s'" ${qdiff});
+
+    # QP difference between chroma and luma.
+    local chromaoffset=$(profile ${profile_name} video codec chromaoffset);
+    codec_options+=$(if_exists "-qdiff '%s'" ${chromaoffset});
+
+    # CABAC is the default entropy encoder used by x264.
+    # Though somewhat slower on both the decoding and encoding end,
+    # it offers 10-15% improved compression on live-action sources
+    # and considerably higher improvements on animated sources,
+    # especially at low bitrates.
+    # It is also required for the use of trellis quantization.
+    # Disabling CABAC may somewhat improve decoding performance,
+    # especially at high bitrates.
+    # CABAC is not allowed in Baseline Profile.
+    # Recommended default:
+    #   -coder 1 (CABAC enabled)
+
+    local no_cabac=$(profile ${profile_name} video codec no_cabac);
+    codec_options+=$(if_exists "-coder '0'" ${no_cabac});
+    local use_cabac=$(profile ${profile_name} video codec use_cabac);
+    codec_options+=$(if_exists "-coder '1'" ${use_cabac});
+    local coder=$(profile ${profile_name} video codec coder);
+    codec_options+=$(if_exists "-coder '%s'" ${coder});
+
+
+    # One of H.264's most useful features is the abillity to reference
+    # frames other than the one immediately prior to the current frame.
+    # This parameter lets one specify how many references can be used,
+    # through a maximum of 16. Increasing the number of refs
+    # increases the DPB (Decoded Picture Buffer) requirement,
+    # which means hardware playback devices will often have strict
+    # limits to the number of refs they can handle.
+    # In live-action sources, more reference have limited use
+    # beyond 4-8, but in cartoon sources up to the maximum value
+    # of 16 is often useful. More reference frames require
+    # more processing power because every frame is searched by
+    # the motion search (except when an early skip decision is made).
+    # The slowdown is especially apparent with slower motion
+    # estimation methods.
+    # Recommended default:
+    #   -refs 6
+
+    local refs=$(profile ${profile_name} video codec refs);
+    codec_options+=$(if_exists "-refs '%s'" ${refs});
+
+    local h26X_codec_options=$(handle_video_h26X_codec_options  \
+        "${profile_name}"                                       \
+    );
+    codec_options+=$(if_exists "-x264opts '%s'" "${h26X_codec_options}");
 
     echo "${codec_options}"
 }
@@ -1011,29 +1157,59 @@ handle_video_hevc_options(){
         ${profile_name}                                     \
     );
 
-    local opts=$(profile ${profile_name} video codec opts)
-    codec_options+=$(if_exists "-x265-params '%s'" ${opts});
+    local h26X_codec_options=$(handle_video_h26X_codec_options  \
+        "${profile_name}"                                       \
+    );
+    codec_options+=$(if_exists "-x265-params '%s'" "${h26X_codec_options}");
     echo "${codec_options}"
 }
-
-
 
 handle_video_h26X_options(){
     local profile_name="${1}";
     local input_file_name="${2}";
 
-    local preset=$(profile ${profile_name} video codec preset);
-    local level=$(profile ${profile_name} video codec level);
-    local weightp=$(profile ${profile_name} video codec weightp);
-    local bframes=$(profile ${profile_name} video codec bframes);
-
     codec_options='';
+
+    local preset=$(profile ${profile_name} video codec preset);
     codec_options+=$(if_exists "-preset '%s'" ${preset});
+
+    local level=$(profile ${profile_name} video codec level);
     codec_options+=$(if_exists "-level:v '%s'" ${level});
+
+    local bframes=$(profile ${profile_name} video codec bframes);
     codec_options+=$(if_exists "-bf '%s'" ${bframes});
+
+    local scenecut=$(profile "${profile_name}" video codec scenecut);
+    codec_options+=$(if_exists "-sc_threshold '%s'" ${scenecut});
+
 
     echo "${codec_options}"
 }
+
+handle_video_h26X_codec_options(){
+    local profile_name="${1}";
+    local input_file_name="${2}";
+    local opts_options='';
+
+
+    local keyint=$(profile ${profile_name} video codec opts keyint);
+    opts_options+=$(if_exists ":keyint=%s" ${keyint});
+
+    local min_keyint=$(profile ${profile_name} video codec opts min_keyint);
+    opts_options+=$(if_exists ":min-keyint=%s" ${min_keyint});
+
+    local no_scenecut=$(profile ${profile_name} video codec opts no_scenecut);
+    opts_options+=$(if_exists ":no-scenecut" ${no_scenecut});
+
+#    local raw_opts=$(profile ${profile_name} video codec opts);
+#    opts_options+=$(if_exists ":%s" ${raw_opts});
+
+    opts_options=$(echo "${opts_options}"| sed -E 's/\s//gi');
+    opts_options=${opts_options:1}
+
+    echo "${opts_options}";
+}
+
 
 handle_video_vp8_options(){
     local profile_name="${1}";
@@ -1231,6 +1407,20 @@ if_exists() {
         fi;
     done
     if [[ -n "${value}" && "${value}" != "null" ]]; then
+        printf " ${output_format} " ${value};
+    fi;
+}
+
+
+if_not_exists() {
+    local output_format="${1}";
+    local value="${@:2}";
+    for var in "${@:2}" ;do
+        if [[ -z "${var}" || "${var}" == "null" ]]; then
+            value='null';
+        fi;
+    done
+    if [[ -z "${value}" || "${value}" == "null" ]]; then
         printf " ${output_format} " ${value};
     fi;
 }

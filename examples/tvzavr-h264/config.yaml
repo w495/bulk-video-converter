@@ -1,6 +1,6 @@
 self:
   compatibility:
-    from: 0.1462762887
+    from: 0.1463347060
 
 ffmpeg:
   bin: /usr/bin/ffmpeg
@@ -13,7 +13,7 @@ profile:
     # and it will be used only for inheritance.
     is_abstract: true
     output_dir_name: ./out
-    source: /home/w495/Videos/input/0000*.MTS
+    source: /home/w495/Videos/input/00001.MTS
     ignore:
       start: 00:00:00
       stop: 00:00:30
@@ -34,7 +34,10 @@ profile:
         profile: high
         weightp: smart
         bframes: 3
-        opts: "keyint=96:min-keyint=96:no-scenecut"
+        opts:
+          keyint: 96
+          min_keyint: 96
+          no_scenecut: true
         level: 3.1
     audio:
       codec:

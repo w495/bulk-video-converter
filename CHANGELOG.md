@@ -15,3 +15,15 @@ p1:
     depends: p0
 
 ```
+
+
+# 0.1463347060
+
+1.  Add multiple templates for `depends`.
+2.  Add YAML-based handling for h264 and h265 options.
+3.  Add some new codec options (for h264).
+4.  Add permanent `yadif=1:-1:0` video filter. 
+    You can to switch it off with setting `prorgressive: null` 
+    for `your_profile/video/prorgressive`.
+
+

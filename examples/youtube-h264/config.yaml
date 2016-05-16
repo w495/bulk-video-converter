@@ -1,0 +1,92 @@
+self:
+  compatibility:
+    from: 0.1463347060
+
+ffmpeg:
+  bin: /usr/bin/ffmpeg
+  threads: 0
+
+# See: https://www.ffmpeg.org/ffmpeg-codecs.html
+# Also see:
+# https://www.virag.si/2015/06/encoding-videos-for-youtube-with-ffmpeg/
+profile:
+
+  base:
+    # you can mark profile as is_abstract
+    # and it will be used only for inheritance.
+    is_abstract: true
+    output_dir_name: ./out
+    source: /home/w495/Videos/input/00001.MTS
+    start: 00:00:00
+    stop: 00:00:30
+    ignore:
+      start: 00:00:00
+      stop: 00:00:30
+      duration:  00:00:30
+
+  youtube_recommended_upload_encoding_settings:
+    # from https://support.google.com/youtube/answer/1722171
+    is_abstract: true       # Dummy profile
+    extends: base           #   that extends `base`.
+    format: mp4             # Container: MP4
+    video:                  # Video Settings
+      codec:                #   Video Codec Settings
+        name : h264         #     Video codec: H.264
+        profile: high       #     High Profile
+        bframes: 2          #     2 consecutive B frames
+        framerate: 25       #     Set framerate to 25.
+        gop:                #     Group of pictures Settings.
+          size: 13          #       GOP of half the frame rate
+          min: 13           #       Minimal GOP size.
+          closed: true      #       Closed GOP
+          no_scenecut: true #       Disable scenecut detecting
+        use_cabac: true     #     CABAC (default entropy encoder)
+      rate_factor: 21       # Variable bitrate (constant rate factor).
+      progressive: true     # Progressive scan (no interlacing).
+      pixel_format: yuv420p # Chroma subsampling: 4:2:0
+    audio:                  # Audio Settings
+      codec:                #   Audio Codec Settings
+        name: aac           #     Audio codec: AAC-LC
+      channels:   stereo    #   Channels: Stereo or Stereo + 5.1
+      maxrate:    384k      #   384k Recommended for stereo
+      samplerate: 48000     #   Sample rate 96khz or 48khz
+
+  youtube_1080p:
+    extends: youtube_recommended_upload_encoding_settings
+    video:
+      width:   -1     # 1920 # for 16:9
+      height:  1080   # 1080p
+      maxrate: 8192k  # 8.0 Mbps is recommended for 1080p
+    audio:
+      channels: 5.1   # Channels: Stereo or Stereo + 5.1
+      maxrate: 512k   # Recommended for 5.1
+#
+#  youtube_720p:
+#    extends: youtube_recommended_upload_encoding_settings
+#    video:
+#      width:   -1
+#      height:  720    # 1280 # for 16:9
+#      maxrate: 5120k  # 5.0 Mbps
+#    audio:
+#      channels: stereo
+#      maxrate: 384k
+#
+#  youtube_480p:
+#    extends: youtube_recommended_upload_encoding_settings
+#    video:
+#      width:   -1
+#      height:  480    # 1280 # for 16:9
+#      maxrate: 2560k  # 2.5 Mbps
+#    audio:
+#      channels: mono
+#      maxrate: 128k
+#
+#  youtube_360p:
+#    extends: youtube_recommended_upload_encoding_settings
+#    video:
+#      width:   -1
+#      height:  360    # 1280 # for 16:9
+#      maxrate: 1024k  # 1 Mbps
+#    audio:
+#      channels: mono
+#      maxrate: 128k
