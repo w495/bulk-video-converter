@@ -31,6 +31,7 @@ profile:
       codec:
         name : h264
         level: 4.2
+        #preset: veryfast
         profile: high
         weightp: smart
         bframes: 3
