@@ -17,8 +17,6 @@ profile:
     is_abstract: true
     output_dir_name: ./out
     source: /home/w495/Videos/input/00001.MTS
-    start: 00:00:00
-    stop: 00:00:30
     ignore:
       start: 00:00:00
       stop: 00:00:30
@@ -29,6 +27,7 @@ profile:
     is_abstract: true       # Dummy profile
     extends: base           #   that extends `base`.
     format: mp4             # Container: MP4
+    passes: 2
     video:                  # Video Settings
       codec:                #   Video Codec Settings
         name : h264         #     Video codec: H.264
@@ -41,7 +40,7 @@ profile:
           closed: true      #       Closed GOP
           no_scenecut: true #       Disable scenecut detecting
         use_cabac: true     #     CABAC (default entropy encoder)
-      rate_factor: 21       # Variable bitrate (constant rate factor).
+      #rate_factor: 21       # Variable bitrate (constant rate factor).
       progressive: true     # Progressive scan (no interlacing).
       pixel_format: yuv420p # Chroma subsampling: 4:2:0
     audio:                  # Audio Settings
@@ -56,7 +55,9 @@ profile:
     video:
       width:   -1     # 1920 # for 16:9
       height:  1080   # 1080p
+      bitrate: 8192k
       maxrate: 8192k  # 8.0 Mbps is recommended for 1080p
+      bufsize: 16384k
     audio:
       channels: 5.1   # Channels: Stereo or Stereo + 5.1
       maxrate: 512k   # Recommended for 5.1

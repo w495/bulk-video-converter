@@ -632,10 +632,14 @@ run_concrete_profile(){
     for pass in $(seq 1 ${passes}); do
         local pass_options='';
         local output_pass_file_name="${output_file_name}";
+        local output_audio_options="${audio_options}";
         if [[ ${passes} > 1 ]]; then
             pass_options+="-pass ${pass} "
             pass_options+="-passlogfile ${pass_log_file_prefix}";
             if [[ ${pass} <  ${passes} ]]; then
+                ## Do not use `-an` due to ffmpeg bug:
+                # See http://j.mp/Incomplete-MB-tree-stats-file
+                # output_audio_options='-an';
                 output_pass_file_name="/dev/null"
             fi;
         fi;
@@ -652,7 +656,7 @@ run_concrete_profile(){
             "-i '${input_file_name}'"                               \
             ${video_options}                                        \
             ${pass_options}                                         \
-            ${audio_options}                                        \
+            ${output_audio_options}                                 \
             ${global_output_options}                                \
             ${output_format_options}                                \
             "-y '${output_pass_file_name}'"                         \
