@@ -18,7 +18,7 @@ readonly START_TIME_NS=$(($(date +%s%N)));
 # Self name.
 readonly SCRIPT_NAME=$(basename $0);
 
-readonly VERSION='0.1463347060';
+readonly VERSION='0.1463867480';
 
 # Internal constants.
 readonly TMP_DIR_BASE_NAME="/tmp/${SCRIPT_NAME}"
@@ -58,6 +58,18 @@ declare FFMPEG_THREADS=1;
 declare FFMPEG_START;
 declare FFMPEG_STOP;
 declare FFMPEG_DURATION;
+
+
+declare ASYNC_FILES_DEFAULT='true';
+declare ASYNC_PROFILES_DEFAULT='true';
+
+declare SELF_IS_ASYNC;
+declare SELF_IS_ASYNC_FILES;
+declare SELF_IS_ASYNC_PROFILES;
+declare SELF_NO_ASYNC;
+declare SELF_NO_ASYNC_FILES;
+declare SELF_NO_ASYNC_PROFILES;
+
 declare -A PROFILE_MAP;
 
 # ------------------------------------------------------------
@@ -116,6 +128,7 @@ declare COLOR_DEL;
 usage() {
     local C0="${COLOR_OFF}"
     local IC="${COLOR_BOLD}${COLOR_LIGHT_CYAN}"
+    local OC="${COLOR_LIGHT_MAGENTA}"
     local AC="${COLOR_UNDERLINED}${COLOR_LIGHT_GREEN}"
     local EC="${COLOR_DARK_YELLOW}"
     local ETC="${COLOR_LIGHT_YELLOW}"
@@ -142,7 +155,8 @@ ${COLOR_REVERSE} Options:${C0}
     ${IC}-i, --input${C0} ${AC}<filename.mp4|:0.0>${C0}
         name of input video file of display. It supports mask for
         file names. If several files are passed, they will be handled
-        in parallel way. Mind this fact while operating the script.
+        in parallel way by default. (See ${OC}--no-async*${C0} options).
+        Mind this fact while operating the script.
         ${ETC}Examples:${C0}
             ${EC}${SCRIPT_NAME} -i ./video.mts${C0}
             ${EC}${SCRIPT_NAME} -i ./part1.mp4 ./part2.mp4${C0}
@@ -184,6 +198,12 @@ ${COLOR_REVERSE} Options:${C0}
     ${IC}-F, --ffmpeg-log-dir${C0} ${AC}<dir name>${C0}
         folder for ffmpeg logs.
         default is ${FC}'${LOG_DIR_BASE_NAME}'${C0}.
+    ${IC}--no-async${C0}
+        switch off asynchronous handling for files and profiles.
+    ${IC}--no-async-files${C0}
+        switch off asynchronous handling only for files.
+    ${IC}--no-async-profiles${C0}
+        switch off asynchronous handling only for profiles.
     ${IC}-h, --help${C0}
         shows this text.
     ${IC}-P, --pass-log-dir${C0} ${AC}<dir name>${C0}
@@ -197,6 +217,27 @@ ${COLOR_REVERSE} Options:${C0}
         ${WTC}WARNING:${C0}
           ${WC}There is no reason to set this option
           in a common situation.${C0}
+    ${IC}--async${C0}
+        switch on asynchronous handling for files and profiles.
+        ${WTC}WARNING:${C0}
+          ${WC}This is a default!
+          There is no reason to set this option
+          in a common situation.${C0}
+        Use ${OC}--no-async*${C0} options to switch it off.
+    ${IC}--async-files${C0}
+        switch on asynchronous handling only for files.
+        ${WTC}WARNING:${C0}
+          ${WC}This is a default!
+          There is no reason to set this option
+          in a common situation.${C0}
+        Use ${OC}--no-async*${C0} options to switch it off.
+    ${IC}--async-profiles${C0}
+        switch on asynchronous handling only for profiles.
+        ${WTC}WARNING:${C0}
+          ${WC}This is a default!
+          There is no reason to set this option
+          in a common situation.${C0}
+        Use ${OC}--no-async*${C0} options to switch it off.
 ${COLOR_REVERSE} Version:${C0}
     ${VERSION}
 ${COLOR_REVERSE} Authors:${C0}
@@ -255,10 +296,15 @@ main(){
 
 
     $(verbose_block "version@%2s" "${VERSION}");
+
     $(verbose_block "datetime@%2s" "'$(date '+%Y:%m:%d %H.%M.%S')'");
 
     # non-local function `configure` — sets global options of script.
     configure "${@}";
+
+    $(verbose_block "async_for_files@%2s" "$(use_async_for_files)");
+    $(verbose_block "async_for_profiles@%2s" "$(use_async_for_profiles)");
+
     $(start_up);
     $(handle_file_sequence "${INPUT_FILE_NAME_LIST}")
     # $(clean_up);
@@ -280,19 +326,36 @@ handle_file_sequence(){
     fi;
 
     local -i file_index=1;
+    local child_pids='';
     for file_name in ${file_name_sequence} ; do
+
         # Handle each file in parallel.  But log about it sequentially.
-        $(handle_file_async                                         \
-            "${file_name}"                                          \
-            "${file_index}"                                         \
-            "${file_log_prefix}-${file_index}"                      \
-            "${concrete_prof}"                                      \
-            "${profile_map_name}"                                   \
-        ) &
+        if [[ "$(use_async_for_files)" == 'true' ]]; then
+            $(handle_file_async                                     \
+                "${file_name}"                                      \
+                "${file_index}"                                     \
+                "${file_log_prefix}-${file_index}"                  \
+                "${concrete_prof}"                                  \
+                "${profile_map_name}"                               \
+            ) &
+            child_pids+="$! "
+        else
+            $(handle_file               \
+                "${file_name}"          \
+                "${file_index}"         \
+                "${concrete_prof}"      \
+                "${profile_map_name}"   \
+            );
+        fi;
+
         file_index+=1
     done;
-    wait;
-    cat ${file_log_prefix}* 1>& ${OUT_LOG_STREAM}
+    if [[ "$(use_async_for_files)" == 'true' ]]; then
+        debug "wait file ${child_pids}"
+        wait "${child_pids}";
+        debug "ok file ${child_pids}"
+        cat ${file_log_prefix}* 1>& ${OUT_LOG_STREAM}
+    fi;
 
 }
 
@@ -303,9 +366,7 @@ handle_file_async(){
     local concrete_profile="${4}";
     local profile_map_name="${5}";
     local pid_suffix="$$-${BASH_SUBSHELL}-${BASHPID}";
-
     #$(notice "handles file async with PID ${pid_suffix}");
-
     (
         $(handle_file               \
             "${input_file_name}"    \
@@ -314,7 +375,6 @@ handle_file_async(){
             "${profile_map_name}"   \
         );
     ) 2> "${file_log}-${pid_suffix}.log"
-
 }
 
 handle_file(){
@@ -327,6 +387,7 @@ handle_file(){
         "${input_file_name}"                \
         "no such file: ${input_file_name}." \
     );
+
 
     if [[ -n ${concrete_profile} ]]; then
 
@@ -386,16 +447,26 @@ handle_profile_sequence(){
     local profile_log_prefix="${PROFILE_LOG_PREFIX}-${file_index}";
     local -i profile_index=1;
 
+    local child_pids='';
     for name in ${profile_list}; do
-        $(handle_profile_async                                      \
-            "${name}"                                               \
-            "${input_file_name}"                                    \
-            "${profile_log_prefix}-${profile_index}"                \
-        ) &
+        if [[ "$(use_async_for_profiles)" == 'true' ]]; then
+            $(handle_profile_async                                  \
+                "${name}"                                           \
+                "${input_file_name}"                                \
+                "${profile_log_prefix}-${profile_index}"            \
+            ) &
+            child_pids+="$! ";
+        else
+            $(handle_profile "${name}" "${input_file_name}");
+        fi;
         profile_index+=1
     done;
-    wait;
-    cat ${profile_log_prefix}* 1>& ${OUT_LOG_STREAM}
+    if [[ "$(use_async_for_profiles)" == 'true' ]]; then
+        debug "wait profile ${child_pids}"
+        wait ${child_pids};
+        debug "ok profile ${child_pids}"
+        cat ${profile_log_prefix}* 1>& ${OUT_LOG_STREAM}
+    fi;
 }
 
 
@@ -1528,6 +1599,42 @@ start_up (){
     fi;
 }
 
+
+use_async_for_files(){
+    local default="${ASYNC_FILES_DEFAULT}";
+    if [[                                       \
+        "${SELF_IS_ASYNC}" == 'true'            \
+        || "${SELF_IS_ASYNC_FILES}" == 'true'   \
+    ]]; then
+        echo 'true';
+    elif  [[                                     \
+        "${SELF_NO_ASYNC}" == 'true'            \
+        || "${SELF_NO_ASYNC_FILES}" == 'true'   \
+    ]]; then
+        echo 'false';
+    else
+        echo "${default}";
+    fi;
+}
+
+use_async_for_profiles(){
+    local default="${ASYNC_PROFILES_DEFAULT}";
+    if [[                                       \
+        "${SELF_IS_ASYNC}" == 'true'            \
+        || "${SELF_IS_ASYNC_PROFILES}" == 'true'   \
+    ]]; then
+        echo 'true';
+    elif  [[                                     \
+        "${SELF_NO_ASYNC}" == 'true'            \
+        || "${SELF_NO_ASYNC_PROFILES}" == 'true'   \
+    ]]; then
+        echo 'false';
+    else
+        echo "${default}";
+    fi;
+}
+
+
 clean_up (){
     if [[ -d "${TMP_DIR_BASE_NAME}" ]]; then
         notice "deletes directory ${TMP_DIR_BASE_NAME}"
@@ -1591,6 +1698,12 @@ parse_options (){
             help,                                   \
             verbose,                                \
             quiet,                                  \
+            async,                                  \
+            async-files,                            \
+            async-profiles,                         \
+            no-async,                               \
+            no-async-files,                         \
+            no-async-profiles,                      \
             dry-run'                                \
         -n "$0"                                     \
         -- "${@}");
@@ -1658,6 +1771,24 @@ parse_options (){
                 shift;;
             -q|--quiet)
                 VERBOSE='false';
+                shift;;
+            --async)
+                SELF_IS_ASYNC='true';
+                shift;;
+            --async-files)
+                SELF_IS_ASYNC_FILES='true';
+                shift;;
+            --async-profiles)
+                SELF_NO_ASYNC_PROFILES='true';
+                shift;;
+            --no-async)
+                SELF_NO_ASYNC='true';
+                shift;;
+            --no-async-files)
+                SELF_NO_ASYNC_FILES='true';
+                shift;;
+            --no-async-profiles)
+                SELF_NO_ASYNC_PROFILES='true';
                 shift;;
             '--'|'')
                 shift 1;

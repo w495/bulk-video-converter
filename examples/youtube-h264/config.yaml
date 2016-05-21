@@ -1,7 +1,8 @@
 self:
+  no_async: true
   compatibility:
-    from: 0.1463347060
-    x: 55.80995 37.49775
+    from: 0.1463867480
+    geo: 55.80995 37.49775
 
 ffmpeg:
   bin: /usr/bin/ffmpeg
@@ -17,7 +18,7 @@ profile:
     # and it will be used only for inheritance.
     is_abstract: true
     output_dir_name: ./out
-    source: /home/w495/Videos/input/00004.MTS
+    source: /home/w495/Videos/input/00000.MTS
     ignore:
       start: 00:00:00
       stop: 00:00:30
@@ -71,17 +72,17 @@ profile:
     video:              # Use constant rate factor. Only for one pass.
       rate_factor: 21   # Variable bitrate (constant rate factor).
 
-#  youtube_720p:
-#    extends: youtube_recommended_upload_encoding_settings
-#    video:              # Video Settings
-#      codec_level: 3.2  #   For decoding restrictions
-#      width:   -1       #   1280 # for 16:9
-#      height:  720      #   720p
-#      bitrate: 5120k    #   5.0 Mbps
-#    audio:              # Audio Settings
-#      channels: stereo  #   Channels: Stereo or Stereo + 5.1
-#      bitrate: 384k     #   Recommended for stereo
-#
+  youtube_720p:
+    extends: youtube_recommended_upload_encoding_settings
+    video:              # Video Settings
+      codec_level: 3.2  #   For decoding restrictions
+      width:   -1       #   1280 # for 16:9
+      height:  720      #   720p
+      bitrate: 5120k    #   5.0 Mbps
+    audio:              # Audio Settings
+      channels: stereo  #   Channels: Stereo or Stereo + 5.1
+      bitrate: 384k     #   Recommended for stereo
+
 #  youtube_480p:
 #    extends: youtube_recommended_upload_encoding_settings
 #    video:              # Video Settings

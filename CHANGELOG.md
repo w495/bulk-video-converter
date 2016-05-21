@@ -16,7 +16,6 @@ p1:
 
 ```
 
-
 # 0.1463347060
 
 1.  Add multiple templates for `depends`.
@@ -25,5 +24,21 @@ p1:
 4.  Add permanent `yadif=1:-1:0` video filter. 
     You can to switch it off with setting `prorgressive: null` 
     for `your_profile/video/prorgressive`.
+
+# 0.1463867480
+
+Add `is_async` and `no_async` mode to config handling.
+In this way you can handle your files and profiles 
+in consecutive way. Just add `no_async` or `no_async_files` 
+or `no_async_profiles` to `self` section of the config.
+For example:
+```YAML
+self:
+  no_async: true 
+  # no_async_files: true # only for files
+  # no_async_profiles: true # only for profiles
+```
+Also you can use `--no-async*` command line arguments.
+Default is asynchronous handling for files and profiles both.
 
 
