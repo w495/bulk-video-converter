@@ -482,6 +482,4 @@ The result will be:
 }
 ```
 
-## TODO
 
-* Add error handling for parallel processes.

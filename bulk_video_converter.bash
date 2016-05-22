@@ -1,5 +1,17 @@
 #!/usr/bin/env bash
 
+# trace ERR through pipes
+set -o pipefail;
+
+# trace ERR through 'time command' and other functions
+set -o errtrace;
+
+## exit the script if any statement returns a non-true return value
+set -o errexit;
+
+set -E
+
+
 # ------------------------------------------------------------
 # Startup constants.
 # ------------------------------------------------------------
@@ -17,8 +29,11 @@ readonly START_TIME_NS=$(($(date +%s%N)));
 
 # Self name.
 readonly SCRIPT_NAME=$(basename $0);
+readonly SCRIPT_PID=$$;
 
-readonly VERSION='0.1463867480';
+
+
+readonly VERSION='0.1463888719';
 
 # Internal constants.
 readonly TMP_DIR_BASE_NAME="/tmp/${SCRIPT_NAME}"
@@ -46,6 +61,7 @@ declare CONFIG_FILE_NAME;
 declare INPUT_FILE_NAME_LIST;
 declare OUTPUT_DIR_NAME;
 declare OUTPUT_FILE_NAME;
+declare LOG_FILE_NAME;
 declare PASS_LOG_FILE_PREFIX;
 
 # ------------------------------------------------------------
@@ -217,6 +233,13 @@ ${COLOR_REVERSE} Options:${C0}
         ${WTC}WARNING:${C0}
           ${WC}There is no reason to set this option
           in a common situation.${C0}
+    ${IC}-f, --ffmpeg-log${C0} ${AC}<filename.log>${C0}
+        name of ffmpeg log file.
+        ${WTC}WARNING:${C0}
+          ${WC}There is no reason to set this option
+          in a common situation.${C0}
+        However, you can use ${AC}/dev/null${C0} as a log file
+        to see colored ffmpeg output.
     ${IC}--async${C0}
         switch on asynchronous handling for files and profiles.
         ${WTC}WARNING:${C0}
@@ -651,10 +674,13 @@ run_concrete_profile(){
     );
     local passes=$(profile_default                      \
         '1' "${profile_name}" 'passes');
+
     local output_format=$(profile_default               \
         'mp4' "${profile_name}" 'format');
+
     local extention=$(profile_default                   \
         "$output_format" "${profile_name}" 'extention');
+
     local output_dir_name=$(profile_default             \
         "${OUTPUT_DIR_NAME}"                            \
         "${profile_name}"                               \
@@ -714,25 +740,45 @@ run_concrete_profile(){
                 output_pass_file_name="/dev/null"
             fi;
         fi;
+
+
+        log_dir_name=$(profile_default                     \
+            "${LOG_DIR_NAME}"                              \
+            "${profile_name}"                              \
+            'log_dir'                                      \
+        );
         local log_file_name=$(compute_if_empty  \
-            "${OUTPUT_FILE_NAME}"               \
+            "${LOG_FILE_NAME}"               \
             "${input_file_name}"                \
-            "${LOG_DIR_NAME}"                   \
+            "${log_dir_name}"                   \
             "${suffix}-${pass}-${extention}"    \
             "ffmpeg.log"                        \
         );
-        $(verbose_run "pass ${pass}@%10s"                           \
-            ${FFMPEG_BIN}                                           \
-            ${global_input_options}                                 \
-            "-i '${input_file_name}'"                               \
-            ${video_options}                                        \
-            ${pass_options}                                         \
-            ${output_audio_options}                                 \
-            ${global_output_options}                                \
-            ${output_format_options}                                \
-            "-y '${output_pass_file_name}'"                         \
-            "2>&1 | tee ${log_file_name} 1>&${OUT_LOG_STREAM};"     \
+        log_file_name=$(profile_default                     \
+            "${log_file_name}"                              \
+            "${profile_name}"                               \
+            'log'                                           \
         );
+
+        local -a run_args_array=(
+            ${FFMPEG_BIN}
+            ${global_input_options}
+            "-i '${input_file_name}'"
+            ${video_options}
+            ${pass_options}
+            ${output_audio_options}
+            ${global_output_options}
+            ${output_format_options}
+            "-y '${output_pass_file_name}'"
+        );
+
+        if [[ "${log_file_name}" != '/dev/null' ]]; then
+            run_args_array+=("2> >(tee -a ${log_file_name} 1>&${OUT_LOG_STREAM});")
+        fi;
+
+        local run_args=$(IFS=' '; echo "${run_args_array[*]}")
+        $(verbose_run "pass ${pass}@%10s"  ${run_args});
+
     done
     verbose_end "passes@%8s";
     verbose_end "${lower_profile_name}@%6s";
@@ -1570,11 +1616,8 @@ compute_if_empty (){
             parent_dir_name=$(dirname "${initial_dir_name}");
             base_dir_name=$(basename "${initial_dir_name}");
             local out_dir_name="${parent_dir_name}/${base_dir_name}";
-            if [[ ! -d "${out_dir_name}" ]]; then
-                notice "creates directory '${out_dir_name}'."
-                mkdir -p "${out_dir_name}";
-            fi;
-            base_name="${out_dir_name}/${base_name}"
+            $(create_directory 'any' "${out_dir_name}");
+            base_name="${out_dir_name}/${base_name}";
         fi;
         out_file_name="${base_name}.${extention}"
         if [[ -n "${suffix}" ]]; then
@@ -1585,17 +1628,23 @@ compute_if_empty (){
 }
 
 start_up (){
-    if [[ -n ${TMP_DIR_NAME} && ! -d "${TMP_DIR_NAME}" ]]; then
-        notice "creates directory '${TMP_DIR_NAME}' at start up."
-        mkdir -p "${TMP_DIR_NAME}";
-    fi;
-    if [[ -n ${LOG_DIR_NAME} && ! -d "${LOG_DIR_NAME}" ]]; then
-        notice "creates directory '${LOG_DIR_NAME}' at start up.";
-        mkdir -p "${LOG_DIR_NAME}";
-    fi;
-    if [[ -n ${OUTPUT_DIR_NAME} && ! -d "${OUTPUT_DIR_NAME}" ]]; then
-        notice "creates directory '${OUTPUT_DIR_NAME}' at start up.";
-        mkdir -p "${OUTPUT_DIR_NAME}";
+    $(create_directory 'tmp' "${TMP_DIR_NAME}"    'at start up.');
+    $(create_directory 'log' "${LOG_DIR_NAME}"    'at start up.');
+    $(create_directory 'out' "${OUTPUT_DIR_NAME}" 'at start up.');
+}
+
+create_directory() {
+    local type="${1}";
+    local name="${2}";
+    local comment="${3}";
+    if [[ -n "${name}" ]]; then
+        if [[ -e "${name}" && ! -d "${name}" ]]; then
+            error "${name} is a file\n";
+            exit_fail;
+        elif [[ ! -e "${name}"  ]]; then
+            notice "creates ${type} directory '${name}' ${comment}";
+            mkdir -p "${name}";
+        fi;
     fi;
 }
 
@@ -1687,7 +1736,7 @@ configure () {
 parse_options (){
     local OPTIONS=$(getopt \
         -o                                          \
-            'i:o:c:O:P:F:hvqd'                      \
+            'i:o:f:c:O:P:F:hvqd'                    \
         --long                                      \
             'input:,                                \
             output:,                                \
@@ -1695,6 +1744,7 @@ parse_options (){
             output-dir:,                            \
             pass-log-dir:,                          \
             ffmpeg-log-dir:,                        \
+            ffmpeg-log:,
             help,                                   \
             verbose,                                \
             quiet,                                  \
@@ -1738,20 +1788,28 @@ parse_options (){
                         OUTPUT_DIR_NAME=${2};
                         shift 2;;
                 esac;;
-            -P|--pass-log-dir)
-                case "${2}" in
-                    '')
-                        shift 1;;
-                    *)
-                        PASS_LOG_DIR_NAME=${2};
-                        shift 2;;
-                esac;;
             -F|--ffmpeg-log-dir)
                 case "${2}" in
                     '')
                         shift 1;;
                     *)
                         LOG_DIR_NAME=${2};
+                        shift 2;;
+                esac;;
+            -f|--ffmpeg-log)
+                case "${2}" in
+                    '')
+                        shift 1;;
+                    *)
+                        LOG_FILE_NAME=${2};
+                        shift 2;;
+                esac;;
+            -P|--pass-log-dir)
+                case "${2}" in
+                    '')
+                        shift 1;;
+                    *)
+                        PASS_LOG_DIR_NAME=${2};
                         shift 2;;
                 esac;;
             -c|--config)
@@ -1802,6 +1860,7 @@ parse_options (){
     declare -rg OUTPUT_DIR_NAME;
     declare -rg OUTPUT_FILE_NAME;
     declare -rg LOG_DIR_NAME;
+    declare -rg LOG_FILE_NAME;
     declare -rg PASS_LOG_DIR_NAME;
     if [[ -z "${INPUT_FILE_NAME_LIST}" ]]; then
         INPUT_FILE_NAME_LIST="${FROM_CONFIG_FILE_NAME}"
@@ -1910,13 +1969,13 @@ fi;
 
 show_usage(){
     usage;
-    exit 0;
+    exit_ok;
 }
 
 wrong_usage(){
     usage;
     error "${@}";
-    exit 3;
+    exit_fail;
 }
 
 verbose() {
@@ -2012,6 +2071,15 @@ fail () {
                 "${@}"
 }
 
+signal () {
+    info_print  'SIGNAL'\
+                "${BG_COLOR_DARK_RED}"\
+                "${COLOR_DARK_YELLOW}"\
+                "${COLOR_LIGHT_RED}"\
+                "${@}"
+}
+
+
 error () {
     info_print  'ERROR'\
                 "${BG_COLOR_DARK_RED}"\
@@ -2057,11 +2125,69 @@ info_print() {
     local WHERE="${WHERE_COLOR} ${SCRIPT_NAME}${COLOR_OFF}";
     local MESSAGE_COLOR="${4}";
     local MESSAGE="${MESSAGE_COLOR}${MESSAGE_TEXT}${COLOR_OFF}";
-    printf "${LOG_OFFSET}${LABEL} ${WHERE}${MESSAGE}\n" \
+    printf "${LABEL} ${WHERE}${MESSAGE}\n" \
         1>& ${OUT_LOG_STREAM};
+}
+
+exit_signal () {
+  local signum="${1}";
+  local parent_lineno="$2";
+  local message="$3";
+  local code="${4:-$((${signum}+128))}";
+  local sigspec=$(kill -l ${signum});
+
+  if [[ -n "$message" ]] ; then
+    error "gets signal ${sigspec} (${signum})"       \
+        " at line ${parent_lineno}: ${message};"    \
+        " exiting by with status ${code}"
+  else
+    error "gets signal ${sigspec} (${signum})"       \
+        "at line ${parent_lineno};"                 \
+        "exiting with status ${code}"
+  fi;
+  sleep 1;
+  exit "${code}";
+}
+
+
+exit_fatal () {
+  local parent_lineno="$1"
+  local message="$2"
+  local code="${3:-4}"
+  if [[ -n "$message" ]] ; then
+    fail "fails at line ${parent_lineno}: ${message}."
+  else
+    fail "fails at line ${parent_lineno}."
+  fi
+  exit "${code}";
+}
+
+exit_ok (){
+    kill -s USR1 ${SCRIPT_PID};
+    exit 0;
+}
+
+exit_fail (){
+    local sign=${1:-USR2}
+    kill -s "${sign}" ${SCRIPT_PID};
+    exit 0;
+}
+
+trap_signal() {
+    for sig  in $@; do
+        trap "exit_signal ${sig} ${LINENO}" ${sig}
+    done
 }
 
 # ------------------------------------------------------------
 # Main function call.
 # ------------------------------------------------------------
+#
+trap_signal  1 2 3 4 5 6 8 9 10 11 12 13 14 15 22 29 28 30 31
+
+trap 'exit_fatal ${LINENO} || true' ERR;
+trap 'exit 0' USR1;
+trap 'exit 3' USR2;
+
+
 main "${@}";
