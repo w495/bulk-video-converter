@@ -18,8 +18,8 @@ profile:
     # and it will be used only for inheritance.
     is_abstract: true
     output_dir_name: ./out
-    source: /home/w495/Videos/input/00000.MTS
-    log: /dev/null
+    #source: /home/w495/Videos/input/0000?.MTS
+    #log: /dev/null
     ignore:
       start: 00:00:00
       stop: 00:00:30

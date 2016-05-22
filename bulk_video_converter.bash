@@ -2183,7 +2183,7 @@ trap_signal() {
 # Main function call.
 # ------------------------------------------------------------
 #
-trap_signal  1 2 3 4 5 6 8 9 10 11 12 13 14 15 22 29 28 30 31
+trap_signal 2 3 4 5 6 8 9 10 11 12 13 15 30 31
 
 trap 'exit_fatal ${LINENO} || true' ERR;
 trap 'exit 0' USR1;
