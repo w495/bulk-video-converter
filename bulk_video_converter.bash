@@ -862,7 +862,7 @@ handle_log_callback(){
 
                 # The sequential number of the frame,
                 # starting from 0.
-                reg+='.*n:\s*?([^ ]+)'
+                reg+='.*n:\s*?([0-9]+)'
                 out+='n:\1\t'
 
                 # The Presentation TimeStamp of the input frame,
