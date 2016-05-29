@@ -316,13 +316,12 @@ EOF
 main(){
     $(verbose_start "${SCRIPT_NAME}");
 
-
-    $(verbose_block "version@%2s" "${VERSION}");
-
     $(verbose_block "datetime@%2s" "'$(date '+%Y:%m:%d %H.%M.%S')'");
 
     # non-local function `configure` — sets global options of script.
     configure "${@}";
+
+    check_versions;
 
     $(verbose_block "async_for_files@%2s" "$(use_async_for_files)");
     $(verbose_block "async_for_profiles@%2s" "$(use_async_for_profiles)");
@@ -331,6 +330,23 @@ main(){
     $(handle_file_sequence "${INPUT_FILE_NAME_LIST}")
     # $(clean_up);
     $(verbose_end "${SCRIPT_NAME}");
+}
+
+
+check_versions(){
+    $(verbose_start "versions@%2s");
+    local config_version="${SELF_COMPATIBILITY_FROM}";
+    $(verbose_block "${SCRIPT_NAME}@%4s" "${VERSION}");
+    $(verbose_block "config@%4s" "${config_version}");
+    if [[ "${config_version}" !=  "${VERSION}" ]]; then
+        warn "version (${VERSION}) do not match" \
+            "config version (${config_version}).";
+        if [[  "${VERSION#0.}" -lt "${config_version#0.}" ]]; then
+            error "version (${VERSION}) less then the smallest" \
+                "compatibility config version (${config_version}).";
+        fi;
+    fi;
+    $(verbose_end "versions@%2s");
 }
 
 handle_file_sequence(){

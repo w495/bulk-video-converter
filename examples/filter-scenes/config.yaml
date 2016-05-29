@@ -36,15 +36,15 @@ profile:
         threshold: 0.4
 
 
+  scene_00:
+    extends: scene_detector
+    video:
+      scene:
+        threshold: 0.0
+
+
   scene_04:
     extends: scene_detector
     video:
       scene:
         threshold: 0.4
-
-
-  scene_08:
-    extends: scene_detector
-    video:
-      scene:
-        threshold: 0.8
