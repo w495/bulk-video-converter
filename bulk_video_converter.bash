@@ -31,7 +31,7 @@ readonly START_TIME_NS=$(($(date +%s%N)));
 readonly SCRIPT_NAME=$(basename $0);
 readonly SCRIPT_PID=$$;
 
-# Version for compatibility detection
+# Version for compatibility detection.
 readonly VERSION='0.1464498833';
 
 # Internal constants.
