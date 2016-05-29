@@ -1,0 +1,50 @@
+self:
+  no_async: true
+  compatibility:
+    from: 0.1463888719
+
+ffmpeg:
+  bin: /usr/bin/ffmpeg
+  threads: 0
+
+# See: https://www.ffmpeg.org/ffmpeg-codecs.html
+# Also see:
+# https://www.virag.si/2015/06/encoding-videos-for-youtube-with-ffmpeg/
+profile:
+
+  base:
+    # you can mark profile as is_abstract
+    # and it will be used only for inheritance.
+    is_abstract: true
+    output_dir_name: ./out
+    source: ./out/d-1-30.mp4
+
+  scene_detector:
+    # from https://support.google.com/youtube/answer/1722171
+    is_abstract: true       # Dummy profile
+    extends: base           #   that extends `base`.
+    format: null
+    log:
+      callback: frame_info
+      dir_name: ./out
+    output:
+      file_name: qq
+    video:                  # Video Settings
+      #codec:  undefined              #   Video Codec Settings
+      showinfo: true
+      scene:
+        threshold: 0.4
+
+
+  scene_04:
+    extends: scene_detector
+    video:
+      scene:
+        threshold: 0.4
+
+
+  scene_08:
+    extends: scene_detector
+    video:
+      scene:
+        threshold: 0.8
