@@ -31,9 +31,8 @@ readonly START_TIME_NS=$(($(date +%s%N)));
 readonly SCRIPT_NAME=$(basename $0);
 readonly SCRIPT_PID=$$;
 
-
-
-readonly VERSION='0.1463888719';
+# Version for compatibility detection
+readonly VERSION='0.1464498833';
 
 # Internal constants.
 readonly TMP_DIR_BASE_NAME="/tmp/${SCRIPT_NAME}"
