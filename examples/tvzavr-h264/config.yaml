@@ -13,7 +13,7 @@ profile:
     # and it will be used only for inheritance.
     is_abstract: true
     output_dir_name: ./out
-    source: /home/w495/Videos/input/00001.MTS
+    source: /home/w495/Videos/IST/ist-x-2.mp4
     ignore:
       start: 00:00:00
       stop: 00:00:30
@@ -31,6 +31,7 @@ profile:
       bitrate: 4000k
       codec:
         name : h264
+        framerate: 25       #     Set framerate to 25.
         level: 4.2
         preset: veryslow
         profile: high
@@ -40,11 +41,17 @@ profile:
           keyint: 96
           min_keyint: 96
           no_scenecut: true
+        gop:
+          closed: true      #       Closed GOP
+          no_scenecut: true #       Disable scenecut detecting
+        use_cabac: true     #     CABAC (default entropy encoder)
+      progressive: true     # Progressive scan (no interlacing).
+      pixel_format: yuv420p # Chroma subsampling: 4:2:0
     audio:
       codec:
         name: aac
-      channels: 5.1     #   Channels: Stereo or Stereo + 5.1
-      bitrate: 512k     #   Recommended for 5.1
+      channels: mono     #   Channels: Stereo or Stereo + 5.1
+      bitrate: 128k     #   Recommended for 5.1
 
 
 #  ## Semi-TVzavr's profile for Desctop PAL-like Web Video.

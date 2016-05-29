@@ -375,7 +375,7 @@ handle_file_sequence(){
     done;
     if [[ "$(use_async_for_files)" == 'true' ]]; then
         debug "wait file ${child_pids}"
-        wait "${child_pids}";
+        wait "${child_pids}" || true;
         debug "ok file ${child_pids}"
         cat ${file_log_prefix}* 1>& ${OUT_LOG_STREAM}
     fi;
@@ -397,7 +397,7 @@ handle_file_async(){
             "${concrete_profile}"   \
             "${profile_map_name}"   \
         );
-    ) 2> "${file_log}-${pid_suffix}.log"
+    ) 2> "${file_log}-${pid_suffix}.log";
 }
 
 handle_file(){
@@ -486,7 +486,7 @@ handle_profile_sequence(){
     done;
     if [[ "$(use_async_for_profiles)" == 'true' ]]; then
         debug "wait profile ${child_pids}"
-        wait ${child_pids};
+        wait ${child_pids} || true;
         debug "ok profile ${child_pids}"
         cat ${profile_log_prefix}* 1>& ${OUT_LOG_STREAM}
     fi;
@@ -686,8 +686,13 @@ run_concrete_profile(){
         "${profile_name}"                               \
         output_dir_name                                 \
     );
-    local output_file_name=$(compute_if_empty           \
-        "${OUTPUT_FILE_NAME}"                           \
+    local output_file_name=$(profile_default             \
+        "${OUTPUT_FILE_NAME}"                            \
+        "${profile_name}"                               \
+        output_file_name                                 \
+    );
+    output_file_name=$(compute_if_empty           \
+        "${output_file_name}"                           \
         "${input_file_name}"                            \
         "${output_dir_name}"                            \
         "${suffix}"                                     \
@@ -745,20 +750,23 @@ run_concrete_profile(){
         log_dir_name=$(profile_default                     \
             "${LOG_DIR_NAME}"                              \
             "${profile_name}"                              \
-            'log_dir'                                      \
+            'log_dir_name'                                 \
         );
-        local log_file_name=$(compute_if_empty  \
-            "${LOG_FILE_NAME}"               \
+        local log_file_name=$(profile_default               \
+            "${LOG_FILE_NAME}"                              \
+            "${profile_name}"                               \
+            'log_file_name'                                 \
+        );
+        log_file_name=$(compute_if_empty  \
+            "${log_file_name}"               \
             "${input_file_name}"                \
             "${log_dir_name}"                   \
             "${suffix}-${pass}-${extention}"    \
             "ffmpeg.log"                        \
         );
-        log_file_name=$(profile_default                     \
-            "${log_file_name}"                              \
-            "${profile_name}"                               \
-            'log'                                           \
-        );
+
+        local log_callback=$(handle_log_callback  "${profile_name}");
+
 
         local -a run_args_array=(
             ${FFMPEG_BIN}
@@ -773,7 +781,12 @@ run_concrete_profile(){
         );
 
         if [[ "${log_file_name}" != '/dev/null' ]]; then
-            run_args_array+=("2> >(tee -a ${log_file_name} 1>&${OUT_LOG_STREAM});")
+            if [[ -n "${log_callback}" ]]; then
+                log_callback="${log_callback} | "
+            fi;
+            log_callback+="tee  ${log_file_name}"
+            log_callback+=" 1>&${OUT_LOG_STREAM}"
+            run_args_array+=("2> >(${log_callback});")
         fi;
 
         local run_args=$(IFS=' '; echo "${run_args_array[*]}")
@@ -787,6 +800,112 @@ run_concrete_profile(){
 # ------------------------------------------------------------
 # Global encoding functions
 # ------------------------------------------------------------
+
+
+handle_log_callback(){
+    local profile_name="${1}";
+    local input_file_name="${2}";
+
+    local -a log_callback_array=();
+
+    local function_list=$(profile   \
+        "${profile_name}"           \
+        'log'                       \
+        'callback'                  \
+    );
+
+    local function_list=$(profile_default   \
+        "${function_list}"              \
+        "${profile_name}"           \
+        'log'                       \
+        'callback'                  \
+        'function'                  \
+    );
+
+    for callback in ${function_list}; do
+        notice "callback = ${callback}"
+        local name=$(sed -E  \
+             's/([A-Za-z_]+)\(.+/\1/gi' <<< "$callback")
+        local arg=$(sed -E  \
+            's/.*\((.+)\).*/\1/gi' <<< "$callback")
+
+        case ${name} in
+            'grep')
+                log_callback_array+=(                   \
+                    " grep --line-buffered '${arg}' "    \
+                );
+                ;;
+            'sed')
+                log_callback_array+=(                       \
+                    " sed -uE 's/.*${arg}:([^ ]+).*/\1/gi'"  \
+                );
+                ;;
+            'frame_info')
+
+                local reg='';
+                local out='';
+
+                # The sequential number of the frame,
+                # starting from 0.
+                reg+='.*n:\s*?([^ ]+)'
+                out+='n:\1\t'
+
+                # The Presentation TimeStamp of the input frame,
+                # expressed as a number of time base units.
+                # The time base unit depends on the filter input pad.
+                reg+='.*pts:\s*?([0-9]+)'
+                out+='pts:\2\t'
+
+                # The Presentation TimeStamp of the input frame,
+                # expressed as a number of seconds.
+                reg+='.*pts_time:\s*?([0-9\.]+)'
+                out+='pts_time:\3\t\t'
+
+                # The position of the frame in the input stream,
+                # or -1 if this information is unavailable and/or
+                # meaningless (for example in case of synthetic video).
+                reg+='.*pos:\s*?([0-9]+).*'
+                out+='pos:\4\t'
+
+                # The picture type of the input frame
+                # ("I" for an I-frame, "P" for a P-frame,
+                # "B" for a B-frame, or "?" for an unknown type).
+                reg+='.*type:\s*?([IPB?]+).*'
+                out+='type:\5\t'
+
+                reg+='.*mean:\s*?\[(.+)\].*'
+                out+='mean:\6 '
+
+                reg+='.*stdev:\s*?\[(.+)\].*'
+                out+='std:\7'
+
+                log_callback_array+=(                       \
+                    " grep --line-buffered  'pts_time' "    \
+                    " sed -uE 's/${reg}/${out}/gi'"  \
+                );
+                ;;
+            *)
+                ;;
+        esac;
+    done;
+
+    local log_callback=$(IFS='|'; echo "${log_callback_array[*]}")
+
+    if [[ -z "${log_callback}" ]]; then
+        log_callback=$(profile    \
+            "${profile_name}"           \
+            'log'                       \
+            'callback'                  \
+            'bash'
+        );
+
+    fi;
+
+
+    echo "${log_callback}"
+}
+
+
 
 handle_global_input_options(){
     local profile_name="${1}";
@@ -904,6 +1023,13 @@ handle_global_device_options(){
 handle_video_options(){
     local profile_name="${1}";
     local input_file_name="${2}";
+
+    local video="$(profile ${profile_name} video)";
+    if [[ "${video}" == 'undefined' ]]; then
+        echo "";
+        exit 0;
+    fi;
+
     local codec_options=$(handle_video_codec_options ${profile_name});
 
     local framerate="$(profile ${profile_name} video framerate)";
@@ -931,7 +1057,7 @@ handle_video_options(){
     common_options+=$(if_exists "-pix_fmt '%s'" ${pixel_format})
 
     local filter=$(handle_video_filter_options "${profile_name}")
-    common_options+=$(if_exists "-filter:v '%s'" "${filter}");
+    common_options+=$(if_exists "-filter:v \"%s\"" "${filter}");
 
     local options="${codec_options} ${common_options}";
     verbose_block "video@%8s" "${options}";
@@ -952,9 +1078,82 @@ handle_video_filter_options(){
     );
     filter_options+=$(if_exists ", yadif=1:-1:0" ${progressive});
 
+
     local width="$(profile ${profile_name} video width)";
     local height="$(profile ${profile_name} video height)";
     filter_options+=$(if_exists ", scale=%s:%s" ${width} ${height});
+
+
+
+
+    local select=$(profile \
+        "${profile_name}" \
+        video \
+        filter \
+        'select' \
+    );
+    select=$(profile_default \
+        "${select}" \
+        "${profile_name}" \
+        video \
+        'select' \
+    );
+    filter_options+=$(if_exists ", select='%s'" ${select});
+
+    local scene_threshold=$(profile \
+        "${profile_name}" \
+        video \
+        filter \
+        'select' \
+        scene       \
+        threshold   \
+    );
+
+    scene_threshold=$(profile_default \
+        "${scene_threshold}"    \
+        "${profile_name}" \
+        video \
+        'select'    \
+        scene       \
+        threshold   \
+    );
+
+    scene_threshold=$(profile_default \
+        "${scene_threshold}"    \
+        "${profile_name}" \
+        video \
+        scene       \
+        threshold   \
+    );
+    filter_options+=$(if_exists     \
+        ", select='gt(scene,%s)'"   \
+        ${scene_threshold}          \
+    );
+
+
+
+
+    local showinfo=$(profile \
+        "${profile_name}" \
+        video \
+        filter \
+        showinfo \
+    );
+
+    showinfo=$(profile_default \
+        "${showinfo}"   \
+        "${profile_name}" \
+        video \
+        showinfo \
+    );
+    filter_options+=$(if_exists ", showinfo" ${showinfo});
+
+    local filter=$(profile \
+        "${profile_name}" \
+        video \
+        filter \
+    );
+    filter_options+=$(if_exists ",%s" ${filter});
 
     filter_options=$(echo "${filter_options}" | sed -E 's/\s//gi');
 
@@ -966,6 +1165,13 @@ handle_video_filter_options(){
 handle_video_codec_options(){
     local profile_name="${1}";
     local input_file_name="${2}";
+
+    local codec="$(profile ${profile_name} video codec)";
+    if [[ "${codec}" == 'undefined' || "${codec}" == '' ]]; then
+        echo "";
+        exit 0;
+    fi;
+
     local codec_name=$(profile_default \
         'h264' \
         ${profile_name} video codec name
@@ -1389,6 +1595,13 @@ handle_video_jpeg2000_options(){
 handle_audio_options(){
     local profile_name="${1}";
     local input_file_name="${2}";
+
+    local audio="$(profile ${profile_name} audio)";
+    if [[ "${audio}" == 'undefined' || "${audio}" == '' ]]; then
+        echo '';
+        exit 0;
+    fi;
+
     local bitrate="$(profile ${profile_name} audio bitrate)";
     local volume="$(profile ${profile_name} audio volume)";
 
@@ -1514,7 +1727,7 @@ handle_audio_mp3_options(){
 profile_if_exists() {
     local output_format="${1}";
     local value=$(profile ${@:2});
-    if [[ -n "${value}" && "${value}" != "null" ]]; then
+    if [[ -n "${value}" && "${value}" != 'undefined' ]]; then
         printf " ${output_format} " "${value}";
     fi;
 }
@@ -1523,11 +1736,11 @@ if_exists() {
     local output_format="${1}";
     local value="${@:2}";
     for var in "${@:2}" ;do
-        if [[ -z "${var}" || "${var}" == "null" ]]; then
-            value='null';
+        if [[ -z "${var}" || "${var}" == 'undefined' ]]; then
+            value='undefined';
         fi;
     done
-    if [[ -n "${value}" && "${value}" != "null" ]]; then
+    if [[ -n "${value}" && "${value}" != 'undefined' ]]; then
         printf " ${output_format} " ${value};
     fi;
 }
@@ -1537,11 +1750,11 @@ if_not_exists() {
     local output_format="${1}";
     local value="${@:2}";
     for var in "${@:2}" ;do
-        if [[ -z "${var}" || "${var}" == "null" ]]; then
-            value='null';
+        if [[ -z "${var}" || "${var}" == 'undefined' ]]; then
+            value='undefined';
         fi;
     done
-    if [[ -z "${value}" || "${value}" == "null" ]]; then
+    if [[ -z "${value}" || "${value}" == 'undefined' ]]; then
         printf " ${output_format} " ${value};
     fi;
 }
@@ -2038,11 +2251,14 @@ verbose_run (){
     local delimiter='@';
     local offset=$(awk -F "$delimiter" '{print $2}' <<< "$string");
     local value="${@:2}";
+
     local COLOR_ON="${COLOR_BOLD}${COLOR_LIGHT_YELLOW}"
     verbose_start "${string}";
+    local v_value=$(echo "${value}" | sed -E 's/\\/\\\\/gi' );
+
     $(verbose_inside                        \
         "${offset}"                         \
-        "${COLOR_ON}${value}${COLOR_OFF}"   \
+        "${COLOR_ON}${v_value}${COLOR_OFF}"   \
     );
     if [[ "${DRY_RUN}" == "false" ]]; then
         if [[ "${VERBOSE}" == "true" ]]; then
@@ -2050,7 +2266,7 @@ verbose_run (){
         fi;
         if [[ "${VERBOSE}" == "false" ]]; then
             $(eval "${value}") 2> /dev/null
-        fi
+     fi
     fi;
     verbose_end "${string}";
 }
