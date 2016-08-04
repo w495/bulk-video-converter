@@ -16,8 +16,8 @@ profile:
     # you can mark profile as is_abstract
     # and it will be used only for inheritance.
     is_abstract: true
-    output_dir_name: ./out
-    source: ./out/d-1-30.mp4
+    #output_dir_name: ./out
+    #source: ./out/d-1-30.mp4
 
   scene_detector:
     # from https://support.google.com/youtube/answer/1722171
@@ -30,17 +30,16 @@ profile:
     output:
       file_name: qq
     video:                  # Video Settings
-      #codec:  undefined              #   Video Codec Settings
       showinfo: true
       scene:
-        threshold: 0.4
+        threshold: 0.8
 
 
   scene_00:
     extends: scene_detector
     video:
       scene:
-        threshold: 0.0
+        threshold: 0.9
 
 
   scene_04:

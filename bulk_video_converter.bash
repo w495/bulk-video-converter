@@ -1182,7 +1182,7 @@ handle_video_codec_options(){
     local input_file_name="${2}";
 
     local codec="$(profile ${profile_name} video codec)";
-    if [[ "${codec}" == 'undefined' || "${codec}" == '' ]]; then
+    if [[ "${codec}" == 'undefined' || "${codec}" == 'null' ]]; then
         echo "";
         exit 0;
     fi;
@@ -1612,7 +1612,8 @@ handle_audio_options(){
     local input_file_name="${2}";
 
     local audio="$(profile ${profile_name} audio)";
-    if [[ "${audio}" == 'undefined' || "${audio}" == '' ]]; then
+    if [[ "${audio}" == 'undefined' || "${audio}" == 'null' ]]; then
+        verbose_block "audio@%8s" "no audio";
         echo '';
         exit 0;
     fi;

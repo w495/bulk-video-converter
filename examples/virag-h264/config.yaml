@@ -9,9 +9,8 @@ profile:
   base:
     is_abstract: 1 # It will be used only for inheritance.
     #source: /home/user/Video/*.MTS  # also you can set file names here.
-    source: /home/w495/Videos/input/00001.MTS
-    start: 00:00:10
-    stop: 00:00:30
+    start: 00:00:00
+    stop: 00:02:30
     output_dir_name: ./out
     pass_log_dir_name: ./pass_log
   virag_h264x1_pal_sd:                  # PAL SD video.
