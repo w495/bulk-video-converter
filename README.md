@@ -14,7 +14,6 @@ in *YAML* configuration. See [examples](#quick-start-guide) below.
 * [Quick start guide](#quick-start-guide)
     * [Conversion to one video](#conversion-to-one-video)
     * [Conversion to several videos](#conversion-to-several-videos)
-* [TODO](#todo)
   
 ## Motivation
 
