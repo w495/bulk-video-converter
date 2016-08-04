@@ -73,35 +73,35 @@ profile:
     video:              # Use constant rate factor. Only for one pass.
       rate_factor: 21   # Variable bitrate (constant rate factor).
 
-#  youtube_720p:
-#    extends: youtube_recommended_upload_encoding_settings
-#    video:              # Video Settings
-#      codec_level: 3.2  #   For decoding restrictions
-#      width:   -1       #   1280 # for 16:9
-#      height:  720      #   720p
-#      bitrate: 5120k    #   5.0 Mbps
-#    audio:              # Audio Settings
-#      channels: stereo  #   Channels: Stereo or Stereo + 5.1
-#      bitrate: 384k     #   Recommended for stereo
+  youtube_720p:
+    extends: youtube_recommended_upload_encoding_settings
+    video:              # Video Settings
+      codec_level: 3.2  #   For decoding restrictions
+      width:   -1       #   1280 # for 16:9
+      height:  720      #   720p
+      bitrate: 5120k    #   5.0 Mbps
+    audio:              # Audio Settings
+      channels: stereo  #   Channels: Stereo or Stereo + 5.1
+      bitrate: 384k     #   Recommended for stereo
 
-#  youtube_480p:
-#    extends: youtube_recommended_upload_encoding_settings
-#    video:              # Video Settings
-#      codec_level: 3.1  # For decoding restrictions
-#      width: -2         #   854  # for 16:9
-#      height:  480      #   480p
-#      bitrate: 2560k    #   2.5 Mbps
-#    audio:              # Audio Settings
-#      channels: mono    #   Channels: Stereo or Stereo + 5.1
-#      bitrate: 128k     #   Recommended for mono
-#
-#  youtube_360p:
-#    extends: youtube_recommended_upload_encoding_settings
-#    video:              # Video Settings
-#      codec_level: 3.1  #   For decoding restrictions
-#      width:   -1       #   640 # for 16:9
-#      height:  360      #   360p
-#      bitrate: 1024k    #   1 Mbps
-#    audio:              # Audio Settings
-#      channels: mono    #   Channels: Stereo or Stereo + 5.1
-#      bitrate: 128k     #   Recommended for mono
+  youtube_480p:
+    extends: youtube_recommended_upload_encoding_settings
+    video:              # Video Settings
+      codec_level: 3.1  # For decoding restrictions
+      width: -2         #   854  # for 16:9
+      height:  480      #   480p
+      bitrate: 2560k    #   2.5 Mbps
+    audio:              # Audio Settings
+      channels: mono    #   Channels: Stereo or Stereo + 5.1
+      bitrate: 128k     #   Recommended for mono
+
+  youtube_360p:
+    extends: youtube_recommended_upload_encoding_settings
+    video:              # Video Settings
+      codec_level: 3.1  #   For decoding restrictions
+      width:   -1       #   640 # for 16:9
+      height:  360      #   360p
+      bitrate: 1024k    #   1 Mbps
+    audio:              # Audio Settings
+      channels: mono    #   Channels: Stereo or Stereo + 5.1
+      bitrate: 128k     #   Recommended for mono
