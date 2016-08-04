@@ -29,6 +29,6 @@ profile:
     extends: scene_detector       #   that extends `scene_detector`.
     video_scene_threshold: 0.4    #   and sets threshold
 
-  scene_04:                       # Conrete «Hard» profile
+  scene_09:                       # Conrete «Hard» profile
     extends: scene_detector       #   that extends `scene_detector`.
-    video_scene_threshold: 0.4    #   and sets threshold
+    video_scene_threshold: 0.9    #   and sets threshold
