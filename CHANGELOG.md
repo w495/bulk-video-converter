@@ -46,3 +46,20 @@ p1:
 
 ```
 
+# 0.1470294456
+
+1.  Add switching of audio and video and their codecs.
+2.  Add `qq` filename handling.
+3.  Add support of ffmpeg video filters.
+4.  Add support of scene detection filter
+    (`-filter:v "select='gt(scene,0.4)'"` ).
+4. Add special support of `showinfo` filter,
+    (`-filter:v "select='gt(scene,0.4),showinfo'"` ),
+5. Add passing names of log files.
+6. Add log handling with callbacks.
+7. Add minimal set of callbacks.
+
+
+
+
+

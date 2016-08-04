@@ -1,49 +1,34 @@
 self:
   no_async: true
   compatibility:
-    from: 0.1464498833
+    from: 0.1470294456
 
 ffmpeg:
   bin: /usr/bin/ffmpeg
   threads: 0
 
-# See: https://www.ffmpeg.org/ffmpeg-codecs.html
-# Also see:
-# https://www.virag.si/2015/06/encoding-videos-for-youtube-with-ffmpeg/
 profile:
 
-  base:
-    # you can mark profile as is_abstract
-    # and it will be used only for inheritance.
-    is_abstract: true
-    #output_dir_name: ./out
-    #source: ./out/d-1-30.mp4
-
   scene_detector:
-    # from https://support.google.com/youtube/answer/1722171
-    is_abstract: true       # Dummy profile
-    extends: base           #   that extends `base`.
-    format: null
-    log:
-      callback: frame_info
-      dir_name: ./out
-    output:
-      file_name: qq
-    video:                  # Video Settings
-      showinfo: true
-      scene:
-        threshold: 0.8
+    is_abstract: true           # Dummy profile (only for inheritance)
+    format: null                #   without format.
+    #source: ./out/d-1-30.mp4   # Path to source file of device
+    video:                      # Video settings
+      codec: null               #   without any codec
+      showinfo: true            #   but with showinfo filter
+      scene:                    #   and scene (shot) detection
+        threshold: 0.1          #     that have threshold ~= 0.1.
+    audio: null                 # There is no any audio settings.
+    output:                     # Output settings
+      file_name: qq             #   There is no any output file.
+    log:                        # But it has log that is
+      callback: frame_info      #   handled with specific callback
+      dir_name: ./out           #   and written  to `./out` dir.
 
+  scene_04:                       # Conrete «Soft» profile
+    extends: scene_detector       #   that extends `scene_detector`.
+    video_scene_threshold: 0.4    #   and sets threshold
 
-  scene_00:
-    extends: scene_detector
-    video:
-      scene:
-        threshold: 0.9
-
-
-  scene_04:
-    extends: scene_detector
-    video:
-      scene:
-        threshold: 0.4
+  scene_04:                       # Conrete «Hard» profile
+    extends: scene_detector       #   that extends `scene_detector`.
+    video_scene_threshold: 0.4    #   and sets threshold
