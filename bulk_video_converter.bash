@@ -1609,7 +1609,7 @@ handle_audio_options(){
 
     local audio="$(profile ${profile_name} audio)";
     if [[ "${audio}" == 'undefined' || "${audio}" == 'null' ]]; then
-        verbose_block "audio@%8s" "<empty>";
+        verbose_block "audio@%8s" "undefined";
         echo '';
         exit 0;
     fi;
