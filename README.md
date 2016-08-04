@@ -18,7 +18,7 @@ in *YAML* configuration. See [examples](#quick-start-guide) below.
   
 ## Motivation
 
-The main purpose of this tool is transcoding single source to several
+TheMain purpose of this tool is transcoding single source to several
 videos of different qualities and sizes. It is very helpful for 
 handling raw videos from amateur camera. 
 

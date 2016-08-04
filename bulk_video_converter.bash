@@ -32,7 +32,7 @@ readonly SCRIPT_NAME=$(basename $0);
 readonly SCRIPT_PID=$$;
 
 # Version for compatibility detection.
-readonly VERSION='0.1464498833';
+readonly VERSION='0.1470294456';
 
 # Internal constants.
 readonly TMP_DIR_BASE_NAME="/tmp/${SCRIPT_NAME}"
@@ -1085,11 +1085,11 @@ handle_video_filter_options(){
 
     local filter_options='';
 
-    local progressive=$(profile_default \
-        'true' \
-        "${profile_name}" \
-        video \
-        progressive \
+    local progressive=$(profile_default     \
+        'true'                              \
+        "${profile_name}"                   \
+        video                               \
+        progressive                         \
     );
     filter_options+=$(if_exists ", yadif=1:-1:0" ${progressive});
 
@@ -1098,61 +1098,57 @@ handle_video_filter_options(){
     local height="$(profile ${profile_name} video height)";
     filter_options+=$(if_exists ", scale=%s:%s" ${width} ${height});
 
-
-
-
-    local select=$(profile \
-        "${profile_name}" \
-        video \
-        filter \
-        'select' \
+    local select=$(profile                  \
+        "${profile_name}"                   \
+        video                               \
+        filter                              \
+        'select'                            \
     );
-    select=$(profile_default \
-        "${select}" \
-        "${profile_name}" \
-        video \
-        'select' \
+
+    select=$(profile_default                \
+        "${select}"                         \
+        "${profile_name}"                   \
+        video                               \
+        'select'                            \
     );
+
     filter_options+=$(if_exists ", select='%s'" ${select});
 
-    local scene_threshold=$(profile \
-        "${profile_name}" \
-        video \
-        filter \
-        'select' \
-        scene       \
-        threshold   \
+    local scene_threshold=$(profile         \
+        "${profile_name}"                   \
+        video                               \
+        filter                              \
+        'select'                            \
+        scene                               \
+        threshold                           \
     );
 
-    scene_threshold=$(profile_default \
-        "${scene_threshold}"    \
-        "${profile_name}" \
-        video \
-        'select'    \
-        scene       \
-        threshold   \
+    scene_threshold=$(profile_default       \
+        "${scene_threshold}"                \
+        "${profile_name}"                   \
+        video                               \
+        'select'                            \
+        scene                               \
+        threshold                           \
     );
 
-    scene_threshold=$(profile_default \
-        "${scene_threshold}"    \
-        "${profile_name}" \
-        video \
-        scene       \
-        threshold   \
+    scene_threshold=$(profile_default       \
+        "${scene_threshold}"                \
+        "${profile_name}"                   \
+        video                               \
+        scene                               \
+        threshold                           \
     );
-    filter_options+=$(if_exists     \
-        ", select='gt(scene,%s)'"   \
-        ${scene_threshold}          \
+    filter_options+=$(if_exists             \
+        ", select='gt(scene,%s)'"           \
+        ${scene_threshold}                  \
     );
 
-
-
-
-    local showinfo=$(profile \
-        "${profile_name}" \
-        video \
-        filter \
-        showinfo \
+    local showinfo=$(profile                \
+        "${profile_name}"                   \
+        video                               \
+        filter                              \
+        showinfo                            \
     );
 
     showinfo=$(profile_default \
