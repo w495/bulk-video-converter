@@ -13,7 +13,7 @@ profile:
     # and it will be used only for inheritance.
     is_abstract: true
     output_dir_name: ./out
-    source: /home/w495/Videos/input/Tulum.mp4
+    #source: /home/w495/Videos/input/Tulum.mp4
     ignore:
       start: 00:00:00
       stop: 00:00:30
@@ -50,8 +50,8 @@ profile:
     audio:
       codec:
         name: aac
-      channels: mono     #   Channels: Stereo or Stereo + 5.1
-      bitrate: 128k     #   Recommended for 5.1
+      channels:  5.1      #   Channels: Stereo or Stereo + 5.1
+      bitrate: 128k       #   Recommended for 5.1
 
 
   ## Semi-TVzavr's profile for Desctop PAL-like Web Video.
