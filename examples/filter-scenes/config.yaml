@@ -10,6 +10,10 @@ ffmpeg:
 profile:
 
   scene_detector:
+    start: 00:00:10
+    #stop: 00:00:30
+    duration:  00:00:10
+
     is_abstract: true           # Dummy profile (only for inheritance)
     format: null                #   without format.
     #source: ./out/d-1-30.mp4   # Path to source file of device
