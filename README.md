@@ -485,17 +485,6 @@ The result will be:
 }
 ```
 
-## Features
-
-It has some special features.
-* Depended profiles that are handles consequently when the result of one processing is used as an input to another one (system `wait` is applied). See [dependent-encoding](examples/featured/dependent-encoding/) example.
-* Configurable asynchronous handing for files and profiles.
-* Device capturing based on FFMpeg's device handling.
-* Simple scene detection based on FFMpeg's filter `select='gt(scene,0.4)'.
-
-See also `examples` directory.
-
-
 ## Installation
 
 We prefer to use this script in place without any installation.
@@ -514,8 +503,23 @@ Just run
 ```
 
 It calls `bulk_video_converter.bash` with YAML-configurations from examples-folder.
+Check source code of [test.bash](test.bash)  for more details.
+
+## Features
+
+It has some special features.
+* Dependent profiles that are handles consequently when the result of one processing is used as an input to another one (system `wait` is applied). See [dependent encoding config](examples/featured/dependent-encoding/dependent-encoding.untested.config.yaml) and [dependent encoding log](examples/featured/dependent-encoding/dependent-encoding.raw.yaml) as a visul representation of processing sequence.
+* Configurable asynchronous handing for files and profiles.
+* Device capturing based on FFMpeg's device handling. See [screen capturing config](examples/featured/screen-capturing/screen-capturing.test-config.yaml) and [screen capturing output](examples/featured/screen-capturing/screen-capturing.wanted.yaml)
+* Simple scene detection based on FFMpeg's filter `select='gt(scene,0.4)'.
+
+See also `examples` directory.
+
+
+
+
 
 
 ## Changes
 
-See `CHANGELOG.md` to track changes.
+See [CHANGELOG](CHANGELOG.md) to track changes.
