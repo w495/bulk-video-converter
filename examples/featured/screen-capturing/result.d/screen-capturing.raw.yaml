@@ -41,7 +41,7 @@ bulk_video_converter.bash:
         # passes done
       # screen_hd done
     # screen_hd for :0.0 done
-# NOTICE 597:  bulk_video_converter.bash uses display ':0.0' as a file name
+# NOTICE 602:  bulk_video_converter.bash uses display ':0.0' as a file name
     screen_lw for :0.0:
       screen_lw:
         global input:

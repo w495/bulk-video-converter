@@ -9,6 +9,10 @@ readonly INPUT_FILE_PATH='input/files/are/from/config';
 readonly SCRIPT_FPATH=$(readlink -f "${SCRIPT_PATH}");
 readonly TESTS_FPATH=$(readlink -f "${TESTS_PATH}");
 
+readonly TEST_CONFIG_PATTERN='*.test-config.yaml';
+
+readonly TEST_CONFIG_FIND_ARGS="-name ${TEST_CONFIG_PATTERN}" ;
+
 readonly TEST_TIME_STRING="1970-01-01_01-01-01-00";
 readonly TEST_RANDOM_STRING="R1Nd0m";  
 readonly TEST_VIDEO_OUTPUT_DIR='/tmp';
@@ -16,8 +20,7 @@ readonly TEST_VIDEO_OUTPUT_DIR='/tmp';
         
 main () {
     print_help "test script ${SCRIPT_PATH};";    
-    local CONFIG_PATH_LIST=$(find ./ -name '*.test-config.yaml' -type f);
-    
+    local CONFIG_PATH_LIST=$(find ./ -type f ${TEST_CONFIG_FIND_ARGS} );
     local TEST_COUINT=$(echo ${CONFIG_PATH_LIST} | wc -w);
     
     for CONFIG_PATH in ${CONFIG_PATH_LIST}; do
@@ -39,7 +42,7 @@ main () {
         
         # Set paths for files.
         local EXPCTD_FPATH="${TEST_DPATH}/${TEST_NAME}.expected.yaml";
-        debug "where wanted result file path is '${EXPCTD_FPATH}';";
+        debug "where expected result file path is '${EXPCTD_FPATH}';";
         local RAW_FPATH="${RESULT_DPATH}/${TEST_NAME}.raw.yaml";
         debug "where raw result file path is '${RAW_FPATH}';";
         local ACTL_FPATH="${RESULT_DPATH}/${TEST_NAME}.actual.yaml";
@@ -78,7 +81,7 @@ main () {
     
         notice 'build test diff ...';
         
-        debug "use diff -u 'wanted/result/file' 'actual/result/file';";
+        debug "use diff -u 'expected/result/file' 'actual/result/file';";
         diff -u "${EXPCTD_FPATH}" "${ACTL_FPATH}" 1> "${DIFF_FPATH}"\
         && success "test '${TEST_NAME}' is ok"                      \
         || fail "test '${TEST_NAME}' is failed";
