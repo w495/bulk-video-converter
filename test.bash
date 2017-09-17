@@ -63,7 +63,7 @@ main () {
         "${SCRIPT_FPATH}"                               \
             --config "${CONFIG_FPATH}"                  \
             --input "${INPUT_FILE_PATH}"                \
-            --output-dir '/tmp'                         \
+            --output-dir "${TEST_VIDEO_OUTPUT_DIR}"     \
             --dry-run                                   \
             --no-async                                  \
             2> "${RAW_FPATH}";
