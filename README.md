@@ -536,7 +536,7 @@ There are some complex examples. The most notable are:
 * [Virag H264](examples/complex/virag/virag-h264.test-config.yaml)
   based on Virag's article
   [H.264 web video encoding tutorial with FFmpeg](https://www.virag.si/2012/06/h.264-web-video-encoding-tutorial-with-ffmpeg/).
-* [TVZavr H264](examples/complex/tvzavr/virag-h264.test-config.yaml) 
+* [TVZavr H264](examples/complex/tvzavr/tvzavr-h264.test-config.yaml) 
   based on way of encoding web video for online-cinema [tvzavr.ru](tvzavr.ru).
 * [YouTube H264](examples/complex/youtube/youtube-h264.test-config.yaml)
   based on [Recommended Upload Encoding Settings](https://support.google.com/youtube/answer/1722171) 
