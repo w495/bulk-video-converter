@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
+## Just run `bash ./test.bash`
+## It calls bulk_video_converter.bash 
+## with YAML-configurations from examples-folder. 
+## It uses all files with suffix .test-config.yaml 
+## to generate script output and compare 
+## actual output with the expected result. 
+## Tests work without running real video handling. 
+## Only generated FFMpeg options are tested.
+
+
 ## Test configuration — initial constants for test running:
 
 readonly SCRIPT_PATH="./bulk_video_converter.bash";
