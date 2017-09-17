@@ -1,23 +1,24 @@
+#!/usr/bin/env bash
 
-
-## Constants:
+## Test configuration — initial constants for test running:
 
 readonly SCRIPT_PATH="./bulk_video_converter.bash";
 readonly TESTS_PATH='./examples';
-readonly INPUT_FILE_PATH='input/files/are/from/config';
+readonly TEST_CONFIG_PATTERN='*.test-config.yaml';
+
+## Computed constants for test running:
 
 readonly SCRIPT_FPATH=$(readlink -f "${SCRIPT_PATH}");
 readonly TESTS_FPATH=$(readlink -f "${TESTS_PATH}");
-
-readonly TEST_CONFIG_PATTERN='*.test-config.yaml';
-
 readonly TEST_CONFIG_FIND_ARGS="-name ${TEST_CONFIG_PATTERN}" ;
 
-readonly TEST_TIME_STRING="1970-01-01_01-01-01-00";
-readonly TEST_RANDOM_STRING="R1Nd0m";  
-readonly TEST_VIDEO_OUTPUT_DIR='/tmp';
+## Fixtures:
 
-        
+readonly INPUT_FILE_PATH_FIXTURE='input/files/are/from/config';
+readonly START_TIME_STRING_FIXTURE="1970-01-01_01-01-01-00";
+readonly RANDOM_STRING_FIXTURE="R1Nd0m";  
+readonly VIDEO_OUTPUT_DIR_FIXTURE='/tmp';
+
 main () {
     print_help "test script ${SCRIPT_PATH};";    
     local CONFIG_PATH_LIST=$(find ./ -type f ${TEST_CONFIG_FIND_ARGS} );
@@ -39,7 +40,6 @@ main () {
         debug "=> so create dir '${RESULT_DPATH}';";
         mkdir -p "${RESULT_DPATH}";
         
-        
         # Set paths for files.
         local EXPCTD_FPATH="${TEST_DPATH}/${TEST_NAME}.expected.yaml";
         debug "where expected result file path is '${EXPCTD_FPATH}';";
@@ -52,24 +52,24 @@ main () {
 
         notice 'set $ENV and run script ...';
         debug "use ENV:"
-        debug " with START_TIME_STRING='${TEST_TIME_STRING}';";
-        debug " with RANDOM_STRING='${TEST_RANDOM_STRING}';";
-        debug "use --input='${INPUT_FILE_PATH}';";
+        debug " with START_TIME_STRING='${START_TIME_STRING_FIXTURE}';";
+        debug " with RANDOM_STRING='${RANDOM_STRING_FIXTURE}';";
+        debug "use --input='${INPUT_FILE_PATH_FIXTURE}';";
         debug "use --config='${CONFIG_FPATH}';";
-        debug "use --output-dir='${TEST_VIDEO_OUTPUT_DIR}';";
+        debug "use --output-dir='${VIDEO_OUTPUT_DIR_FIXTURE}';";
         debug "use --dry-run;";
         debug "use --no-async;";        
         debug "and store script result to ${RAW_FPATH}";
         
         # Set ENV and run script
-        START_TIME_STRING="${TEST_TIME_STRING}"         \
-        RANDOM_STRING="${TEST_RANDOM_STRING}"           \
-        "${SCRIPT_FPATH}"                               \
-            --config "${CONFIG_FPATH}"                  \
-            --input "${INPUT_FILE_PATH}"                \
-            --output-dir "${TEST_VIDEO_OUTPUT_DIR}"     \
-            --dry-run                                   \
-            --no-async                                  \
+        START_TIME_STRING="${START_TIME_STRING_FIXTURE}"    \
+        RANDOM_STRING="${RANDOM_STRING_FIXTURE}"            \
+        "${SCRIPT_FPATH}"                                   \
+            --config "${CONFIG_FPATH}"                      \
+            --input "${INPUT_FILE_PATH_FIXTURE}"            \
+            --output-dir "${VIDEO_OUTPUT_DIR_FIXTURE}"      \
+            --dry-run                                       \
+            --no-async                                      \
             2> "${RAW_FPATH}";
         notice 'script is ok';
         
@@ -80,7 +80,6 @@ main () {
         notice 'yaml is ok';
     
         notice 'build test diff ...';
-        
         debug "use diff -u 'expected/result/file' 'actual/result/file';";
         diff -u "${EXPCTD_FPATH}" "${ACTL_FPATH}" 1> "${DIFF_FPATH}"\
         && success "test '${TEST_NAME}' is ok"                      \
