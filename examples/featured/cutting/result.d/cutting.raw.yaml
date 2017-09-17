@@ -16,9 +16,9 @@ bulk_video_converter.bash:
   async_for_profiles:
     false
   # async_for_profiles done
-# NOTICE 97:  bulk_video_converter.bash gets file names from config
+# NOTICE 91:  bulk_video_converter.bash gets file names from config
   input/files/are/from/config:
-# NOTICE 127:  bulk_video_converter.bash gets file names from config
+# NOTICE 121:  bulk_video_converter.bash gets file names from config
     cutting for input/files/are/from/config:
       cutting:
         global input:

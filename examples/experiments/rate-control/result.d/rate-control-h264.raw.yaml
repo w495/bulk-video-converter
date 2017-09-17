@@ -16,9 +16,9 @@ bulk_video_converter.bash:
   async_for_profiles:
     false
   # async_for_profiles done
-# NOTICE 101:  bulk_video_converter.bash gets file names from config
+# NOTICE 97:  bulk_video_converter.bash gets file names from config
   input/files/are/from/config:
-# NOTICE 432:  bulk_video_converter.bash gets file names from config
+# NOTICE 412:  bulk_video_converter.bash gets file names from config
     ratectl_x1a4m for input/files/are/from/config:
       ratectl_x1a4m:
         global input:
@@ -40,7 +40,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1a4m done
     # ratectl_x1a4m for input/files/are/from/config done
-# NOTICE 1964:  bulk_video_converter.bash gets file names from config
+# NOTICE 1299:  bulk_video_converter.bash gets file names from config
     ratectl_x1c4m for input/files/are/from/config:
       ratectl_x1c4m:
         global input:
@@ -62,7 +62,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1c4m done
     # ratectl_x1c4m for input/files/are/from/config done
-# NOTICE 3146:  bulk_video_converter.bash gets file names from config
+# NOTICE 2541:  bulk_video_converter.bash gets file names from config
     ratectl_x1v4ma4m for input/files/are/from/config:
       ratectl_x1v4ma4m:
         global input:
@@ -84,7 +84,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1v4ma4m done
     # ratectl_x1v4ma4m for input/files/are/from/config done
-# NOTICE 4297:  bulk_video_converter.bash gets file names from config
+# NOTICE 3757:  bulk_video_converter.bash gets file names from config
     ratectl_x1a2m for input/files/are/from/config:
       ratectl_x1a2m:
         global input:
@@ -106,7 +106,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1a2m done
     # ratectl_x1a2m for input/files/are/from/config done
-# NOTICE 5187:  bulk_video_converter.bash gets file names from config
+# NOTICE 4642:  bulk_video_converter.bash gets file names from config
     ratectl_x1c2m for input/files/are/from/config:
       ratectl_x1c2m:
         global input:
@@ -128,7 +128,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1c2m done
     # ratectl_x1c2m for input/files/are/from/config done
-# NOTICE 6361:  bulk_video_converter.bash gets file names from config
+# NOTICE 5887:  bulk_video_converter.bash gets file names from config
     ratectl_x1v2ma2m for input/files/are/from/config:
       ratectl_x1v2ma2m:
         global input:
@@ -150,7 +150,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1v2ma2m done
     # ratectl_x1v2ma2m for input/files/are/from/config done
-# NOTICE 7543:  bulk_video_converter.bash gets file names from config
+# NOTICE 7108:  bulk_video_converter.bash gets file names from config
     ratectl_x1a1m for input/files/are/from/config:
       ratectl_x1a1m:
         global input:
@@ -172,7 +172,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1a1m done
     # ratectl_x1a1m for input/files/are/from/config done
-# NOTICE 8412:  bulk_video_converter.bash gets file names from config
+# NOTICE 7952:  bulk_video_converter.bash gets file names from config
     ratectl_x1c1m for input/files/are/from/config:
       ratectl_x1c1m:
         global input:
@@ -194,7 +194,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1c1m done
     # ratectl_x1c1m for input/files/are/from/config done
-# NOTICE 9568:  bulk_video_converter.bash gets file names from config
+# NOTICE 9150:  bulk_video_converter.bash gets file names from config
     ratectl_x1v1ma1m for input/files/are/from/config:
       ratectl_x1v1ma1m:
         global input:
@@ -216,7 +216,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1v1ma1m done
     # ratectl_x1v1ma1m for input/files/are/from/config done
-# NOTICE 10776:  bulk_video_converter.bash gets file names from config
+# NOTICE 10359:  bulk_video_converter.bash gets file names from config
     ratectl_x2a4m for input/files/are/from/config:
       ratectl_x2a4m:
         global input:
@@ -241,7 +241,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x2a4m done
     # ratectl_x2a4m for input/files/are/from/config done
-# NOTICE 12038:  bulk_video_converter.bash gets file names from config
+# NOTICE 11660:  bulk_video_converter.bash gets file names from config
     ratectl_x2c4m for input/files/are/from/config:
       ratectl_x2c4m:
         global input:
@@ -266,7 +266,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x2c4m done
     # ratectl_x2c4m for input/files/are/from/config done
-# NOTICE 13708:  bulk_video_converter.bash gets file names from config
+# NOTICE 13236:  bulk_video_converter.bash gets file names from config
     ratectl_x2v4ma4m for input/files/are/from/config:
       ratectl_x2v4ma4m:
         global input:
@@ -291,7 +291,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x2v4ma4m done
     # ratectl_x2v4ma4m for input/files/are/from/config done
-# NOTICE 15342:  bulk_video_converter.bash gets file names from config
+# NOTICE 14931:  bulk_video_converter.bash gets file names from config
     ratectl_x2a2m for input/files/are/from/config:
       ratectl_x2a2m:
         global input:
@@ -316,7 +316,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x2a2m done
     # ratectl_x2a2m for input/files/are/from/config done
-# NOTICE 16678:  bulk_video_converter.bash gets file names from config
+# NOTICE 16270:  bulk_video_converter.bash gets file names from config
     ratectl_x2c2m for input/files/are/from/config:
       ratectl_x2c2m:
         global input:
@@ -341,7 +341,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x2c2m done
     # ratectl_x2c2m for input/files/are/from/config done
-# NOTICE 18329:  bulk_video_converter.bash gets file names from config
+# NOTICE 17927:  bulk_video_converter.bash gets file names from config
     ratectl_x2v2ma2m for input/files/are/from/config:
       ratectl_x2v2ma2m:
         global input:
@@ -366,7 +366,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x2v2ma2m done
     # ratectl_x2v2ma2m for input/files/are/from/config done
-# NOTICE 20076:  bulk_video_converter.bash gets file names from config
+# NOTICE 19541:  bulk_video_converter.bash gets file names from config
     ratectl_x2a1m for input/files/are/from/config:
       ratectl_x2a1m:
         global input:
@@ -391,7 +391,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x2a1m done
     # ratectl_x2a1m for input/files/are/from/config done
-# NOTICE 21351:  bulk_video_converter.bash gets file names from config
+# NOTICE 20855:  bulk_video_converter.bash gets file names from config
     ratectl_x2c1m for input/files/are/from/config:
       ratectl_x2c1m:
         global input:
@@ -416,7 +416,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x2c1m done
     # ratectl_x2c1m for input/files/are/from/config done
-# NOTICE 23044:  bulk_video_converter.bash gets file names from config
+# NOTICE 22453:  bulk_video_converter.bash gets file names from config
     ratectl_x2v1ma1m for input/files/are/from/config:
       ratectl_x2v1ma1m:
         global input:
@@ -441,7 +441,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x2v1ma1m done
     # ratectl_x2v1ma1m for input/files/are/from/config done
-# NOTICE 24778:  bulk_video_converter.bash gets file names from config
+# NOTICE 24139:  bulk_video_converter.bash gets file names from config
     ratectl_x1qp00 for input/files/are/from/config:
       ratectl_x1qp00:
         global input:
@@ -463,7 +463,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1qp00 done
     # ratectl_x1qp00 for input/files/are/from/config done
-# NOTICE 25675:  bulk_video_converter.bash gets file names from config
+# NOTICE 25057:  bulk_video_converter.bash gets file names from config
     ratectl_x1qp10 for input/files/are/from/config:
       ratectl_x1qp10:
         global input:
@@ -485,7 +485,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1qp10 done
     # ratectl_x1qp10 for input/files/are/from/config done
-# NOTICE 26603:  bulk_video_converter.bash gets file names from config
+# NOTICE 25957:  bulk_video_converter.bash gets file names from config
     ratectl_x1qp23 for input/files/are/from/config:
       ratectl_x1qp23:
         global input:
@@ -507,7 +507,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1qp23 done
     # ratectl_x1qp23 for input/files/are/from/config done
-# NOTICE 27497:  bulk_video_converter.bash gets file names from config
+# NOTICE 26850:  bulk_video_converter.bash gets file names from config
     ratectl_x1qp28 for input/files/are/from/config:
       ratectl_x1qp28:
         global input:
@@ -529,7 +529,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1qp28 done
     # ratectl_x1qp28 for input/files/are/from/config done
-# NOTICE 28397:  bulk_video_converter.bash gets file names from config
+# NOTICE 27743:  bulk_video_converter.bash gets file names from config
     ratectl_x1qp40 for input/files/are/from/config:
       ratectl_x1qp40:
         global input:
@@ -551,7 +551,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1qp40 done
     # ratectl_x1qp40 for input/files/are/from/config done
-# NOTICE 29298:  bulk_video_converter.bash gets file names from config
+# NOTICE 28580:  bulk_video_converter.bash gets file names from config
     ratectl_x1qp50 for input/files/are/from/config:
       ratectl_x1qp50:
         global input:
@@ -573,7 +573,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1qp50 done
     # ratectl_x1qp50 for input/files/are/from/config done
-# NOTICE 30156:  bulk_video_converter.bash gets file names from config
+# NOTICE 29473:  bulk_video_converter.bash gets file names from config
     ratectl_x1rf00 for input/files/are/from/config:
       ratectl_x1rf00:
         global input:
@@ -595,7 +595,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1rf00 done
     # ratectl_x1rf00 for input/files/are/from/config done
-# NOTICE 31021:  bulk_video_converter.bash gets file names from config
+# NOTICE 30377:  bulk_video_converter.bash gets file names from config
     ratectl_x1rf10 for input/files/are/from/config:
       ratectl_x1rf10:
         global input:
@@ -617,7 +617,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1rf10 done
     # ratectl_x1rf10 for input/files/are/from/config done
-# NOTICE 31856:  bulk_video_converter.bash gets file names from config
+# NOTICE 31269:  bulk_video_converter.bash gets file names from config
     ratectl_x1rf23 for input/files/are/from/config:
       ratectl_x1rf23:
         global input:
@@ -639,7 +639,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1rf23 done
     # ratectl_x1rf23 for input/files/are/from/config done
-# NOTICE 32724:  bulk_video_converter.bash gets file names from config
+# NOTICE 32156:  bulk_video_converter.bash gets file names from config
     ratectl_x1rf28 for input/files/are/from/config:
       ratectl_x1rf28:
         global input:
@@ -661,7 +661,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1rf28 done
     # ratectl_x1rf28 for input/files/are/from/config done
-# NOTICE 33582:  bulk_video_converter.bash gets file names from config
+# NOTICE 33041:  bulk_video_converter.bash gets file names from config
     ratectl_x1rf40 for input/files/are/from/config:
       ratectl_x1rf40:
         global input:
@@ -683,7 +683,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1rf40 done
     # ratectl_x1rf40 for input/files/are/from/config done
-# NOTICE 34506:  bulk_video_converter.bash gets file names from config
+# NOTICE 33936:  bulk_video_converter.bash gets file names from config
     ratectl_x1rf50 for input/files/are/from/config:
       ratectl_x1rf50:
         global input:
@@ -705,7 +705,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1rf50 done
     # ratectl_x1rf50 for input/files/are/from/config done
-# NOTICE 35437:  bulk_video_converter.bash gets file names from config
+# NOTICE 34850:  bulk_video_converter.bash gets file names from config
     ratectl_x1v4mrf00 for input/files/are/from/config:
       ratectl_x1v4mrf00:
         global input:
@@ -727,7 +727,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1v4mrf00 done
     # ratectl_x1v4mrf00 for input/files/are/from/config done
-# NOTICE 36689:  bulk_video_converter.bash gets file names from config
+# NOTICE 36094:  bulk_video_converter.bash gets file names from config
     ratectl_x1v4mrf10 for input/files/are/from/config:
       ratectl_x1v4mrf10:
         global input:
@@ -749,7 +749,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1v4mrf10 done
     # ratectl_x1v4mrf10 for input/files/are/from/config done
-# NOTICE 37891:  bulk_video_converter.bash gets file names from config
+# NOTICE 37298:  bulk_video_converter.bash gets file names from config
     ratectl_x1v4mrf23 for input/files/are/from/config:
       ratectl_x1v4mrf23:
         global input:
@@ -771,7 +771,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1v4mrf23 done
     # ratectl_x1v4mrf23 for input/files/are/from/config done
-# NOTICE 39076:  bulk_video_converter.bash gets file names from config
+# NOTICE 38532:  bulk_video_converter.bash gets file names from config
     ratectl_x1v4mrf28 for input/files/are/from/config:
       ratectl_x1v4mrf28:
         global input:
@@ -793,7 +793,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1v4mrf28 done
     # ratectl_x1v4mrf28 for input/files/are/from/config done
-# NOTICE 40297:  bulk_video_converter.bash gets file names from config
+# NOTICE 39761:  bulk_video_converter.bash gets file names from config
     ratectl_x1v4mrf40 for input/files/are/from/config:
       ratectl_x1v4mrf40:
         global input:
@@ -815,7 +815,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1v4mrf40 done
     # ratectl_x1v4mrf40 for input/files/are/from/config done
-# NOTICE 41452:  bulk_video_converter.bash gets file names from config
+# NOTICE 41021:  bulk_video_converter.bash gets file names from config
     ratectl_x1v4mrf50 for input/files/are/from/config:
       ratectl_x1v4mrf50:
         global input:
@@ -837,7 +837,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1v4mrf50 done
     # ratectl_x1v4mrf50 for input/files/are/from/config done
-# NOTICE 42635:  bulk_video_converter.bash gets file names from config
+# NOTICE 42255:  bulk_video_converter.bash gets file names from config
     ratectl_x1v2mrf00 for input/files/are/from/config:
       ratectl_x1v2mrf00:
         global input:
@@ -859,7 +859,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1v2mrf00 done
     # ratectl_x1v2mrf00 for input/files/are/from/config done
-# NOTICE 43788:  bulk_video_converter.bash gets file names from config
+# NOTICE 43452:  bulk_video_converter.bash gets file names from config
     ratectl_x1v2mrf10 for input/files/are/from/config:
       ratectl_x1v2mrf10:
         global input:
@@ -881,7 +881,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1v2mrf10 done
     # ratectl_x1v2mrf10 for input/files/are/from/config done
-# NOTICE 44976:  bulk_video_converter.bash gets file names from config
+# NOTICE 44625:  bulk_video_converter.bash gets file names from config
     ratectl_x1v2mrf23 for input/files/are/from/config:
       ratectl_x1v2mrf23:
         global input:
@@ -903,7 +903,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1v2mrf23 done
     # ratectl_x1v2mrf23 for input/files/are/from/config done
-# NOTICE 46212:  bulk_video_converter.bash gets file names from config
+# NOTICE 45795:  bulk_video_converter.bash gets file names from config
     ratectl_x1v2mrf28 for input/files/are/from/config:
       ratectl_x1v2mrf28:
         global input:
@@ -925,7 +925,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1v2mrf28 done
     # ratectl_x1v2mrf28 for input/files/are/from/config done
-# NOTICE 47425:  bulk_video_converter.bash gets file names from config
+# NOTICE 47032:  bulk_video_converter.bash gets file names from config
     ratectl_x1v2mrf40 for input/files/are/from/config:
       ratectl_x1v2mrf40:
         global input:
@@ -947,7 +947,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1v2mrf40 done
     # ratectl_x1v2mrf40 for input/files/are/from/config done
-# NOTICE 48627:  bulk_video_converter.bash gets file names from config
+# NOTICE 48237:  bulk_video_converter.bash gets file names from config
     ratectl_x1v2mrf50 for input/files/are/from/config:
       ratectl_x1v2mrf50:
         global input:
@@ -969,7 +969,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1v2mrf50 done
     # ratectl_x1v2mrf50 for input/files/are/from/config done
-# NOTICE 49807:  bulk_video_converter.bash gets file names from config
+# NOTICE 49480:  bulk_video_converter.bash gets file names from config
     ratectl_x1v1mrf00 for input/files/are/from/config:
       ratectl_x1v1mrf00:
         global input:
@@ -991,7 +991,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1v1mrf00 done
     # ratectl_x1v1mrf00 for input/files/are/from/config done
-# NOTICE 50993:  bulk_video_converter.bash gets file names from config
+# NOTICE 50752:  bulk_video_converter.bash gets file names from config
     ratectl_x1v1mrf10 for input/files/are/from/config:
       ratectl_x1v1mrf10:
         global input:
@@ -1013,7 +1013,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1v1mrf10 done
     # ratectl_x1v1mrf10 for input/files/are/from/config done
-# NOTICE 52229:  bulk_video_converter.bash gets file names from config
+# NOTICE 51959:  bulk_video_converter.bash gets file names from config
     ratectl_x1v1mrf23 for input/files/are/from/config:
       ratectl_x1v1mrf23:
         global input:
@@ -1035,7 +1035,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1v1mrf23 done
     # ratectl_x1v1mrf23 for input/files/are/from/config done
-# NOTICE 53398:  bulk_video_converter.bash gets file names from config
+# NOTICE 53168:  bulk_video_converter.bash gets file names from config
     ratectl_x1v1mrf28 for input/files/are/from/config:
       ratectl_x1v1mrf28:
         global input:
@@ -1057,7 +1057,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1v1mrf28 done
     # ratectl_x1v1mrf28 for input/files/are/from/config done
-# NOTICE 54608:  bulk_video_converter.bash gets file names from config
+# NOTICE 54416:  bulk_video_converter.bash gets file names from config
     ratectl_x1v1mrf40 for input/files/are/from/config:
       ratectl_x1v1mrf40:
         global input:
@@ -1079,7 +1079,7 @@ bulk_video_converter.bash:
         # passes done
       # ratectl_x1v1mrf40 done
     # ratectl_x1v1mrf40 for input/files/are/from/config done
-# NOTICE 55811:  bulk_video_converter.bash gets file names from config
+# NOTICE 55683:  bulk_video_converter.bash gets file names from config
     ratectl_x1v1mrf50 for input/files/are/from/config:
       ratectl_x1v1mrf50:
         global input:

@@ -532,7 +532,7 @@ It has some special features.
   See [scene detection test config](examples/featured/scene-detection/scene-detection.test-config.yaml) 
   and [scene detection test output](examples/featured/scene-detection/scene-detection.expected.yaml).
 
-## Complex-examples
+## More examples
 
 There are some complex examples. The most notable are:
 * [**«Virag H264»**](examples/complex/virag/virag-h264.test-config.yaml)
@@ -544,9 +544,14 @@ There are some complex examples. The most notable are:
   based on 
   [Recommended Upload Encoding Settings](https://support.google.com/youtube/answer/1722171)
   from YouTube documentation.
-* Different encoding variants of encoding from article 
-  [Understanding Rate Control Modes (x264, x265)](http://slhck.info/video/2017/03/01/rate-control.html)
-  — **coming soon**.
+* [**«Rate Control H264»**](/examples/experiments/rate-control/rate-control-h264.test-config.yaml) 
+  — different encoding variants of encoding from article 
+  [Understanding Rate Control Modes (x264, x265)](http://slhck.info/video/2017/03/01/rate-control.html).
+* [**GOP Control H264»**](/examples/experiments/gop-control/gop-control-h264.long-config.yaml) 
+  — different variants of assigning constant GOP.
+* [**Codec Control»**](/examples/experiments/codec-control/codec-control.test-config.yaml) 
+  — different variants of assigning different codecs and codec options.
+
 
 ## Changes
 

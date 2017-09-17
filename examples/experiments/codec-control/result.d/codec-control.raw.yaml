@@ -17,9 +17,9 @@ bulk_video_converter.bash:
   async_for_profiles:
     false
   # async_for_profiles done
-# NOTICE 99:  bulk_video_converter.bash gets file names from config
+# NOTICE 97:  bulk_video_converter.bash gets file names from config
   input/files/are/from/config:
-# NOTICE 166:  bulk_video_converter.bash gets file names from config
+# NOTICE 163:  bulk_video_converter.bash gets file names from config
     h264_x1_pal_sd for input/files/are/from/config:
       h264_x1_pal_sd:
         global input:
@@ -41,7 +41,7 @@ bulk_video_converter.bash:
         # passes done
       # h264_x1_pal_sd done
     # h264_x1_pal_sd for input/files/are/from/config done
-# NOTICE 935:  bulk_video_converter.bash gets file names from config
+# NOTICE 934:  bulk_video_converter.bash gets file names from config
     webm_x1_pal_sd for input/files/are/from/config:
       webm_x1_pal_sd:
         global input:
@@ -63,7 +63,7 @@ bulk_video_converter.bash:
         # passes done
       # webm_x1_pal_sd done
     # webm_x1_pal_sd for input/files/are/from/config done
-# NOTICE 1536:  bulk_video_converter.bash gets file names from config
+# NOTICE 1526:  bulk_video_converter.bash gets file names from config
     h263_x1_pal_sd for input/files/are/from/config:
       h263_x1_pal_sd:
         global input:
@@ -85,7 +85,7 @@ bulk_video_converter.bash:
         # passes done
       # h263_x1_pal_sd done
     # h263_x1_pal_sd for input/files/are/from/config done
-# NOTICE 2119:  bulk_video_converter.bash gets file names from config
+# NOTICE 2117:  bulk_video_converter.bash gets file names from config
     dirac_x1_pal_sd for input/files/are/from/config:
       dirac_x1_pal_sd:
         global input:
@@ -107,7 +107,7 @@ bulk_video_converter.bash:
         # passes done
       # dirac_x1_pal_sd done
     # dirac_x1_pal_sd for input/files/are/from/config done
-# NOTICE 2723:  bulk_video_converter.bash gets file names from config
+# NOTICE 2714:  bulk_video_converter.bash gets file names from config
     hevc_x1_pal_gray_sd for input/files/are/from/config:
       hevc_x1_pal_gray_sd:
         global input:
@@ -129,7 +129,7 @@ bulk_video_converter.bash:
         # passes done
       # hevc_x1_pal_gray_sd done
     # hevc_x1_pal_gray_sd for input/files/are/from/config done
-# NOTICE 3364:  bulk_video_converter.bash gets file names from config
+# NOTICE 3355:  bulk_video_converter.bash gets file names from config
     xvid_x1_pal_gray_sd for input/files/are/from/config:
       xvid_x1_pal_gray_sd:
         global input:
