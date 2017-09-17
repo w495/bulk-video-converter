@@ -17,9 +17,9 @@ bulk_video_converter.bash:
   async_for_profiles:
     false
   # async_for_profiles done
-# NOTICE 93:  bulk_video_converter.bash gets file names from config
+# NOTICE 85:  bulk_video_converter.bash gets file names from config
   input/files/are/from/config:
-# NOTICE 151:  bulk_video_converter.bash gets file names from config
+# NOTICE 137:  bulk_video_converter.bash gets file names from config
     virag_h264x1_pal_sd for input/files/are/from/config:
       virag_h264x1_pal_sd:
         global input:
@@ -44,7 +44,7 @@ bulk_video_converter.bash:
         # passes done
       # virag_h264x1_pal_sd done
     # virag_h264x1_pal_sd for input/files/are/from/config done
-# NOTICE 953:  bulk_video_converter.bash gets file names from config
+# NOTICE 881:  bulk_video_converter.bash gets file names from config
     virag_h264x1_480p_web for input/files/are/from/config:
       virag_h264x1_480p_web:
         global input:
@@ -69,7 +69,7 @@ bulk_video_converter.bash:
         # passes done
       # virag_h264x1_480p_web done
     # virag_h264x1_480p_web for input/files/are/from/config done
-# NOTICE 1974:  bulk_video_converter.bash gets file names from config
+# NOTICE 1940:  bulk_video_converter.bash gets file names from config
     virag_h264x1_480p_tablet for input/files/are/from/config:
       virag_h264x1_480p_tablet:
         global input:
@@ -94,7 +94,7 @@ bulk_video_converter.bash:
         # passes done
       # virag_h264x1_480p_tablet done
     # virag_h264x1_480p_tablet for input/files/are/from/config done
-# NOTICE 3268:  bulk_video_converter.bash gets file names from config
+# NOTICE 3258:  bulk_video_converter.bash gets file names from config
     virag_h264x1_360p_mobile for input/files/are/from/config:
       virag_h264x1_360p_mobile:
         global input:
