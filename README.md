@@ -14,9 +14,10 @@ in *YAML* configuration. See [examples](#quick-start-guide) below.
 * [Quick start guide](#quick-start-guide)
     * [Conversion to one video](#conversion-to-one-video)
     * [Conversion to several videos](#conversion-to-several-videos)
-* [Features](#features)
 * [Installation](#installation)
 * [Tests](#tests)
+* [Features](#features)
+* [Complex examples](#Complex-examples)
 * [Changes](#changes)
 
 ## Motivation
@@ -503,19 +504,47 @@ bash ./test.bash
 ```
 
 It calls `bulk_video_converter.bash` with YAML-configurations from examples-folder.
+It uses all files with suffix `.test-config.yaml` to generate script output
+and compare actual output with the expected result.
+Tests work without running real video handling. 
+Only generated FFMpeg options are tested.
+
 Check source code of [test.bash](test.bash)  for more details.
 
 ## Features
 
 It has some special features.
-* Dependent profiles that are handles consequently when the result of one processing is used as an input to another one (system `wait` is applied). See [dependent encoding config](examples/featured/dependent-encoding/dependent-encoding.untested.config.yaml) and [dependent encoding log](examples/featured/dependent-encoding/dependent-encoding.raw.yaml) as a visul representation of processing sequence.
+* Dry-run. You can run script without doing anything 
+  to check generated FFMpeg options.
+* Dependent profiles that are handles consequently when the result 
+  of one processing is used as an input to another one 
+  (system `wait` is applied). 
+  See [dependent encoding config](examples/featured/dependent-encoding/dependent-encoding.untested.config.yaml) 
+  and [dependent encoding log](examples/featured/dependent-encoding/dependent-encoding.raw.yaml) 
+  as a visual representation of processing sequence.
 * Configurable asynchronous handing for files and profiles.
-* Device capturing based on FFMpeg's device handling. See [screen capturing test config](examples/featured/screen-capturing/screen-capturing.test-config.yaml) and [screen capturing test output](examples/featured/screen-capturing/screen-capturing.wanted.yaml).
-* Simple scene detection based on FFMpeg's filter `select='gt(scene,0.4)'.
+* Device capturing based on FFMpeg's device handling. 
+  See [screen capturing test config](examples/featured/screen-capturing/screen-capturing.test-config.yaml) 
+  and [screen capturing test output](examples/featured/screen-capturing/screen-capturing.expected.yaml).
+* Simple scene detection based on FFMpeg's filter `select='gt(scene,0.4)'`.
+  See [scene detection test config](examples/featured/scene-detection/scene-detection.test-config.yaml) 
+  and [scene detection test output](examples/featured/scene-detection/scene-detection.expected.yaml).
 
-See also `examples` directory.
+## Complex-examples
 
-
+There are some complex examples. The most notable are:
+* [Virag H264](examples/complex/virag/virag-h264.test-config.yaml)
+  based on Virag's article
+  [H.264 web video encoding tutorial with FFmpeg](https://www.virag.si/2012/06/h.264-web-video-encoding-tutorial-with-ffmpeg/).
+* [TVZavr H264](examples/complex/tvzavr/virag-h264.test-config.yaml) 
+  based on way of encoding web video for online-cinema [tvzavr.ru](tvzavr.ru).
+* [YouTube H264](examples/complex/youtube/youtube-h264.test-config.yaml)
+  based on [Recommended Upload Encoding Settings](https://support.google.com/youtube/answer/1722171) 
+  from YouTube documentation and Virag's article
+  [Encoding videos for YouTube with FFMpeg](https://www.virag.si/2015/06/encoding-videos-for-youtube-with-ffmpeg).
+* Different encoding variants of encoding from article 
+  [Understanding Rate Control Modes (x264, x265)](http://slhck.info/video/2017/03/01/rate-control.html)
+  — **coming soon**.
 
 ## Changes
 

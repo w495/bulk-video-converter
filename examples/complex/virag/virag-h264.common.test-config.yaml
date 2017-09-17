@@ -1,6 +1,6 @@
 #
 # Config example due to [H.264 web video encoding tutorial with FFmpeg]
-# https://www.virag.si/2012/01/web-video-encoding-tutorial-with-ffmpeg-0-9/
+# https://www.virag.si/2012/06/h.264-web-video-encoding-tutorial-with-ffmpeg/
 #
 ffmpeg:
   bin: /usr/bin/ffmpeg

@@ -36,13 +36,14 @@ main () {
         debug "=> so create dir '${RESULT_DPATH}';";
         mkdir -p "${RESULT_DPATH}";
         
+        
         # Set paths for files.
-        local WANTED_FPATH="${TEST_DPATH}/${TEST_NAME}.wanted.yaml";
-        debug "where wanted result file path is '${WANTED_FPATH}';";
+        local EXPCTD_FPATH="${TEST_DPATH}/${TEST_NAME}.expected.yaml";
+        debug "where wanted result file path is '${EXPCTD_FPATH}';";
         local RAW_FPATH="${RESULT_DPATH}/${TEST_NAME}.raw.yaml";
         debug "where raw result file path is '${RAW_FPATH}';";
-        local ACTUAL_FPATH="${RESULT_DPATH}/${TEST_NAME}.actual.yaml";
-        debug "where actual result file path is '${ACTUAL_FPATH}';";
+        local ACTL_FPATH="${RESULT_DPATH}/${TEST_NAME}.actual.yaml";
+        debug "where actual result file path is '${ACTL_FPATH}';";
         local DIFF_FPATH="${RESULT_DPATH}/${TEST_NAME}.diff";
         debug "where diff file path is '${DIFF_FPATH}';";
 
@@ -71,15 +72,15 @@ main () {
         
         notice 'build fine yaml ... ';
         debug "delete commnet from '${RAW_FPATH}';";
-        debug "and store result to '${ACTUAL_FPATH}';";
-        grep -v '#' "${RAW_FPATH}" > "${ACTUAL_FPATH}";
+        debug "and store result to '${ACTL_FPATH}';";
+        grep -v '#' "${RAW_FPATH}" > "${ACTL_FPATH}";
         notice 'yaml is ok';
     
         notice 'build test diff ...';
         
         debug "use diff -u 'wanted/result/file' 'actual/result/file';";
-        diff -u "${WANTED_FPATH}" "${ACTUAL_FPATH}" 1> "${DIFF_FPATH}" \
-        && success "test '${TEST_NAME}' is ok"                         \
+        diff -u "${EXPCTD_FPATH}" "${ACTL_FPATH}" 1> "${DIFF_FPATH}"\
+        && success "test '${TEST_NAME}' is ok"                      \
         || fail "test '${TEST_NAME}' is failed";
     
     done;
