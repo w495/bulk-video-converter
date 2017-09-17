@@ -535,7 +535,7 @@ It has some special features.
 ## Complex-examples
 
 There are some complex examples. The most notable are:
-* [Virag H264](examples/complex/virag/virag-h264.test-config.yaml)
+* [**Virag H264**](examples/complex/virag/virag-h264.test-config.yaml)
   based on Virag's article
   [H.264 web video encoding tutorial with FFmpeg](https://www.virag.si/2012/06/h.264-web-video-encoding-tutorial-with-ffmpeg/).
 * [TVZavr H264](examples/complex/tvzavr/tvzavr-h264.test-config.yaml) 
