@@ -14,7 +14,11 @@ in *YAML* configuration. See [examples](#quick-start-guide) below.
 * [Quick start guide](#quick-start-guide)
     * [Conversion to one video](#conversion-to-one-video)
     * [Conversion to several videos](#conversion-to-several-videos)
-  
+* [Features](#features)
+* [Installation](#installation)
+* [Tests](#tests)
+* [Changes](#changes)
+
 ## Motivation
 
 Main purpose of this tool is transcoding single source to several
@@ -481,4 +485,37 @@ The result will be:
 }
 ```
 
+## Features
 
+It has some special features.
+* Depended profiles that are handles consequently when the result of one processing is used as an input to another one (system `wait` is applied). See [dependent-encoding](examples/featured/dependent-encoding/) example.
+* Configurable asynchronous handing for files and profiles.
+* Device capturing based on FFMpeg's device handling.
+* Simple scene detection based on FFMpeg's filter `select='gt(scene,0.4)'.
+
+See also `examples` directory.
+
+
+## Installation
+
+We prefer to use this script in place without any installation.
+But if you want you can just copy `bulk_video_converter.bash` 
+to directory under you `$PATH`:
+* to `/home/${USER}/bin`
+* or to `/usr/local/bin` (this is the best place)
+* or to `/usr/bin`
+
+
+## Tests
+
+Just run 
+```
+    ./test.bash 
+```
+
+It calls `bulk_video_converter.bash` with YAML-configurations from examples-folder.
+
+
+## Changes
+
+See `CHANGELOG.md` to track changes.

@@ -1,7 +1,7 @@
 self:
   no_async: true
   compatibility:
-    from: 0.1463347060
+    from: 0.1505573195
 
 ffmpeg:
   bin: /usr/bin/ffmpeg
