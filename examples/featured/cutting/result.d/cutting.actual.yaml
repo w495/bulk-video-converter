@@ -1,0 +1,28 @@
+bulk_video_converter.bash:
+  datetime:
+    1970-01-01_01-01-01-00
+  versions:
+    bulk_video_converter.bash:
+      0.1505573195
+    config:
+      0.1505573195
+  async_for_files:
+    false
+  async_for_profiles:
+    false
+  input/files/are/from/config:
+    cutting for input/files/are/from/config:
+      cutting:
+        global input:
+          -threads '0' -ss '00:00:00' 
+        video:
+          -codec:v 'libx264' -crf '23' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" 
+        audio:
+          -strict 'experimental' -codec:a 'aac' -b:a '128k' -ac '6'
+        global output:
+          -ss '00:00:00' -t '00:00:30' -to '00:00:30' 
+        format:
+          -movflags '+faststart' -f 'mp4' 
+        passes:
+          pass 1:
+            /usr/bin/ffmpeg -threads '0' -ss '00:00:00' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '23' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -strict 'experimental' -codec:a 'aac' -b:a '128k' -ac '6' -ss '00:00:00' -t '00:00:30' -to '00:00:30' -movflags '+faststart' -f 'mp4' -y '//tmp/config-cutting.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-cutting-1-mp4.ffmpeg.log 1>&2);

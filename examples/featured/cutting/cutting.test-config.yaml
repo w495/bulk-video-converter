@@ -1,0 +1,33 @@
+self:
+  no_async: true
+  compatibility:
+    from: 0.1505573195
+
+ffmpeg:
+  bin: /usr/bin/ffmpeg
+  threads: 0
+
+profile:
+
+  cutting:
+    output:
+      dir_name: /tmp
+    source: input/files/are/from/config
+    start: 00:00:00
+    stop: 00:00:30
+    duration:  00:00:30
+    passes: 1
+    video:
+      width:   -1  # 1920 # for 16:9
+      height:  1080
+      rate_factor: 23
+      framerate: 25       #     Set framerate to 25.
+      codec:
+        name : h264
+      progressive: true     # Progressive scan (no interlacing).
+      pixel_format: yuv420p # Chroma subsampling: 4:2:0
+    audio:
+      codec:
+        name: aac
+      channels:  5.1      #   Channels: Stereo or Stereo + 5.1
+      bitrate: 128k       #   Recommended for 5.1
