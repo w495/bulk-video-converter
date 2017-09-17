@@ -1,0 +1,137 @@
+ffmpeg:
+  bin: /usr/bin/ffmpeg
+  threads: 0
+
+profile:
+
+  base:
+    # you can mark profile as is_abstract
+    # and it will be used only for inheritance.
+    is_abstract: true
+    output_dir_name: /tmp
+
+  h264_x1_pal_sd:
+    # Other options are inherited from `base`
+    extends:   base
+    passes: 1
+    video:
+      width:  -1  # 1024 # for 16:9
+      height: 576 # SD
+      codec:
+        preset: slower
+        name : h264
+        profile: high
+      bitrate: 1000k
+    audio:
+      codec:
+        name: aac
+      channels: 5.1
+      bitrate: 196k
+
+  webm_x1_pal_sd:
+    # Other options are inherited from `base`
+    extends:   base
+    passes: 1
+    format: webm
+    extention: mp4
+    video:
+      width:  -1  # 1024 # for 16:9
+      height: 576 # SD
+      codec:
+        name: vp9
+        quality: good
+        qmin: 10
+        qmax: 42
+      bitrate: 1200k
+      maxrate: 1200k
+      bufsize: 2400k
+    audio:
+      codec:
+        name: libvorbis
+      channels: 5.1
+      bitrate: 196k
+
+  h263_x1_pal_sd:
+    # Other options are inherited from `base`
+    extends:   base
+    passes: 1
+    format: flv
+    extention: flv
+    video:
+      width:  -1  # 1024 # for 16:9
+      height: 576 # SD
+      preset: slower
+      codec:
+        name: flv
+      bitrate: 1200k
+      maxrate: 1200k
+      bufsize: 2400k
+    audio:
+      codec:
+        name: mp3
+      # For flv with mp3 — (44100, 22050, 11025)
+      framerate: 22050
+      channels: mono
+      bitrate: 64k
+
+  dirac_x1_pal_sd:
+    # Other options are inherited from `base`
+    extends:   base
+    passes: 1
+    format: mov
+    video:
+      width:  -1  # 1024 # for 16:9
+      height: 576 # SD
+      codec:
+        name: dirac
+        qscale: 0
+    audio:
+      codec:
+        name: aac
+      channels: mono
+      bitrate: 64k
+
+  hevc_x1_pal_gray_sd:
+    # Other options are inherited from `base`
+    extends:   base
+    passes: 1
+    format: mp4
+    video:
+      width:  -1  # 1024 # for 16:9
+      height: 576 # SD
+      codec:
+        name: hevc
+        preset: veryslow
+        weightp: smart
+        bframes: 3
+        opts: "keyint=96:min-keyint=96:no-scenecut"
+        profile: high
+        level: 3.1
+      bitrate: 1200k
+      maxrate: 1200k
+      bufsize: 2400k
+    audio:
+      codec:
+        name: aac
+      channels: 5.1
+      bitrate: 196k
+
+  xvid_x1_pal_gray_sd:
+    # Other options are inherited from `base`
+    extends:   base
+    passes: 1
+    format: mp4
+    video:
+      width:  -1  # 1024 # for 16:9
+      height: 576 # SD
+      codec:
+        name: xvid
+      bitrate: 1000k
+      maxrate: 1000k
+      bufsize: 2000k
+    audio:
+      codec:
+        name: mp3
+      channels: 5.1
+      bitrate: 196k
+

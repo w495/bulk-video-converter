@@ -1,0 +1,155 @@
+bulk_video_converter.bash:
+  datetime:
+    1970-01-01_01-01-01-00
+  # datetime done
+  versions:
+    bulk_video_converter.bash:
+      0.1505573195
+    # bulk_video_converter.bash done
+    config:
+      
+    # config done
+# WARNING:  bulk_video_converter.bash version (0.1505573195) do not match config version ().
+  # versions done
+  async_for_files:
+    false
+  # async_for_files done
+  async_for_profiles:
+    false
+  # async_for_profiles done
+# NOTICE 99:  bulk_video_converter.bash gets file names from config
+  input/files/are/from/config:
+# NOTICE 166:  bulk_video_converter.bash gets file names from config
+    h264_x1_pal_sd for input/files/are/from/config:
+      h264_x1_pal_sd:
+        global input:
+          -threads '0' 
+        # global input done
+        video:
+          -codec:v 'libx264' -profile:v 'high' -preset 'slower' -b:v '1000k' -filter:v "yadif=1:-1:0,scale=-1:576" 
+        # video done
+        audio:
+          -strict 'experimental' -codec:a 'aac' -b:a '196k' -ac '6'
+        # audio done
+        format:
+          -movflags '+faststart' -f 'mp4' 
+        # format done
+        passes:
+          pass 1:
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -preset 'slower' -b:v '1000k' -filter:v "yadif=1:-1:0,scale=-1:576" -strict 'experimental' -codec:a 'aac' -b:a '196k' -ac '6' -movflags '+faststart' -f 'mp4' -y '//tmp/config-h264_x1_pal_sd.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-h264_x1_pal_sd-1-mp4.ffmpeg.log 1>&2);
+          # pass 1 done
+        # passes done
+      # h264_x1_pal_sd done
+    # h264_x1_pal_sd for input/files/are/from/config done
+# NOTICE 935:  bulk_video_converter.bash gets file names from config
+    webm_x1_pal_sd for input/files/are/from/config:
+      webm_x1_pal_sd:
+        global input:
+          -threads '0' 
+        # global input done
+        video:
+          -codec:v 'libvpx-vp9' -b:v '1200k' -maxrate '1200k' -bufsize '2400k' -filter:v "yadif=1:-1:0,scale=-1:576" 
+        # video done
+        audio:
+          -b:a '196k' -ac '6'
+        # audio done
+        format:
+          -f 'webm' 
+        # format done
+        passes:
+          pass 1:
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libvpx-vp9' -b:v '1200k' -maxrate '1200k' -bufsize '2400k' -filter:v "yadif=1:-1:0,scale=-1:576" -b:a '196k' -ac '6' -f 'webm' -y '//tmp/config-webm_x1_pal_sd.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-webm_x1_pal_sd-1-mp4.ffmpeg.log 1>&2);
+          # pass 1 done
+        # passes done
+      # webm_x1_pal_sd done
+    # webm_x1_pal_sd for input/files/are/from/config done
+# NOTICE 1536:  bulk_video_converter.bash gets file names from config
+    h263_x1_pal_sd for input/files/are/from/config:
+      h263_x1_pal_sd:
+        global input:
+          -threads '0' 
+        # global input done
+        video:
+          -codec:v 'flashsv' -b:v '1200k' -maxrate '1200k' -bufsize '2400k' -filter:v "yadif=1:-1:0,scale=-1:576" 
+        # video done
+        audio:
+          -codec:a 'libmp3lame' -b:a '64k' -ac '1'
+        # audio done
+        format:
+          -f 'flv' 
+        # format done
+        passes:
+          pass 1:
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'flashsv' -b:v '1200k' -maxrate '1200k' -bufsize '2400k' -filter:v "yadif=1:-1:0,scale=-1:576" -codec:a 'libmp3lame' -b:a '64k' -ac '1' -f 'flv' -y '//tmp/config-h263_x1_pal_sd.flv' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-h263_x1_pal_sd-1-flv.ffmpeg.log 1>&2);
+          # pass 1 done
+        # passes done
+      # h263_x1_pal_sd done
+    # h263_x1_pal_sd for input/files/are/from/config done
+# NOTICE 2119:  bulk_video_converter.bash gets file names from config
+    dirac_x1_pal_sd for input/files/are/from/config:
+      dirac_x1_pal_sd:
+        global input:
+          -threads '0' 
+        # global input done
+        video:
+          -codec:v 'dirac' -qscale:v '0' -filter:v "yadif=1:-1:0,scale=-1:576" 
+        # video done
+        audio:
+          -strict 'experimental' -codec:a 'aac' -b:a '64k' -ac '1'
+        # audio done
+        format:
+          -movflags '+faststart' -f 'mov' 
+        # format done
+        passes:
+          pass 1:
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'dirac' -qscale:v '0' -filter:v "yadif=1:-1:0,scale=-1:576" -strict 'experimental' -codec:a 'aac' -b:a '64k' -ac '1' -movflags '+faststart' -f 'mov' -y '//tmp/config-dirac_x1_pal_sd.mov' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-dirac_x1_pal_sd-1-mov.ffmpeg.log 1>&2);
+          # pass 1 done
+        # passes done
+      # dirac_x1_pal_sd done
+    # dirac_x1_pal_sd for input/files/are/from/config done
+# NOTICE 2723:  bulk_video_converter.bash gets file names from config
+    hevc_x1_pal_gray_sd for input/files/are/from/config:
+      hevc_x1_pal_gray_sd:
+        global input:
+          -threads '0' 
+        # global input done
+        video:
+          -codec:v 'libx265' -preset 'veryslow' -level:v '3.1' -bf '3' -b:v '1200k' -maxrate '1200k' -bufsize '2400k' -filter:v "yadif=1:-1:0,scale=-1:576" 
+        # video done
+        audio:
+          -strict 'experimental' -codec:a 'aac' -b:a '196k' -ac '6'
+        # audio done
+        format:
+          -movflags '+faststart' -f 'mp4' 
+        # format done
+        passes:
+          pass 1:
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx265' -preset 'veryslow' -level:v '3.1' -bf '3' -b:v '1200k' -maxrate '1200k' -bufsize '2400k' -filter:v "yadif=1:-1:0,scale=-1:576" -strict 'experimental' -codec:a 'aac' -b:a '196k' -ac '6' -movflags '+faststart' -f 'mp4' -y '//tmp/config-hevc_x1_pal_gray_sd.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-hevc_x1_pal_gray_sd-1-mp4.ffmpeg.log 1>&2);
+          # pass 1 done
+        # passes done
+      # hevc_x1_pal_gray_sd done
+    # hevc_x1_pal_gray_sd for input/files/are/from/config done
+# NOTICE 3364:  bulk_video_converter.bash gets file names from config
+    xvid_x1_pal_gray_sd for input/files/are/from/config:
+      xvid_x1_pal_gray_sd:
+        global input:
+          -threads '0' 
+        # global input done
+        video:
+          -codec:v 'libxvid' -vtag 'xvid' -b:v '1000k' -maxrate '1000k' -bufsize '2000k' -filter:v "yadif=1:-1:0,scale=-1:576" 
+        # video done
+        audio:
+          -codec:a 'libmp3lame' -b:a '196k' -ac '6'
+        # audio done
+        format:
+          -movflags '+faststart' -f 'mp4' 
+        # format done
+        passes:
+          pass 1:
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libxvid' -vtag 'xvid' -b:v '1000k' -maxrate '1000k' -bufsize '2000k' -filter:v "yadif=1:-1:0,scale=-1:576" -codec:a 'libmp3lame' -b:a '196k' -ac '6' -movflags '+faststart' -f 'mp4' -y '//tmp/config-xvid_x1_pal_gray_sd.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-xvid_x1_pal_gray_sd-1-mp4.ffmpeg.log 1>&2);
+          # pass 1 done
+        # passes done
+      # xvid_x1_pal_gray_sd done
+    # xvid_x1_pal_gray_sd for input/files/are/from/config done
+  # input/files/are/from/config done
+# bulk_video_converter.bash done

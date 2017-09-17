@@ -1,0 +1,559 @@
+self: ## Bulk video converter options.
+  no_async: true              # Work in synchronous way.
+  compatibility:              # For backward compatibility warnings.
+    from: 0.1470294456        # Recommended version of bulk video converter,
+
+ffmpeg: ## System FFMpeg options.
+  bin: /usr/bin/ffmpeg        # Path to ffmpeg
+  threads: 0                  # Number of threads
+    # If set number of threads to `0`
+    # it will use number of processors.
+
+profile: ## List of conversion profiles.
+
+  gopctl_base:              # Base profile — only for inheritance
+    is_abstract: true       # Dummy profile:
+    # source: /tmp          # Input video path mask
+    output:                 # Output options
+      dir_name: /tmp        # Place for result files
+    format: mp4             # Container: MP4
+    passes: 2               # Two passes for ffmpeg
+    video:                  # Video Settings
+      width:   -1           #   1920 # for 16:9
+      height:  1080         #   1080p — Full HD
+      codec:                #   Video Codec Settings:
+        name : h264         #     Video codec: H.264
+        preset: veryslow    #     Codec options preset
+        framerate: 25       #     Set framerate to 25
+        level: 4.2          #     For decoding restrictions
+        profile: high       #     High Profile
+        weightp: smart      #     Effective fade handling
+        bframes: 3          #     Three consecutive B frames
+        use_cabac: true     #     CABAC (default entropy encoder)
+      progressive: true     # Progressive scan (no interlacing).
+      pixel_format: yuv420p # Chroma subsampling: 4:2:0
+    audio:                  # Audio Settings
+      codec_name: aac       #   Audio codec: AAC-LC
+      channels:  stereo     #   Channels: mono, stereo, 3.1, 5.1
+      bitrate: 128k         #   Recommended for stereo
+      samplerate: 48000     #   Sample rate 48khz
+
+  obase:
+    extends: gopctl_base
+    is_abstract: true       # Dummy profile
+    video:                  # Video Settings
+      codec:                #   Video Codec Settings:
+        gop:                #     Group of pictures Settings.
+          closed: true      #       Closed GOP
+          no_scenecut: true #       Disable scenecut detecting
+        opts:               #     Internal codec options
+          no_scenecut: true #       Ignore detected shots
+
+  opts06:
+    extends: obase
+    is_abstract: true       # Dummy profile
+    video_codec_opts:       #     Internal codec options
+      keyint: 6             #       Effective GOP size
+      min_keyint: 6         #       Minimal GOP size
+      
+  opts12:
+    extends: obase
+    is_abstract: true       # Dummy profile
+    video_codec_opts:       #     Internal codec options
+      keyint: 12            #       Effective GOP size
+      min_keyint: 12        #       Minimal GOP size
+      
+  opts24:
+    extends: obase
+    is_abstract: true       # Dummy profile
+    video_codec_opts:       #     Internal codec options
+      keyint: 24            #       Effective GOP size
+      min_keyint: 24        #       Minimal GOP size
+
+  opts48:
+    extends: obase
+    is_abstract: true       # Dummy profile
+    video_codec_opts:       #     Internal codec options
+      keyint: 48            #       Effective GOP size
+      min_keyint: 48        #       Minimal GOP size
+
+  opts96:
+    extends: obase
+    is_abstract: true       # Dummy profile
+    video_codec_opts:       #     Internal codec options
+      keyint: 96            #       Effective GOP size
+      min_keyint: 96        #       Minimal GOP size
+
+  opts192:
+    extends: obase
+    is_abstract: true       # Dummy profile
+    video_codec_opts:       #     Internal codec options
+      keyint: 192           #       Effective GOP size
+      min_keyint: 192       #       Minimal GOP size
+
+  gbase:
+    extends: gopctl_base
+    is_abstract: true       # Dummy profile
+    video_codec_gop:        #     Group of pictures Settings.
+      closed: true          #       Closed GOP
+      no_scenecut: true     #       Disable scenecut detecting
+
+  gop192:
+    extends: gbase
+    is_abstract: true       # Dummy profile
+    video_codec_gop:        #     Group of pictures Settings.
+      size: 192             #       GOP of half the frame rate
+      min: 192              #       Minimal GOP size.
+
+  gop96:
+    extends: gbase
+    is_abstract: true       # Dummy profile
+    video_codec_gop:        #     Group of pictures Settings.
+      size: 96              #       GOP of half the frame rate
+      min: 96               #       Minimal GOP size.
+
+  gop48:
+    extends: gbase
+    is_abstract: true       # Dummy profile
+    video_codec_gop:        #     Group of pictures Settings.
+      size: 48              #       GOP of half the frame rate
+      min: 48               #       Minimal GOP size.
+
+  gop24:
+    extends: gbase
+    is_abstract: true       # Dummy profile
+    video_codec_gop:        #     Group of pictures Settings.
+      size: 24              #       GOP of half the frame rate
+      min: 24               #       Minimal GOP size.
+
+  gop12:
+    extends: gbase
+    is_abstract: true       # Dummy profile
+    video_codec_gop:        #     Group of pictures Settings.
+      size: 12              #       GOP of half the frame rate
+      min: 12               #       Minimal GOP size.
+
+  gop06:
+    extends: gbase
+    is_abstract: true       # Dummy profile
+    video_codec_gop:        #     Group of pictures Settings.
+      size: 06              #       GOP of half the frame rate
+      min: 06               #       Minimal GOP size.
+      
+  abr4m:                    # Average Bitrate 
+    is_abstract: true       # Dummy profile
+    video:                  # Video Settings
+      bitrate: 4M           #   Set constant bitrate.
+
+  vbv4m:                    # Constrained Encoding 
+    is_abstract: true       # Dummy profile
+    video:                  # Video Buffering Verifier:
+      maxrate: 4M           #   Maximum bit rate tolerance
+      bufsize: 8M           #   How often to calculate the average bit rate
+
+  cbr4m:                    # Constant Bitrate 
+    extends: vbv4m          # Inherits maxrate and bufsize
+    is_abstract: true       # Dummy profile
+    video:                  # Video Buffering Verifier:
+      minrate: 4M           #   Minimum bit rate tolerance
+      
+  abr2m:                    # Average Bitrate 
+    is_abstract: true       # Dummy profile
+    video:                  # Video Settings
+      bitrate: 2M           #   Set constant bitrate.
+
+  vbv2m:                    # Constrained Encoding 
+    is_abstract: true       # Dummy profile
+    video:                  # Video Buffering Verifier:
+      maxrate: 2M           #   Maximum bit rate tolerance
+      bufsize: 4M           #   How often to calculate the average bit rate
+      
+  cbr2m:                    # Constant Bitrate 
+    extends: vbv2m          # Inherits maxrate and bufsize
+    is_abstract: true       # Dummy profile
+    video:                  # Video Buffering Verifier:
+      minrate: 2M           #   Minimum bit rate tolerance
+      
+  abr1m:                    # Average Bitrate 
+    is_abstract: true       # Dummy profile
+    video:                  # Video Settings
+      bitrate: 1M           #   Set constant bitrate.
+
+  vbv1m:                    # Constrained Encoding 
+    is_abstract: true       # Dummy profile
+    video:                  # Video Buffering Verifier:
+      maxrate: 1M           #   Maximum bit rate tolerance
+      bufsize: 2M           #   How often to calculate the average bit rate
+      
+  cbr1m:                    # Constant Bitrate 
+    extends: vbv2m          # Inherits maxrate and bufsize
+    is_abstract: true       # Dummy profile
+    video:                  # Video Buffering Verifier:
+      minrate: 1M           #   Minimum bit rate tolerance
+
+  crf23:                    # Constant Rate Factor
+    is_abstract: true       # Dummy profile
+    passes: 1               # Two passes for ffmpeg
+    video_rate_factor: 23   # Rate Factor
+
+
+  gopctl_o192rf23:
+    extends: opts192 crf23
+
+  gopctl_o192a4:
+    extends: opts192 abr4m
+
+  gopctl_o192a2:
+    extends: opts192 abr2m
+
+  gopctl_o192a1:
+    extends: opts192 abr1m
+    
+  gopctl_o192b4:
+    extends: opts192 vbv4m abr4m 
+
+  gopctl_o192b2:
+    extends: opts192 vbv2m abr2m 
+
+  gopctl_o192b1:
+    extends: opts192 vbv1m abr1m 
+
+  gopctl_o192c4:
+    extends: opts192 cbr4m
+
+  gopctl_o192c2:
+    extends: opts192 cbr2m
+
+  gopctl_o192c1:
+    extends: opts192 cbr1m
+
+  gopctl_o96rf23:
+    extends: opts96 crf23
+
+  gopctl_o96a4:
+    extends: opts96 abr4m
+
+  gopctl_o96a2:
+    extends: opts96 abr2m
+
+  gopctl_o96a1:
+    extends: opts96 abr1m
+    
+  gopctl_o96b4:
+    extends: opts96 vbv4m abr4m 
+
+  gopctl_o96b2:
+    extends: opts96 vbv2m abr2m 
+
+  gopctl_o96b1:
+    extends: opts96 vbv1m abr1m 
+
+  gopctl_o96c4:
+    extends: opts96 cbr4m
+
+  gopctl_o96c2:
+    extends: opts96 cbr2m
+
+  gopctl_o96c1:
+    extends: opts96 cbr1m
+    
+  gopctl_o48rf23:
+    extends: opts48 crf23
+
+  gopctl_o48a4:
+    extends: opts48 abr4m
+
+  gopctl_o48a2:
+    extends: opts48 abr2m
+
+  gopctl_o48a1:
+    extends: opts48 abr1m
+    
+  gopctl_o48b4:
+    extends: opts48 vbv4m abr4m 
+
+  gopctl_o48b2:
+    extends: opts48 vbv2m abr2m 
+
+  gopctl_o48b1:
+    extends: opts48 vbv1m abr1m 
+
+  gopctl_o48c4:
+    extends: opts48 cbr4m
+
+  gopctl_o48c2:
+    extends: opts48 cbr2m
+
+  gopctl_o48c1:
+    extends: opts48 cbr1m
+
+  gopctl_o24rf23:
+    extends: opts24 crf23
+
+  gopctl_o24a4:
+    extends: opts24 abr4m
+
+  gopctl_o24a2:
+    extends: opts24 abr2m
+
+  gopctl_o24a1:
+    extends: opts24 abr1m
+    
+  gopctl_o24b4:
+    extends: opts24 vbv4m abr4m 
+
+  gopctl_o24b2:
+    extends: opts24 vbv2m abr2m 
+
+  gopctl_o24b1:
+    extends: opts24 vbv1m abr1m 
+
+  gopctl_o24c4:
+    extends: opts24 cbr4m
+
+  gopctl_o24c2:
+    extends: opts24 cbr2m
+
+  gopctl_o24c1:
+    extends: opts24 cbr1m
+
+  gopctl_o12rf23:
+    extends: opts12 crf23
+
+  gopctl_o12a4:
+    extends: opts12 abr4m
+
+  gopctl_o12a2:
+    extends: opts12 abr2m
+
+  gopctl_o12a1:
+    extends: opts12 abr1m
+    
+  gopctl_o12b4:
+    extends: opts12 vbv4m abr4m 
+
+  gopctl_o12b2:
+    extends: opts12 vbv2m abr2m 
+
+  gopctl_o12b1:
+    extends: opts12 vbv1m abr1m 
+
+  gopctl_o12c4:
+    extends: opts12 cbr4m
+
+  gopctl_o12c2:
+    extends: opts12 cbr2m
+
+  gopctl_o12c1:
+    extends: opts12 cbr1m
+
+  gopctl_o06rf23:
+    extends: opts06 crf23
+
+  gopctl_o06a4:
+    extends: opts06 abr4m
+
+  gopctl_o06a2:
+    extends: opts06 abr2m
+
+  gopctl_o06a1:
+    extends: opts06 abr1m
+    
+  gopctl_o06b4:
+    extends: opts06 vbv4m abr4m 
+
+  gopctl_o06b2:
+    extends: opts06 vbv2m abr2m 
+
+  gopctl_o06b1:
+    extends: opts06 vbv1m abr1m 
+
+  gopctl_o06c4:
+    extends: opts06 cbr4m
+
+  gopctl_o06c2:
+    extends: opts06 cbr2m
+
+  gopctl_o06c1:
+    extends: opts06 cbr1m
+
+  gopctl_g192rf23:
+    extends: gop192 crf23
+
+  gopctl_g192a4:
+    extends: gop192 abr4m
+
+  gopctl_g192a2:
+    extends: gop192 abr2m
+
+  gopctl_g192a1:
+    extends: gop192 abr1m
+    
+  gopctl_g192b4:
+    extends: gop192 vbv4m abr4m 
+
+  gopctl_g192b2:
+    extends: gop192 vbv2m abr2m 
+
+  gopctl_g192b1:
+    extends: gop192 vbv1m abr1m 
+
+  gopctl_g192c4:
+    extends: gop192 cbr4m
+
+  gopctl_g192c2:
+    extends: gop192 cbr2m
+
+  gopctl_g192c1:
+    extends: gop192 cbr1m
+
+  gopctl_g96rf23:
+    extends: gop96 crf23
+
+  gopctl_g96a4:
+    extends: gop96 abr4m
+
+  gopctl_g96a2:
+    extends: gop96 abr2m
+
+  gopctl_g96a1:
+    extends: gop96 abr1m
+    
+  gopctl_g96b4:
+    extends: gop96 vbv4m abr4m 
+
+  gopctl_g96b2:
+    extends: gop96 vbv2m abr2m 
+
+  gopctl_g96b1:
+    extends: gop96 vbv1m abr1m 
+
+  gopctl_g96c4:
+    extends: gop96 cbr4m
+
+  gopctl_g96c2:
+    extends: gop96 cbr2m
+
+  gopctl_g96c1:
+    extends: gop96 cbr1m
+    
+  gopctl_g48rf23:
+    extends: gop48 crf23
+
+  gopctl_g48a4:
+    extends: gop48 abr4m
+
+  gopctl_g48a2:
+    extends: gop48 abr2m
+
+  gopctl_g48a1:
+    extends: gop48 abr1m
+    
+  gopctl_g48b4:
+    extends: gop48 vbv4m abr4m 
+
+  gopctl_g48b2:
+    extends: gop48 vbv2m abr2m 
+
+  gopctl_g48b1:
+    extends: gop48 vbv1m abr1m 
+
+  gopctl_g48c4:
+    extends: gop48 cbr4m
+
+  gopctl_g48c2:
+    extends: gop48 cbr2m
+
+  gopctl_g48c1:
+    extends: gop48 cbr1m
+
+  gopctl_g24rf23:
+    extends: gop24 crf23
+
+  gopctl_g24a4:
+    extends: gop24 abr4m
+
+  gopctl_g24a2:
+    extends: gop24 abr2m
+
+  gopctl_g24a1:
+    extends: gop24 abr1m
+    
+  gopctl_g24b4:
+    extends: gop24 vbv4m abr4m 
+
+  gopctl_g24b2:
+    extends: gop24 vbv2m abr2m 
+
+  gopctl_g24b1:
+    extends: gop24 vbv1m abr1m 
+
+  gopctl_g24c4:
+    extends: gop24 cbr4m
+
+  gopctl_g24c2:
+    extends: gop24 cbr2m
+
+  gopctl_g24c1:
+    extends: gop24 cbr1m
+
+  gopctl_g12rf23:
+    extends: gop12 crf23
+
+  gopctl_g12a4:
+    extends: gop12 abr4m
+
+  gopctl_g12a2:
+    extends: gop12 abr2m
+
+  gopctl_g12a1:
+    extends: gop12 abr1m
+    
+  gopctl_g12b4:
+    extends: gop12 vbv4m abr4m 
+
+  gopctl_g12b2:
+    extends: gop12 vbv2m abr2m 
+
+  gopctl_g12b1:
+    extends: gop12 vbv1m abr1m 
+
+  gopctl_g12c4:
+    extends: gop12 cbr4m
+
+  gopctl_g12c2:
+    extends: gop12 cbr2m
+
+  gopctl_g12c1:
+    extends: gop12 cbr1m
+
+  gopctl_g06rf23:
+    extends: gop06 crf23
+
+  gopctl_g06a4:
+    extends: gop06 abr4m
+
+  gopctl_g06a2:
+    extends: gop06 abr2m
+
+  gopctl_g06a1:
+    extends: gop06 abr1m
+    
+  gopctl_g06b4:
+    extends: gop06 vbv4m abr4m 
+
+  gopctl_g06b2:
+    extends: gop06 vbv2m abr2m 
+
+  gopctl_g06b1:
+    extends: gop06 vbv1m abr1m 
+
+  gopctl_g06c4:
+    extends: gop06 cbr4m
+
+  gopctl_g06c2:
+    extends: gop06 cbr2m
+
+  gopctl_g06c1:
+    extends: gop06 cbr1m
+    

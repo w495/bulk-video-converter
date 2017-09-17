@@ -1,0 +1,298 @@
+self: ## Bulk video converter options.
+  no_async: true            # Work in synchronous way.
+  compatibility:            # For backward compatibility warnings.
+    from: 0.1505573195      # Recommended version of bulk video converter,
+
+ffmpeg: ## System FFMpeg options.
+  bin: /usr/bin/ffmpeg      # Path to ffmpeg
+  threads: 0                # Number of threads
+    # If set number of threads to `0`
+    # it will use number of processors.
+
+profile: ## List of conversion profiles.
+
+  base:                     # Base profile — only for inheritance
+    is_abstract: true       # Dummy profile:
+    source: /tmp            # Input video path mask
+    output:                 # Output options
+      dir_name: /tmp        # Place for result files
+    format: mp4             # Container: MP4
+    video:                  # Video Settings
+      width:   -1           #   1920 # for 16:9
+      height:  1080         #   1080p — Full HD
+      framerate: 25         #   Set framerate to 25
+      codec:                #   Video Codec Settings:
+        name : h264         #     Video codec: H.264
+        preset: veryslow    #     Codec options preset
+        level: 4.0          #     For decoding restrictions
+        profile: high       #     High Profile
+        weightp: smart      #     Effective fade handling
+        bframes: 3          #     Three consecutive B frames
+        use_cabac: true     #     CABAC (default entropy encoder)
+      progressive: true     # Progressive scan (no interlacing).
+      pixel_format: yuv420p # Chroma subsampling: 4:2:0
+    audio:                  # Audio Settings
+      codec_name: aac       #   Audio codec: AAC-LC
+      channels:  stereo     #   Channels: mono, stereo, 3.1, 5.1
+      bitrate: 128k         #   Recommended for stereo
+      samplerate: 48000     #   Sample rate 48khz
+
+  2passes:               
+    is_abstract: true       # Dummy profile
+    passes: 2               # Two passes for ffmpeg
+
+  abr4m:                    # Average Bitrate 
+    is_abstract: true       # Dummy profile
+    video:                  # Video Settings
+      bitrate: 4M           #   Set constant bitrate.
+
+  vbv4m:                    # Constrained Encoding 
+    is_abstract: true       # Dummy profile
+    video:                  # Video Buffering Verifier:
+      maxrate: 4M           #   Maximum bit rate tolerance
+      bufsize: 8M           #   How often to calculate the average bit rate
+
+  cbr4m:                    # Constant Bitrate 
+    extends: vbv4m          # Inherits maxrate and bufsize
+    is_abstract: true       # Dummy profile
+    video:                  # Video Buffering Verifier:
+      minrate: 4M           #   Minimum bit rate tolerance
+      
+  abr2m:                    # Average Bitrate 
+    is_abstract: true       # Dummy profile
+    video:                  # Video Settings
+      bitrate: 2M           #   Set constant bitrate.
+
+  vbv2m:                    # Constrained Encoding 
+    is_abstract: true       # Dummy profile
+    video:                  # Video Buffering Verifier:
+      maxrate: 2M           #   Maximum bit rate tolerance
+      bufsize: 4M           #   How often to calculate the average bit rate
+      
+  cbr2m:                    # Constant Bitrate 
+    extends: vbv2m          # Inherits maxrate and bufsize
+    is_abstract: true       # Dummy profile
+    video:                  # Video Buffering Verifier:
+      minrate: 2M           #   Minimum bit rate tolerance
+      
+  abr1m:                    # Average Bitrate 
+    is_abstract: true       # Dummy profile
+    video:                  # Video Settings
+      bitrate: 1M           #   Set constant bitrate.
+
+  vbv1m:                    # Constrained Encoding 
+    is_abstract: true       # Dummy profile
+    video:                  # Video Buffering Verifier:
+      maxrate: 1M           #   Maximum bit rate tolerance
+      bufsize: 2M           #   How often to calculate the average bit rate
+      
+  cbr1m:                    # Constant Bitrate 
+    extends: vbv2m          # Inherits maxrate and bufsize
+    is_abstract: true       # Dummy profile
+    video:                  # Video Buffering Verifier:
+      minrate: 1M           #   Minimum bit rate tolerance
+
+  cqp00:                    # Constant Quantization Parameter
+    is_abstract: true       # Dummy profile
+    video_codec_qp: 0       # Quantization Parameter
+
+  cqp10:                    # Constant Quantization Parameter
+    is_abstract: true       # Dummy profile
+    video_codec_qp: 10      # Quantization Parameter
+
+  cqp23:                    # Constant Quantization Parameter
+    is_abstract: true       # Dummy profile
+    video_codec_qp: 23      # Quantization Parameter
+
+  cqp28:                    # Constant Quantization Parameter
+    is_abstract: true       # Dummy profile
+    video_codec_qp: 28      # Quantization Parameter
+    
+  cqp40:                    # Constant Quantization Parameter
+    is_abstract: true       # Dummy profile
+    video_codec_qp: 40      # Quantization Parameter
+
+  cqp50:                    # Constant Quantization Parameter
+    is_abstract: true       # Dummy profile
+    video_codec_qp: 50      # Quantization Parameter
+        
+  crf00:                    # Constant Rate Factor
+    is_abstract: true       # Dummy profile
+    video_rate_factor: 0    # Rate Factor
+      
+  crf10:                    # Constant Rate Factor
+    is_abstract: true       # Dummy profile
+    video_rate_factor: 10   # Rate Factor
+      
+  crf23:                    # Constant Rate Factor
+    is_abstract: true       # Dummy profile
+    video_rate_factor: 23   # Rate Factor
+
+  crf28:                    # Constant Rate Factor
+    is_abstract: true       # Dummy profile
+    video_rate_factor: 28   # Rate Factor
+
+  crf40:                    # Constant Rate Factor
+    is_abstract: true       # Dummy profile
+    video_rate_factor: 40   # Rate Factor
+      
+  crf50:                    # Constant Rate Factor
+    is_abstract: true       # Dummy profile
+    video_rate_factor: 50   # Rate Factor
+      
+      
+  ratectl_x1a4m:           # 4M Average Bitrate
+    extends: abr4m       # 1 Pass
+
+  ratectl_x1c4m:           # 4M Constant Bitrate
+    extends: cbr4m       # 1 Pass
+
+  ratectl_x1v4ma4m:    # 4M Video Buffering Verifier (ABR-VBV)
+    extends: vbv4m abr4m # 1 Pass
+
+  ratectl_x1a2m:           # 2M Average Bitrate
+    extends: abr2m       # 1 Pass
+
+
+  ratectl_x1c2m:           # 2M Constant Bitrate
+    extends: cbr2m       # 1 Pass
+
+  ratectl_x1v2ma2m:    # 2M Video Buffering Verifier (ABR-VBV)
+    extends: vbv2m abr2m # 1 Pass
+
+  ratectl_x1a1m:           # 1M Average Bitrate
+    extends: abr1m       # 1 Pass
+
+  ratectl_x1c1m:           # 1M Constant Bitrate
+    extends: cbr1m       # 1 Pass
+
+  ratectl_x1v1ma1m:    # 1M Video Buffering Verifier (ABR-VBV)
+    extends: vbv1m abr1m # 1 Pass
+
+  ratectl_x2a4m:           # 4M Average Bitrate
+    extends: 2passes abr4m       # 2 Passes 
+
+  ratectl_x2c4m:           # 4M Constant Bitrate
+    extends: 2passes cbr4m       # 2 Passes 
+
+  ratectl_x2v4ma4m:    # 4M Video Buffering Verifier (ABR-VBV)
+    extends: 2passes vbv4m abr4m # 2 Passes 
+      
+  ratectl_x2a2m:           # 2M Average Bitrate
+    extends: 2passes  abr2m       # 2 Passes 
+
+  ratectl_x2c2m:           # 2M Constant Bitrate
+    extends: 2passes  cbr2m       # 2 Passes 
+
+  ratectl_x2v2ma2m:    # 2M Video Buffering Verifier (ABR-VBV)
+    extends: 2passes  vbv2m abr2m # 2 Passes 
+
+  ratectl_x2a1m:           # 1M Average Bitrate
+    extends: 2passes  abr1m       # 2 Passes 
+
+  ratectl_x2c1m:           # 1M Constant Bitrate
+    extends: 2passes  cbr1m       # 2 Passes 
+
+  ratectl_x2v1ma1m:    # 1M Video Buffering Verifier (ABR-VBV)
+    extends: 2passes  vbv1m abr1m # 2 Passes 
+
+    
+  ## Simple Constant Quantization Parameter
+  
+  ratectl_x1qp00:           # Constant Quantization Parameter — 00
+    extends: cqp00
+
+  ratectl_x1qp10:           # Constant Quantization Parameter — 10
+    extends: cqp10
+
+  ratectl_x1qp23:           # Constant Quantization Parameter — 23
+    extends: cqp23
+    
+  ratectl_x1qp28:           # Constant Quantization Parameter — 28
+    extends: cqp28
+
+  ratectl_x1qp40:           # Constant Quantization Parameter — 40
+    extends: cqp40
+
+  ratectl_x1qp50:           # Constant Quantization Parameter — 40
+    extends: cqp50
+
+  ## Simple Constant Rate Factor
+  
+  ratectl_x1rf00:           # Constant Rate Factor — 00
+    extends: crf00
+
+  ratectl_x1rf10:           # Constant Rate Factor — 10
+    extends: crf10
+
+  ratectl_x1rf23:           # Constant Rate Factor — 23
+    extends: crf23
+    
+  ratectl_x1rf28:           # Constant Rate Factor — 28
+    extends: crf28
+
+  ratectl_x1rf40:           # Constant Rate Factor — 40
+    extends: crf40
+
+  ratectl_x1rf50:           # Constant Rate Factor — 50
+    extends: crf50
+
+  ## 4M Video Buffering Verifier with Constant Rate Factor
+
+  ratectl_x1v4mrf00:    # VBV 4M with Constant Rate Factor — 00
+    extends: vbv4m crf00
+
+  ratectl_x1v4mrf10:    # VBV 4M with Constant Rate Factor — 10
+    extends: vbv4m crf10
+
+  ratectl_x1v4mrf23:    # VBV 4M with Constant Rate Factor — 23
+    extends: vbv4m crf23
+    
+  ratectl_x1v4mrf28:    # VBV 4M with Constant Rate Factor — 28
+    extends: vbv4m crf28
+
+  ratectl_x1v4mrf40:    # VBV 4M with Constant Rate Factor — 40
+    extends: vbv4m crf40
+
+  ratectl_x1v4mrf50:    # VBV 4M with Constant Rate Factor — 50
+    extends: vbv4m crf50
+
+  ## 2M Video Buffering Verifier with Constant Rate Factor
+  
+  ratectl_x1v2mrf00:    # VBV 2M with Constant Rate Factor — 00
+    extends: vbv2m crf00
+
+  ratectl_x1v2mrf10:    # VBV 2M with Constant Rate Factor — 10
+    extends: vbv2m crf10
+
+  ratectl_x1v2mrf23:    # VBV 2M with Constant Rate Factor — 23
+    extends: vbv2m crf23
+    
+  ratectl_x1v2mrf28:    # VBV 2M with Constant Rate Factor — 28
+    extends: vbv2m crf28
+
+  ratectl_x1v2mrf40:    # VBV 2M with Constant Rate Factor — 40
+    extends: vbv2m crf40
+
+  ratectl_x1v2mrf50:    # VBV 2M with Constant Rate Factor — 50
+    extends: vbv2m crf50
+    
+  ## 1M Video Buffering Verifier with Constant Rate Factor
+  
+  ratectl_x1v1mrf00:    # VBV 1M with Constant Rate Factor — 00
+    extends: vbv1m crf00
+
+  ratectl_x1v1mrf10:    # VBV 1M with Constant Rate Factor — 10
+    extends: vbv1m crf10
+
+  ratectl_x1v1mrf23:    # VBV 1M with Constant Rate Factor — 23
+    extends: vbv1m crf23
+    
+  ratectl_x1v1mrf28:    # VBV 1M with Constant Rate Factor — 28
+    extends: vbv1m crf28
+
+  ratectl_x1v1mrf40:    # VBV 1M with Constant Rate Factor — 40
+    extends: vbv1m crf40
+
+  ratectl_x1v1mrf50:    # VBV 1M with Constant Rate Factor — 50
+    extends: vbv1m crf50
