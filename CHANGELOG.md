@@ -1,8 +1,9 @@
 # 0.1505573195
 
 1. Add tests based on examples.
-2. Split examples to `complex` and `featured`.
+2. Split examples to `complex`, `featured` and `experiments`.
 3, Fix compatibility errors.
+4, Fix some minor issues.
 
 # 0.1470294456
 
