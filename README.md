@@ -547,9 +547,9 @@ There are some complex examples. The most notable are:
 * [**«Rate Control H264»**](/examples/experiments/rate-control/rate-control-h264.test-config.yaml) 
   — different encoding variants of encoding from article 
   [Understanding Rate Control Modes (x264, x265)](http://slhck.info/video/2017/03/01/rate-control.html).
-* [**GOP Control H264»**](/examples/experiments/gop-control/gop-control-h264.long-config.yaml) 
+* [**«GOP Control H264»**](/examples/experiments/gop-control/gop-control-h264.long-config.yaml) 
   — different variants of assigning constant GOP.
-* [**Codec Control»**](/examples/experiments/codec-control/codec-control.test-config.yaml) 
+* [**«Codec Control»**](/examples/experiments/codec-control/codec-control.test-config.yaml) 
   — different variants of assigning different codecs and codec options.
 
 
