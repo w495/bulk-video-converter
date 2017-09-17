@@ -16,9 +16,9 @@ bulk_video_converter.bash:
   async_for_profiles:
     false
   # async_for_profiles done
-# NOTICE 85:  bulk_video_converter.bash gets file names from config
+# NOTICE 94:  bulk_video_converter.bash gets file names from config
   input/files/are/from/config:
-# NOTICE 175:  bulk_video_converter.bash gets file names from config
+# NOTICE 210:  bulk_video_converter.bash gets file names from config
     youtube_x2_1080p_hd for input/files/are/from/config:
       youtube_x2_1080p_hd:
         global input:
@@ -43,7 +43,7 @@ bulk_video_converter.bash:
         # passes done
       # youtube_x2_1080p_hd done
     # youtube_x2_1080p_hd for input/files/are/from/config done
-# NOTICE 1492:  bulk_video_converter.bash gets file names from config
+# NOTICE 1699:  bulk_video_converter.bash gets file names from config
     youtube_720p for input/files/are/from/config:
       youtube_720p:
         global input:
@@ -65,7 +65,7 @@ bulk_video_converter.bash:
         # passes done
       # youtube_720p done
     # youtube_720p for input/files/are/from/config done
-# NOTICE 2426:  bulk_video_converter.bash gets file names from config
+# NOTICE 2783:  bulk_video_converter.bash gets file names from config
     youtube_480p for input/files/are/from/config:
       youtube_480p:
         global input:
@@ -87,7 +87,7 @@ bulk_video_converter.bash:
         # passes done
       # youtube_480p done
     # youtube_480p for input/files/are/from/config done
-# NOTICE 3448:  bulk_video_converter.bash gets file names from config
+# NOTICE 3894:  bulk_video_converter.bash gets file names from config
     youtube_360p for input/files/are/from/config:
       youtube_360p:
         global input:

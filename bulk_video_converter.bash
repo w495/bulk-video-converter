@@ -1421,12 +1421,21 @@ handle_video_h264_options(){
     );
 
 
-    # Minimum quantizer. Doesn't need to be changed.
+    # Constant quantization. Doesn't need to be changed.
+    local qp=$(profile ${profile_name} video codec qp);
+    codec_options+=$(if_exists "-qp '%s'" ${qp});
+
+    # Constant quantization. Doesn't need to be changed.
+    qp=$(profile ${profile_name} video codec quantization);
+    codec_options+=$(if_exists "-qp '%s'" ${qp});
+
+    
+    # Minimum quantization. Doesn't need to be changed.
     # Recommended default: -qmin 10
     local qmin=$(profile ${profile_name} video codec qmin);
     codec_options+=$(if_exists "-qmin '%s'" ${qmin});
 
-    # Maximum quantizer. Doesn't need to be changed.
+    # Maximum quantization. Doesn't need to be changed.
     # Recommended default: -qmax 51
     local qmax=$(profile ${profile_name} video codec qmax);
     codec_options+=$(if_exists "-qmax '%s'" ${qmax});
