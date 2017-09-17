@@ -516,6 +516,8 @@ Check source code of [test.bash](test.bash)  for more details.
 It has some special features.
 * Dry-run. You can run script without doing anything 
   to check generated FFMpeg options.
+* Extended profiles. Any profile can inherit and extend options
+  from another profile. Nested option structures are overridden too.
 * Dependent profiles that are handles consequently when the result 
   of one processing is used as an input to another one 
   (system `wait` is applied). 
