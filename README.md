@@ -498,8 +498,8 @@ to directory under you `$PATH`:
 ## Tests
 
 Just run 
-```
-    ./test.bash 
+```bash
+bash ./test.bash 
 ```
 
 It calls `bulk_video_converter.bash` with YAML-configurations from examples-folder.
@@ -510,13 +510,10 @@ Check source code of [test.bash](test.bash)  for more details.
 It has some special features.
 * Dependent profiles that are handles consequently when the result of one processing is used as an input to another one (system `wait` is applied). See [dependent encoding config](examples/featured/dependent-encoding/dependent-encoding.untested.config.yaml) and [dependent encoding log](examples/featured/dependent-encoding/dependent-encoding.raw.yaml) as a visul representation of processing sequence.
 * Configurable asynchronous handing for files and profiles.
-* Device capturing based on FFMpeg's device handling. See [screen capturing config](examples/featured/screen-capturing/screen-capturing.test-config.yaml) and [screen capturing output](examples/featured/screen-capturing/screen-capturing.wanted.yaml)
+* Device capturing based on FFMpeg's device handling. See [screen capturing test config](examples/featured/screen-capturing/screen-capturing.test-config.yaml) and [screen capturing test output](examples/featured/screen-capturing/screen-capturing.wanted.yaml).
 * Simple scene detection based on FFMpeg's filter `select='gt(scene,0.4)'.
 
 See also `examples` directory.
-
-
-
 
 
 
