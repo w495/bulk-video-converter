@@ -1,0 +1,74 @@
+bulk_video_converter.bash:
+  datetime:
+    1970-01-01_01-01-01-00
+  # datetime done
+  versions:
+    bulk_video_converter.bash:
+      0.1505573195
+    # bulk_video_converter.bash done
+    config:
+      0.1505573195
+    # config done
+  # versions done
+  async_for_files:
+    false
+  # async_for_files done
+  async_for_profiles:
+    false
+  # async_for_profiles done
+# NOTICE 91:  bulk_video_converter.bash gets file names from config
+  input/files/are/from/config:
+# NOTICE 138:  bulk_video_converter.bash gets file names from config
+    scene_04 for input/files/are/from/config:
+      scene_04:
+        global input:
+          -threads '0' -ss '00:00:10' 
+        # global input done
+        video:
+          -filter:v "yadif=1:-1:0,select='gt(scene,0.4)',showinfo" 
+        # video done
+        audio:
+          null
+        # audio done
+        global output:
+          -ss '00:00:10' -t '00:00:10' -to '00:00:30' 
+        # global output done
+        format:
+          -f 'null' 
+        # format done
+        passes:
+# NOTICE 514:  bulk_video_converter.bash callback = frame_info
+          pass 1:
+            /usr/bin/ffmpeg -threads '0' -ss '00:00:10' -i 'input/files/are/from/config' -filter:v "yadif=1:-1:0,select='gt(scene,0.4)',showinfo" -ss '00:00:10' -t '00:00:10' -to '00:00:30' -f 'null' -y 'qq' 2> >( grep --line-buffered 'pts_time' | sed -uE 's/.*n:\s*?([0-9]+).*pts:\s*?([0-9]+).*pts_time:\s*?([0-9\.]+).*pos:\s*?([0-9]+).*.*type:\s*?([IPB?]+).*.*mean:\s*?\[(.+)\].*.*stdev:\s*?\[(.+)\].*/n:\1\tpts:\2\tpts_time:\3\t\tpos:\4\ttype:\5\tmean:\6 std:\7/gi' | tee //tmp/config-scene_04-1-null.ffmpeg.log 1>&2);
+          # pass 1 done
+        # passes done
+      # scene_04 done
+    # scene_04 for input/files/are/from/config done
+# NOTICE 578:  bulk_video_converter.bash gets file names from config
+    scene_09 for input/files/are/from/config:
+      scene_09:
+        global input:
+          -threads '0' -ss '00:00:10' 
+        # global input done
+        video:
+          -filter:v "yadif=1:-1:0,select='gt(scene,0.9)',showinfo" 
+        # video done
+        audio:
+          null
+        # audio done
+        global output:
+          -ss '00:00:10' -t '00:00:10' -to '00:00:30' 
+        # global output done
+        format:
+          -f 'null' 
+        # format done
+        passes:
+# NOTICE 965:  bulk_video_converter.bash callback = frame_info
+          pass 1:
+            /usr/bin/ffmpeg -threads '0' -ss '00:00:10' -i 'input/files/are/from/config' -filter:v "yadif=1:-1:0,select='gt(scene,0.9)',showinfo" -ss '00:00:10' -t '00:00:10' -to '00:00:30' -f 'null' -y 'qq' 2> >( grep --line-buffered 'pts_time' | sed -uE 's/.*n:\s*?([0-9]+).*pts:\s*?([0-9]+).*pts_time:\s*?([0-9\.]+).*pos:\s*?([0-9]+).*.*type:\s*?([IPB?]+).*.*mean:\s*?\[(.+)\].*.*stdev:\s*?\[(.+)\].*/n:\1\tpts:\2\tpts_time:\3\t\tpos:\4\ttype:\5\tmean:\6 std:\7/gi' | tee //tmp/config-scene_09-1-null.ffmpeg.log 1>&2);
+          # pass 1 done
+        # passes done
+      # scene_09 done
+    # scene_09 for input/files/are/from/config done
+  # input/files/are/from/config done
+# bulk_video_converter.bash done

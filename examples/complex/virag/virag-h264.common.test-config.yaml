@@ -11,8 +11,8 @@ profile:
     #source: /home/user/Video/*.MTS  # also you can set file names here.
     start: 00:00:00
     stop: 00:02:30
-    output_dir_name: ./out
-    pass_log_dir_name: ./pass_log
+    output_dir_name: /tmp
+    pass_log_dir_name: /tmp
   virag_h264x1_pal_sd:                  # PAL SD video.
     extends:   base
     passes: 1

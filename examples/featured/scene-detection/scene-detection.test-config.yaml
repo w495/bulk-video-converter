@@ -1,7 +1,7 @@
 self:
   no_async: true
   compatibility:
-    from: 0.1470294456
+    from: 0.1505573195
 
 ffmpeg:
   bin: /usr/bin/ffmpeg
@@ -11,7 +11,7 @@ profile:
 
   scene_detector:
     start: 00:00:10
-    #stop: 00:00:30
+    stop: 00:00:30
     duration:  00:00:10
 
     is_abstract: true           # Dummy profile (only for inheritance)
@@ -24,10 +24,11 @@ profile:
         threshold: 0.1          #     that have threshold ~= 0.1.
     audio: null                 # There is no any audio settings.
     output:                     # Output settings
+      dir_name: /tmp            
       file_name: qq             #   There is no any output file.
     log:                        # But it has log that is
       callback: frame_info      #   handled with specific callback
-      dir_name: ./out           #   and written  to `./out` dir.
+      dir_name: /tmp            #   and written  to `./out` dir.
 
   scene_04:                       # Conrete «Soft» profile
     extends: scene_detector       #   that extends `scene_detector`.

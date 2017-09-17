@@ -1,6 +1,7 @@
 self:
+  no_async: true
   compatibility:
-    from: 0.1463347060
+    from: 0.1505573195
 
 ffmpeg:
   bin: /usr/bin/ffmpeg
@@ -12,12 +13,12 @@ profile:
     # you can mark profile as is_abstract
     # and it will be used only for inheritance.
     is_abstract: true
-    output_dir_name: ./out
-    #source: /home/w495/Videos/input/Tulum.mp4
-    ignore:
-      start: 00:00:00
-      stop: 00:00:30
-      duration:  00:00:30
+    output:
+      dir_name: /tmp
+    #source: /home/ndvr/Videos/*.mts
+    start: 00:00:00
+    stop: 00:00:30
+    duration:  00:00:30
 
   ## Semi-TVzavr's profile for HDTV devices.
   ## Check in the player on the https://www.tvzavr.ru/
@@ -29,10 +30,10 @@ profile:
       width:   -1  # 1920 # for 16:9
       height:  1080
       bitrate: 4000k
+      framerate: 25       #     Set framerate to 25.
       codec:
         name : h264
-        framerate: 25       #     Set framerate to 25.
-        level: 4.2
+        level: 4.0
         preset: veryslow
         profile: high
         weightp: smart

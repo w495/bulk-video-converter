@@ -1,8 +1,7 @@
 self:
   no_async: true
   compatibility:
-    from: 0.1463888719
-    geo: 55.80995 37.49775
+    from: 0.1505573195
 
 ffmpeg:
   bin: /usr/bin/ffmpeg
@@ -17,9 +16,9 @@ profile:
     # you can mark profile as is_abstract
     # and it will be used only for inheritance.
     is_abstract: true
-    output_dir_name: ./out
-    #source: /home/w495/Videos/input/0000?.MTS
-    #log: /dev/null
+    output:
+      dir_name: /tmp
+    #source: /home/ndvr/Videos/*.mts
     ignore:
       start: 00:00:00
       stop: 00:00:30
@@ -35,7 +34,6 @@ profile:
         name : h264         #     Video codec: H.264
         profile: high       #     High Profile
         bframes: 2          #     2 consecutive B frames
-        framerate: 25       #     Set framerate to 25.
         gop:                #     Group of pictures Settings.
           size: 13          #       GOP of half the frame rate
           min: 13           #       Minimal GOP size.
@@ -44,6 +42,7 @@ profile:
         use_cabac: true     #     CABAC (default entropy encoder)
       progressive: true     # Progressive scan (no interlacing).
       pixel_format: yuv420p # Chroma subsampling: 4:2:0
+      framerate: 25         #     Set framerate to 25.
     audio:                  # Audio Settings
       codec:                #   Audio Codec Settings
         name: aac           #     Audio codec: AAC-LC

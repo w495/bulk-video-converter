@@ -1,3 +1,9 @@
+# 0.1505573195
+
+1. Add tests based on examples.
+2. Split examples to `complex` and `featured`.
+3, Fix compatibility errors.
+
 # 0.1470294456
 
 1.  Add switching of audio and video and their codecs.

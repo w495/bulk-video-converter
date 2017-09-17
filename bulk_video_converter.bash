@@ -16,27 +16,40 @@ set -E
 # Startup constants.
 # ------------------------------------------------------------
 
-# Random sting for random naming.
-readonly RANDOM_STING=$(cat /dev/urandom \
-    | tr -dc "A-Za-z0-9" \
-    | fold -c8 \
-    | head -n 1
-);
-
-# Time of script start for time based naming.
-readonly START_TIME_STRING=$(date "+%Y-%m-%d_%H-%M-%S-%N");
-readonly START_TIME_NS=$(($(date +%s%N)));
-
 # Self name.
 readonly SCRIPT_NAME=$(basename $0);
 readonly SCRIPT_PID=$$;
 
+# Random sting for random naming.
+if [[ -v 'RANDOM_STRING' ]]; then
+    echo "# ${SCRIPT_NAME}: use RANDOM_STRING from ENV:";
+    echo "# ${SCRIPT_NAME}:     RANDOM_STRING='${RANDOM_STRING}'.";
+else
+    readonly RANDOM_STRING=$(cat /dev/urandom \
+        | tr -dc "A-Za-z0-9" \
+        | fold -c8 \
+        | head -n 1
+    );
+fi;
+
+# Time of script start for time based naming.
+if [[ -v 'START_TIME_STRING' ]]; then
+    echo "# ${SCRIPT_NAME}: use START_TIME_STRING from ENV:";
+    echo "# ${SCRIPT_NAME}:     START_TIME_STRING='${START_TIME_STRING}'.";
+else
+    readonly START_TIME_STRING=$(date "+%Y-%m-%d_%H-%M-%S-%N");
+fi;
+
+readonly START_TIME_NS=$(($(date +%s%N)));
+
+
+
 # Version for compatibility detection.
-readonly VERSION='0.1470294456';
+readonly VERSION='0.1505573195';
 
 # Internal constants.
 readonly TMP_DIR_BASE_NAME="/tmp/${SCRIPT_NAME}"
-readonly TMP_DIR_NAME="${TMP_DIR_BASE_NAME}/${RANDOM_STING}";
+readonly TMP_DIR_NAME="${TMP_DIR_BASE_NAME}/${RANDOM_STRING}";
 
 
 # ------------------------------------------------------------
@@ -316,7 +329,7 @@ EOF
 main(){
     $(verbose_start "${SCRIPT_NAME}");
 
-    $(verbose_block "datetime@%2s" "'$(date '+%Y:%m:%d %H.%M.%S')'");
+    $(verbose_block "datetime@%2s" "$START_TIME_STRING");
 
     # non-local function `configure` — sets global options of script.
     configure "${@}";
