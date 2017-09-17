@@ -1,0 +1,61 @@
+#
+# Config example due to [H.264 web video encoding tutorial with FFmpeg]
+# https://www.virag.si/2012/06/h.264-web-video-encoding-tutorial-with-ffmpeg/
+#
+ffmpeg:
+  bin: /usr/bin/ffmpeg
+  threads: 0
+profile:
+  base:
+    is_abstract: 1 # It will be used only for inheritance.
+    #source: /home/user/Video/*.MTS  # also you can set file names here.
+    start: 00:00:00
+    stop: 00:02:30
+    output_dir_name: /tmp
+    pass_log_dir_name: /tmp
+  virag_h264x1_pal_sd:                  # PAL SD video.
+    extends:   base
+    passes: 1
+    video:
+      width:  0   # any
+      height: 576 # SD
+      preset: slower
+      codec:
+        profile: main
+      bitrate: 1000k
+    audio:
+      codec:
+        name: aac
+      channels: 5.1
+      bitrate: 196k
+  virag_h264x1_480p_web:                # Standard web video.
+    extends: virag_h264x1_pal_sd
+    video:
+      height: 480
+      preset: slow
+      bitrate: 500k
+      maxrate: 500k
+      bufsize: 1000k
+    audio:
+      bitrate: 128k
+      channels: stereo
+  virag_h264x1_480p_tablet:             # Video for iPads and tablets.
+    extends: virag_h264x1_480p_web
+    video:
+      codec:
+        profile: main
+      bitrate: 400k
+      maxrate: 400k
+      bufsize: 800k
+  virag_h264x1_360p_mobile:             # 360p video for old phones.
+    extends: virag_h264x1_480p_tablet
+    video:
+      height: 360
+      codec:
+        profile: baseline
+      bitrate: 250k
+      maxrate: 250k
+      bufsize: 500k
+    audio:
+      bitrate: 96k
+      channels: mono
