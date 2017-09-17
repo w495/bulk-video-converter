@@ -225,7 +225,7 @@ bulk_video_converter.bash:
 
 If you want to get several videos from one source you should describe 
 several profiles in the config. For example, let we use profiles from 
-[H.264 web video encoding tutorial with FFmpeg.](https://www.virag.si/2012/01/web-video-encoding-tutorial-with-ffmpeg-0-9/)
+[H.264 web video encoding tutorial with FFmpeg.](https://www.virag.si/2012/06/h.264-web-video-encoding-tutorial-with-ffmpeg/)
 
 
 #### Config example for virag's profiles
