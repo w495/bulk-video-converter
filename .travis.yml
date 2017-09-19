@@ -1,0 +1,10 @@
+language: bash
+install: true
+script:
+  - ./bulk_video_converter.bash
+  - ./test.bash
+notifications:
+  email: false
+os:
+  - linux
+  - osx
