@@ -27,7 +27,7 @@ if [[ -v 'RANDOM_STRING' ]]; then
 else
     readonly RANDOM_STRING=$(cat /dev/urandom \
         | tr -dc "A-Za-z0-9" \
-        | fold -c8 \
+        | fold -w8 \
         | head -n 1
     );
 fi;
