@@ -17,9 +17,9 @@ bulk_video_converter.bash:
     false
   # async_for_profiles done
 LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
-# NOTICE 101:  bulk_video_converter.bash gets file names from config
+# NOTICE 103:  bulk_video_converter.bash gets file names from config
   input/files/are/from/config:
-# NOTICE 201:  bulk_video_converter.bash gets file names from config
+# NOTICE 208:  bulk_video_converter.bash gets file names from config
     youtube_x2_1080p_hd for input/files/are/from/config:
       youtube_x2_1080p_hd:
         global input:
@@ -44,7 +44,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # youtube_x2_1080p_hd done
     # youtube_x2_1080p_hd for input/files/are/from/config done
-# NOTICE 1782:  bulk_video_converter.bash gets file names from config
+# NOTICE 1848:  bulk_video_converter.bash gets file names from config
     youtube_720p for input/files/are/from/config:
       youtube_720p:
         global input:
@@ -66,7 +66,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # youtube_720p done
     # youtube_720p for input/files/are/from/config done
-# NOTICE 2931:  bulk_video_converter.bash gets file names from config
+# NOTICE 2989:  bulk_video_converter.bash gets file names from config
     youtube_480p for input/files/are/from/config:
       youtube_480p:
         global input:
@@ -88,7 +88,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # youtube_480p done
     # youtube_480p for input/files/are/from/config done
-# NOTICE 4014:  bulk_video_converter.bash gets file names from config
+# NOTICE 4124:  bulk_video_converter.bash gets file names from config
     youtube_360p for input/files/are/from/config:
       youtube_360p:
         global input:

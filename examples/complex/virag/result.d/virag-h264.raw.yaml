@@ -18,9 +18,9 @@ bulk_video_converter.bash:
     false
   # async_for_profiles done
 LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
-# NOTICE 121:  bulk_video_converter.bash gets file names from config
+# NOTICE 97:  bulk_video_converter.bash gets file names from config
   input/files/are/from/config:
-# NOTICE 181:  bulk_video_converter.bash gets file names from config
+# NOTICE 156:  bulk_video_converter.bash gets file names from config
     virag_h264x1_pal_sd for input/files/are/from/config:
       virag_h264x1_pal_sd:
         global input:
@@ -45,7 +45,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # virag_h264x1_pal_sd done
     # virag_h264x1_pal_sd for input/files/are/from/config done
-# NOTICE 1050:  bulk_video_converter.bash gets file names from config
+# NOTICE 987:  bulk_video_converter.bash gets file names from config
     virag_h264x1_480p_web for input/files/are/from/config:
       virag_h264x1_480p_web:
         global input:
@@ -70,7 +70,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # virag_h264x1_480p_web done
     # virag_h264x1_480p_web for input/files/are/from/config done
-# NOTICE 2231:  bulk_video_converter.bash gets file names from config
+# NOTICE 2190:  bulk_video_converter.bash gets file names from config
     virag_h264x1_480p_tablet for input/files/are/from/config:
       virag_h264x1_480p_tablet:
         global input:
@@ -95,7 +95,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # virag_h264x1_480p_tablet done
     # virag_h264x1_480p_tablet for input/files/are/from/config done
-# NOTICE 3864:  bulk_video_converter.bash gets file names from config
+# NOTICE 3750:  bulk_video_converter.bash gets file names from config
     virag_h264x1_360p_mobile for input/files/are/from/config:
       virag_h264x1_360p_mobile:
         global input:

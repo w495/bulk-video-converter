@@ -9,4 +9,4 @@ notifications:
   email: false
 os:
   - linux
-  - osx
+# - osx

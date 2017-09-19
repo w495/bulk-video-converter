@@ -17,9 +17,9 @@ bulk_video_converter.bash:
     false
   # async_for_profiles done
 LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
-# NOTICE 152:  bulk_video_converter.bash gets file names from config
+# NOTICE 101:  bulk_video_converter.bash gets file names from config
   input/files/are/from/config:
-# NOTICE 209:  bulk_video_converter.bash gets file names from config
+# NOTICE 162:  bulk_video_converter.bash gets file names from config
     mai_vob_h264_crf_1080p_hd for input/files/are/from/config:
       mai_vob_h264_crf_1080p_hd:
         global input:
@@ -41,7 +41,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # mai_vob_h264_crf_1080p_hd done
     # mai_vob_h264_crf_1080p_hd for input/files/are/from/config done
-# NOTICE 967:  bulk_video_converter.bash gets file names from config
+# NOTICE 1025:  bulk_video_converter.bash gets file names from config
     mai_vob_h264_crf_0720p_hd for input/files/are/from/config:
       mai_vob_h264_crf_0720p_hd:
         global input:
@@ -63,7 +63,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # mai_vob_h264_crf_0720p_hd done
     # mai_vob_h264_crf_0720p_hd for input/files/are/from/config done
-# NOTICE 2077:  bulk_video_converter.bash gets file names from config
+# NOTICE 2191:  bulk_video_converter.bash gets file names from config
     mai_vob_h264_crf_0576p_hi for input/files/are/from/config:
       mai_vob_h264_crf_0576p_hi:
         global input:
@@ -85,7 +85,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # mai_vob_h264_crf_0576p_hi done
     # mai_vob_h264_crf_0576p_hi for input/files/are/from/config done
-# NOTICE 3526:  bulk_video_converter.bash gets file names from config
+# NOTICE 3687:  bulk_video_converter.bash gets file names from config
     mai_vob_h264_crf_0480p_hi for input/files/are/from/config:
       mai_vob_h264_crf_0480p_hi:
         global input:
