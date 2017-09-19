@@ -92,3 +92,6 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         global input:
           -threads '0' 
         # global input done
+        video:
+          -codec:v 'libx264' -profile:v 'main' -weightp 'smart' -preset 'veryslow' -level:v '3.0' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -crf '23' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-2:480" 
+        # video done
