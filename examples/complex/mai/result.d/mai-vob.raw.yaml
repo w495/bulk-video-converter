@@ -16,9 +16,10 @@ bulk_video_converter.bash:
   async_for_profiles:
     false
   # async_for_profiles done
-# NOTICE 93:  bulk_video_converter.bash gets file names from config
+LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
+# NOTICE 152:  bulk_video_converter.bash gets file names from config
   input/files/are/from/config:
-# NOTICE 149:  bulk_video_converter.bash gets file names from config
+# NOTICE 209:  bulk_video_converter.bash gets file names from config
     mai_vob_h264_crf_1080p_hd for input/files/are/from/config:
       mai_vob_h264_crf_1080p_hd:
         global input:
@@ -35,12 +36,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '4.2' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -crf '23' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -strict 'experimental' -codec:a 'aac' -b:a '128k' -ac '6' -movflags '+faststart' -f 'mp4' -y '//tmp/config-mai_vob_h264_crf_1080p_hd.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-mai_vob_h264_crf_1080p_hd-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '4.2' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -crf '23' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -strict 'experimental' -codec:a 'aac' -b:a '128k' -ac '6' -movflags '+faststart' -f 'mp4' -y '//tmp/config-mai_vob_h264_crf_1080p_hd.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-mai_vob_h264_crf_1080p_hd-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # mai_vob_h264_crf_1080p_hd done
     # mai_vob_h264_crf_1080p_hd for input/files/are/from/config done
-# NOTICE 869:  bulk_video_converter.bash gets file names from config
+# NOTICE 967:  bulk_video_converter.bash gets file names from config
     mai_vob_h264_crf_0720p_hd for input/files/are/from/config:
       mai_vob_h264_crf_0720p_hd:
         global input:
@@ -57,12 +58,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '3.1' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -crf '23' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:720" -strict 'experimental' -codec:a 'aac' -b:a '128k' -ac '6' -movflags '+faststart' -f 'mp4' -y '//tmp/config-mai_vob_h264_crf_0720p_hd.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-mai_vob_h264_crf_0720p_hd-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '3.1' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -crf '23' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:720" -strict 'experimental' -codec:a 'aac' -b:a '128k' -ac '6' -movflags '+faststart' -f 'mp4' -y '//tmp/config-mai_vob_h264_crf_0720p_hd.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-mai_vob_h264_crf_0720p_hd-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # mai_vob_h264_crf_0720p_hd done
     # mai_vob_h264_crf_0720p_hd for input/files/are/from/config done
-# NOTICE 1909:  bulk_video_converter.bash gets file names from config
+# NOTICE 2077:  bulk_video_converter.bash gets file names from config
     mai_vob_h264_crf_0576p_hi for input/files/are/from/config:
       mai_vob_h264_crf_0576p_hi:
         global input:
@@ -79,12 +80,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'main' -weightp 'smart' -preset 'veryslow' -level:v '3.0' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -crf '23' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:576" -strict 'experimental' -codec:a 'aac' -b:a '196k' -ac '2' -movflags '+faststart' -f 'mp4' -y '//tmp/config-mai_vob_h264_crf_0576p_hi.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-mai_vob_h264_crf_0576p_hi-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'main' -weightp 'smart' -preset 'veryslow' -level:v '3.0' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -crf '23' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:576" -strict 'experimental' -codec:a 'aac' -b:a '196k' -ac '2' -movflags '+faststart' -f 'mp4' -y '//tmp/config-mai_vob_h264_crf_0576p_hi.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-mai_vob_h264_crf_0576p_hi-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # mai_vob_h264_crf_0576p_hi done
     # mai_vob_h264_crf_0576p_hi for input/files/are/from/config done
-# NOTICE 3255:  bulk_video_converter.bash gets file names from config
+# NOTICE 3526:  bulk_video_converter.bash gets file names from config
     mai_vob_h264_crf_0480p_hi for input/files/are/from/config:
       mai_vob_h264_crf_0480p_hi:
         global input:
@@ -101,7 +102,7 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'main' -weightp 'smart' -preset 'veryslow' -level:v '3.0' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -crf '23' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-2:480" -strict 'experimental' -codec:a 'aac' -b:a '196k' -ac '2' -movflags '+faststart' -f 'mp4' -y '//tmp/config-mai_vob_h264_crf_0480p_hi.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-mai_vob_h264_crf_0480p_hi-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'main' -weightp 'smart' -preset 'veryslow' -level:v '3.0' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -crf '23' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-2:480" -strict 'experimental' -codec:a 'aac' -b:a '196k' -ac '2' -movflags '+faststart' -f 'mp4' -y '//tmp/config-mai_vob_h264_crf_0480p_hi.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-mai_vob_h264_crf_0480p_hi-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # mai_vob_h264_crf_0480p_hi done

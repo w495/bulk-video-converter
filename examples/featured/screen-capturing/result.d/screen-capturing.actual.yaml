@@ -10,6 +10,7 @@ bulk_video_converter.bash:
     false
   async_for_profiles:
     false
+LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
   input/files/are/from/config:
     screen_hd for :0.0:
       screen_hd:
@@ -23,7 +24,7 @@ bulk_video_converter.bash:
           -movflags '+faststart' -f 'mp4' 
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -f alsa -i hw:0 -f x11grab -s wxga -i ':0.0' -codec:v 'libx264' -profile:v 'high444' -weightp 'smart' -level:v '3.1' -bf '3' -b:v '2000k' -filter:v "yadif=1:-1:0,scale=1280:720" -strict 'experimental' -codec:a 'aac' -b:a '320k' -ac '6' -movflags '+faststart' -f 'mp4' -y '//tmp/display-0-0-1970-01-01_01-01-01-00-screen_hd.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/display-0-0-1970-01-01_01-01-01-00-screen_hd-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -f alsa -i hw:0 -f x11grab -s wxga -i ':0.0' -codec:v 'libx264' -profile:v 'high444' -weightp 'smart' -level:v '3.1' -bf '3' -b:v '2000k' -filter:v "yadif=1:-1:0,scale=1280:720" -strict 'experimental' -codec:a 'aac' -b:a '320k' -ac '6' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/display-0-0-1970-01-01_01-01-01-00-screen_hd.mp4' 2> >(tee /tmp/video/log/dir/fixture/display-0-0-1970-01-01_01-01-01-00-screen_hd-1-mp4.ffmpeg.log 1>&2);
     screen_lw for :0.0:
       screen_lw:
         global input:
@@ -36,4 +37,4 @@ bulk_video_converter.bash:
           -movflags '+faststart' -f 'mp4' 
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -f alsa -i hw:0 -f x11grab -s wxga -i ':0.0' -codec:v 'libx264' -profile:v 'high444' -weightp 'smart' -level:v '3.0' -bf '3' -b:v '250k' -filter:v "yadif=1:-1:0,scale=480:270" -strict 'experimental' -codec:a 'aac' -b:a '64k' -ac '1' -movflags '+faststart' -f 'mp4' -y '//tmp/display-0-0-1970-01-01_01-01-01-00-screen_lw.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/display-0-0-1970-01-01_01-01-01-00-screen_lw-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -f alsa -i hw:0 -f x11grab -s wxga -i ':0.0' -codec:v 'libx264' -profile:v 'high444' -weightp 'smart' -level:v '3.0' -bf '3' -b:v '250k' -filter:v "yadif=1:-1:0,scale=480:270" -strict 'experimental' -codec:a 'aac' -b:a '64k' -ac '1' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/display-0-0-1970-01-01_01-01-01-00-screen_lw.mp4' 2> >(tee /tmp/video/log/dir/fixture/display-0-0-1970-01-01_01-01-01-00-screen_lw-1-mp4.ffmpeg.log 1>&2);

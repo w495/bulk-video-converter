@@ -17,9 +17,9 @@ bulk_video_converter.bash:
     false
   # async_for_profiles done
 LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
-# NOTICE 98:  bulk_video_converter.bash gets file names from config
+# NOTICE 119:  bulk_video_converter.bash gets file names from config
   input/files/are/from/config:
-# NOTICE 127:  bulk_video_converter.bash gets file names from config
+# NOTICE 153:  bulk_video_converter.bash gets file names from config
     cutting for input/files/are/from/config:
       cutting:
         global input:

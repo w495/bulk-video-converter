@@ -17,9 +17,10 @@ bulk_video_converter.bash:
   async_for_profiles:
     false
   # async_for_profiles done
-# NOTICE 90:  bulk_video_converter.bash gets file names from config
+LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
+# NOTICE 121:  bulk_video_converter.bash gets file names from config
   input/files/are/from/config:
-# NOTICE 151:  bulk_video_converter.bash gets file names from config
+# NOTICE 181:  bulk_video_converter.bash gets file names from config
     virag_h264x1_pal_sd for input/files/are/from/config:
       virag_h264x1_pal_sd:
         global input:
@@ -39,12 +40,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -ss '00:00:00' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'main' -b:v '1000k' -filter:v "yadif=1:-1:0,scale=0:576" -strict 'experimental' -codec:a 'aac' -b:a '196k' -ac '6' -ss '00:00:00' -to '00:02:30' -movflags '+faststart' -f 'mp4' -y '//tmp/config-virag_h264x1_pal_sd.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-virag_h264x1_pal_sd-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -ss '00:00:00' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'main' -b:v '1000k' -filter:v "yadif=1:-1:0,scale=0:576" -strict 'experimental' -codec:a 'aac' -b:a '196k' -ac '6' -ss '00:00:00' -to '00:02:30' -movflags '+faststart' -f 'mp4' -y '//tmp/config-virag_h264x1_pal_sd.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-virag_h264x1_pal_sd-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # virag_h264x1_pal_sd done
     # virag_h264x1_pal_sd for input/files/are/from/config done
-# NOTICE 965:  bulk_video_converter.bash gets file names from config
+# NOTICE 1050:  bulk_video_converter.bash gets file names from config
     virag_h264x1_480p_web for input/files/are/from/config:
       virag_h264x1_480p_web:
         global input:
@@ -64,12 +65,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -ss '00:00:00' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'main' -b:v '500k' -maxrate '500k' -bufsize '1000k' -filter:v "yadif=1:-1:0,scale=0:480" -strict 'experimental' -codec:a 'aac' -b:a '128k' -ac '2' -ss '00:00:00' -to '00:02:30' -movflags '+faststart' -f 'mp4' -y '//tmp/config-virag_h264x1_480p_web.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-virag_h264x1_480p_web-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -ss '00:00:00' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'main' -b:v '500k' -maxrate '500k' -bufsize '1000k' -filter:v "yadif=1:-1:0,scale=0:480" -strict 'experimental' -codec:a 'aac' -b:a '128k' -ac '2' -ss '00:00:00' -to '00:02:30' -movflags '+faststart' -f 'mp4' -y '//tmp/config-virag_h264x1_480p_web.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-virag_h264x1_480p_web-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # virag_h264x1_480p_web done
     # virag_h264x1_480p_web for input/files/are/from/config done
-# NOTICE 2085:  bulk_video_converter.bash gets file names from config
+# NOTICE 2231:  bulk_video_converter.bash gets file names from config
     virag_h264x1_480p_tablet for input/files/are/from/config:
       virag_h264x1_480p_tablet:
         global input:
@@ -89,12 +90,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -ss '00:00:00' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'main' -b:v '400k' -maxrate '400k' -bufsize '800k' -filter:v "yadif=1:-1:0,scale=0:480" -strict 'experimental' -codec:a 'aac' -b:a '128k' -ac '2' -ss '00:00:00' -to '00:02:30' -movflags '+faststart' -f 'mp4' -y '//tmp/config-virag_h264x1_480p_tablet.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-virag_h264x1_480p_tablet-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -ss '00:00:00' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'main' -b:v '400k' -maxrate '400k' -bufsize '800k' -filter:v "yadif=1:-1:0,scale=0:480" -strict 'experimental' -codec:a 'aac' -b:a '128k' -ac '2' -ss '00:00:00' -to '00:02:30' -movflags '+faststart' -f 'mp4' -y '//tmp/config-virag_h264x1_480p_tablet.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-virag_h264x1_480p_tablet-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # virag_h264x1_480p_tablet done
     # virag_h264x1_480p_tablet for input/files/are/from/config done
-# NOTICE 3518:  bulk_video_converter.bash gets file names from config
+# NOTICE 3864:  bulk_video_converter.bash gets file names from config
     virag_h264x1_360p_mobile for input/files/are/from/config:
       virag_h264x1_360p_mobile:
         global input:
@@ -114,7 +115,7 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -ss '00:00:00' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'baseline' -b:v '250k' -maxrate '250k' -bufsize '500k' -filter:v "yadif=1:-1:0,scale=0:360" -strict 'experimental' -codec:a 'aac' -b:a '96k' -ac '1' -ss '00:00:00' -to '00:02:30' -movflags '+faststart' -f 'mp4' -y '//tmp/config-virag_h264x1_360p_mobile.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-virag_h264x1_360p_mobile-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -ss '00:00:00' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'baseline' -b:v '250k' -maxrate '250k' -bufsize '500k' -filter:v "yadif=1:-1:0,scale=0:360" -strict 'experimental' -codec:a 'aac' -b:a '96k' -ac '1' -ss '00:00:00' -to '00:02:30' -movflags '+faststart' -f 'mp4' -y '//tmp/config-virag_h264x1_360p_mobile.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-virag_h264x1_360p_mobile-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # virag_h264x1_360p_mobile done

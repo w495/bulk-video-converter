@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+## Do dirty thing: Copy actual result to expected result.
+
+## Test configuration — initial constants for test running:
+
+readonly TESTS_PATH='./examples';
+readonly TEST_CONFIG_PATTERN='*.test-config.yaml';
+
+## Computed constants for test running:
+
+readonly TESTS_FPATH=$(readlink -f "${TESTS_PATH}");
+readonly TEST_CONFIG_FIND_ARGS="-name ${TEST_CONFIG_PATTERN}" ;
+
+readonly CONFIG_PATH_LIST=$(find ./ -type f ${TEST_CONFIG_FIND_ARGS} );
+readonly TEST_COUINT=$(echo ${CONFIG_PATH_LIST} | wc -w);
+
+tests_dirty_fix () {
+    for CONFIG_PATH in ${CONFIG_PATH_LIST}; do
+        echo "dirty fix '${CONFIG_PATH}';";
+        local CONFIG_FPATH=$(readlink -f "${CONFIG_PATH}");
+        local TEST_BASE_NAME=$(basename "${CONFIG_FPATH}");
+        local TEST_DPATH=$(dirname "${CONFIG_FPATH}");
+        local TEST_NAME="${TEST_BASE_NAME%.*.*}";
+        local RESULT_DPATH="${TEST_DPATH}/result.d";
+
+        local EXPCTD_FPATH="${TEST_DPATH}/${TEST_NAME}.expected.yaml";
+        local RAW_FPATH="${RESULT_DPATH}/${TEST_NAME}.raw.yaml";
+        local ACTL_FPATH="${RESULT_DPATH}/${TEST_NAME}.actual.yaml";
+
+        cp "${ACTL_FPATH}" "${EXPCTD_FPATH}";
+
+    done;
+    echo "dirty fix ok";
+}
+
+tests_dirty_fix;
