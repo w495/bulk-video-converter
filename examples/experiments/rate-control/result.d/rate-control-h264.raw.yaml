@@ -954,3 +954,6 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         global input:
           -threads '0' 
         # global input done
+        video:
+          -codec:v 'libx264' -crf '50' -maxrate '2M' -bufsize '4M' -filter:v "yadif=1:-1:0" 
+        # video done
