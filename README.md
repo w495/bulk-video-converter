@@ -21,7 +21,7 @@ in *YAML* configuration. See [examples](#quick-start-guide) below.
 * [Installation](#installation)
 * [Tests](#tests)
 * [Features](#features)
-* [More examples](#More-examples)
+* [More examples](#more-examples)
 * [Changes](#changes)
 
 ## Motivation
