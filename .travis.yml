@@ -1,5 +1,6 @@
 language: bash
 install: true
+sudo: false
 script:
   - ./bulk_video_converter.bash
   - ./test.bash
