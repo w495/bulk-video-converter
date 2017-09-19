@@ -2,7 +2,8 @@ language: bash
 install: true
 sudo: false
 script:
-  - ./bulk_video_converter.bash -d  
+ - ./bulk_video_converter.bash --help
+  - ./bulk_video_converter.bash --dry-run   
   - ./test.bash
 notifications:
   email: false

@@ -27,7 +27,8 @@ readonly TEST_CONFIG_FIND_ARGS="-name ${TEST_CONFIG_PATTERN}" ;
 readonly INPUT_FILE_PATH_FIXTURE='input/files/are/from/config';
 readonly START_TIME_STRING_FIXTURE="1970-01-01_01-01-01-00";
 readonly RANDOM_STRING_FIXTURE="R1Nd0m";  
-readonly VIDEO_OUTPUT_DIR_FIXTURE='/tmp';
+readonly VIDEO_OUTPUT_DIR_FIXTURE='/tmp/video/output/dir/fixture';
+readonly VIDEO_LOG_DIR_FIXTURE='/tmp/video/log/dir/fixture';
 
 main () {
     print_help "test script ${SCRIPT_PATH};";    
@@ -67,6 +68,7 @@ main () {
         debug "use --input='${INPUT_FILE_PATH_FIXTURE}';";
         debug "use --config='${CONFIG_FPATH}';";
         debug "use --output-dir='${VIDEO_OUTPUT_DIR_FIXTURE}';";
+        debug "use --ffmpeg-log-dir='${VIDEO_LOG_DIR_FIXTURE}';";
         debug "use --dry-run;";
         debug "use --no-async;";        
         debug "and store script result to ${RAW_FPATH}";
@@ -78,6 +80,7 @@ main () {
             --config "${CONFIG_FPATH}"                      \
             --input "${INPUT_FILE_PATH_FIXTURE}"            \
             --output-dir "${VIDEO_OUTPUT_DIR_FIXTURE}"      \
+            --ffmpeg-log-dir "${VIDEO_LOG_DIR_FIXTURE}"     \
             --dry-run                                       \
             --no-async                                      \
             2> "${RAW_FPATH}";
@@ -90,7 +93,11 @@ main () {
         notice 'yaml is ok';
     
         notice 'build test diff ...';
-        debug "use diff -u 'expected/result/file' 'actual/result/file';";
+        debug 'use diff -u expected/file actual/file;';
+        debug "expected/file is '${EXPCTD_FPATH}';"
+        debug "actual/file   is '${ACTL_FPATH}';"
+        debug 'to make diff empty use:';
+        debug "mv '${ACTL_FPATH}' '${EXPCTD_FPATH}';"
         diff -u "${EXPCTD_FPATH}" "${ACTL_FPATH}" 1> "${DIFF_FPATH}"\
         && success "test '${TEST_NAME}' is ok"                      \
         || fail "test '${TEST_NAME}' is failed";

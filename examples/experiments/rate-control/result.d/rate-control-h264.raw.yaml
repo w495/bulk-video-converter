@@ -16,9 +16,10 @@ bulk_video_converter.bash:
   async_for_profiles:
     false
   # async_for_profiles done
-# NOTICE 97:  bulk_video_converter.bash gets file names from config
+LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
+# NOTICE 108:  bulk_video_converter.bash gets file names from config
   input/files/are/from/config:
-# NOTICE 412:  bulk_video_converter.bash gets file names from config
+# NOTICE 449:  bulk_video_converter.bash gets file names from config
     ratectl_x1a4m for input/files/are/from/config:
       ratectl_x1a4m:
         global input:
@@ -35,12 +36,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -b:v '4M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1a4m.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1a4m-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -b:v '4M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1a4m.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1a4m-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1a4m done
     # ratectl_x1a4m for input/files/are/from/config done
-# NOTICE 1299:  bulk_video_converter.bash gets file names from config
+# NOTICE 1350:  bulk_video_converter.bash gets file names from config
     ratectl_x1c4m for input/files/are/from/config:
       ratectl_x1c4m:
         global input:
@@ -57,12 +58,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -maxrate '4M' -minrate '4M' -bufsize '8M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1c4m.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1c4m-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -maxrate '4M' -minrate '4M' -bufsize '8M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1c4m.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1c4m-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1c4m done
     # ratectl_x1c4m for input/files/are/from/config done
-# NOTICE 2541:  bulk_video_converter.bash gets file names from config
+# NOTICE 2646:  bulk_video_converter.bash gets file names from config
     ratectl_x1v4ma4m for input/files/are/from/config:
       ratectl_x1v4ma4m:
         global input:
@@ -79,12 +80,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -b:v '4M' -maxrate '4M' -bufsize '8M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1v4ma4m.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1v4ma4m-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -b:v '4M' -maxrate '4M' -bufsize '8M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1v4ma4m.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1v4ma4m-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1v4ma4m done
     # ratectl_x1v4ma4m for input/files/are/from/config done
-# NOTICE 3757:  bulk_video_converter.bash gets file names from config
+# NOTICE 3891:  bulk_video_converter.bash gets file names from config
     ratectl_x1a2m for input/files/are/from/config:
       ratectl_x1a2m:
         global input:
@@ -101,12 +102,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -b:v '2M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1a2m.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1a2m-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -b:v '2M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1a2m.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1a2m-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1a2m done
     # ratectl_x1a2m for input/files/are/from/config done
-# NOTICE 4642:  bulk_video_converter.bash gets file names from config
+# NOTICE 4809:  bulk_video_converter.bash gets file names from config
     ratectl_x1c2m for input/files/are/from/config:
       ratectl_x1c2m:
         global input:
@@ -123,12 +124,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -maxrate '2M' -minrate '2M' -bufsize '4M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1c2m.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1c2m-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -maxrate '2M' -minrate '2M' -bufsize '4M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1c2m.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1c2m-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1c2m done
     # ratectl_x1c2m for input/files/are/from/config done
-# NOTICE 5887:  bulk_video_converter.bash gets file names from config
+# NOTICE 6071:  bulk_video_converter.bash gets file names from config
     ratectl_x1v2ma2m for input/files/are/from/config:
       ratectl_x1v2ma2m:
         global input:
@@ -145,12 +146,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -b:v '2M' -maxrate '2M' -bufsize '4M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1v2ma2m.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1v2ma2m-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -b:v '2M' -maxrate '2M' -bufsize '4M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1v2ma2m.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1v2ma2m-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1v2ma2m done
     # ratectl_x1v2ma2m for input/files/are/from/config done
-# NOTICE 7108:  bulk_video_converter.bash gets file names from config
+# NOTICE 7307:  bulk_video_converter.bash gets file names from config
     ratectl_x1a1m for input/files/are/from/config:
       ratectl_x1a1m:
         global input:
@@ -167,12 +168,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -b:v '1M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1a1m.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1a1m-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -b:v '1M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1a1m.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1a1m-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1a1m done
     # ratectl_x1a1m for input/files/are/from/config done
-# NOTICE 7952:  bulk_video_converter.bash gets file names from config
+# NOTICE 8218:  bulk_video_converter.bash gets file names from config
     ratectl_x1c1m for input/files/are/from/config:
       ratectl_x1c1m:
         global input:
@@ -189,12 +190,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -maxrate '2M' -minrate '1M' -bufsize '4M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1c1m.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1c1m-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -maxrate '2M' -minrate '1M' -bufsize '4M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1c1m.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1c1m-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1c1m done
     # ratectl_x1c1m for input/files/are/from/config done
-# NOTICE 9150:  bulk_video_converter.bash gets file names from config
+# NOTICE 9476:  bulk_video_converter.bash gets file names from config
     ratectl_x1v1ma1m for input/files/are/from/config:
       ratectl_x1v1ma1m:
         global input:
@@ -211,12 +212,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -b:v '1M' -maxrate '1M' -bufsize '2M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1v1ma1m.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1v1ma1m-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -b:v '1M' -maxrate '1M' -bufsize '2M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1v1ma1m.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1v1ma1m-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1v1ma1m done
     # ratectl_x1v1ma1m for input/files/are/from/config done
-# NOTICE 10359:  bulk_video_converter.bash gets file names from config
+# NOTICE 10725:  bulk_video_converter.bash gets file names from config
     ratectl_x2a4m for input/files/are/from/config:
       ratectl_x2a4m:
         global input:
@@ -233,15 +234,15 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -b:v '4M' -filter:v "yadif=1:-1:0" -pass 1 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-ratectl_x2a4m.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x2a4m-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -b:v '4M' -filter:v "yadif=1:-1:0" -pass 1 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-ratectl_x2a4m.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x2a4m-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
           pass 2:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -b:v '4M' -filter:v "yadif=1:-1:0" -pass 2 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-ratectl_x2a4m.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x2a4m.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x2a4m-2-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -b:v '4M' -filter:v "yadif=1:-1:0" -pass 2 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-ratectl_x2a4m.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x2a4m.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x2a4m-2-mp4.ffmpeg.log 1>&2);
           # pass 2 done
         # passes done
       # ratectl_x2a4m done
     # ratectl_x2a4m for input/files/are/from/config done
-# NOTICE 11660:  bulk_video_converter.bash gets file names from config
+# NOTICE 12094:  bulk_video_converter.bash gets file names from config
     ratectl_x2c4m for input/files/are/from/config:
       ratectl_x2c4m:
         global input:
@@ -258,15 +259,15 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -maxrate '4M' -minrate '4M' -bufsize '8M' -filter:v "yadif=1:-1:0" -pass 1 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-ratectl_x2c4m.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x2c4m-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -maxrate '4M' -minrate '4M' -bufsize '8M' -filter:v "yadif=1:-1:0" -pass 1 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-ratectl_x2c4m.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x2c4m-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
           pass 2:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -maxrate '4M' -minrate '4M' -bufsize '8M' -filter:v "yadif=1:-1:0" -pass 2 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-ratectl_x2c4m.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x2c4m.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x2c4m-2-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -maxrate '4M' -minrate '4M' -bufsize '8M' -filter:v "yadif=1:-1:0" -pass 2 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-ratectl_x2c4m.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x2c4m.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x2c4m-2-mp4.ffmpeg.log 1>&2);
           # pass 2 done
         # passes done
       # ratectl_x2c4m done
     # ratectl_x2c4m for input/files/are/from/config done
-# NOTICE 13236:  bulk_video_converter.bash gets file names from config
+# NOTICE 13802:  bulk_video_converter.bash gets file names from config
     ratectl_x2v4ma4m for input/files/are/from/config:
       ratectl_x2v4ma4m:
         global input:
@@ -283,15 +284,15 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -b:v '4M' -maxrate '4M' -bufsize '8M' -filter:v "yadif=1:-1:0" -pass 1 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-ratectl_x2v4ma4m.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x2v4ma4m-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -b:v '4M' -maxrate '4M' -bufsize '8M' -filter:v "yadif=1:-1:0" -pass 1 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-ratectl_x2v4ma4m.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x2v4ma4m-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
           pass 2:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -b:v '4M' -maxrate '4M' -bufsize '8M' -filter:v "yadif=1:-1:0" -pass 2 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-ratectl_x2v4ma4m.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x2v4ma4m.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x2v4ma4m-2-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -b:v '4M' -maxrate '4M' -bufsize '8M' -filter:v "yadif=1:-1:0" -pass 2 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-ratectl_x2v4ma4m.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x2v4ma4m.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x2v4ma4m-2-mp4.ffmpeg.log 1>&2);
           # pass 2 done
         # passes done
       # ratectl_x2v4ma4m done
     # ratectl_x2v4ma4m for input/files/are/from/config done
-# NOTICE 14931:  bulk_video_converter.bash gets file names from config
+# NOTICE 15514:  bulk_video_converter.bash gets file names from config
     ratectl_x2a2m for input/files/are/from/config:
       ratectl_x2a2m:
         global input:
@@ -308,15 +309,15 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -b:v '2M' -filter:v "yadif=1:-1:0" -pass 1 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-ratectl_x2a2m.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x2a2m-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -b:v '2M' -filter:v "yadif=1:-1:0" -pass 1 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-ratectl_x2a2m.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x2a2m-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
           pass 2:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -b:v '2M' -filter:v "yadif=1:-1:0" -pass 2 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-ratectl_x2a2m.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x2a2m.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x2a2m-2-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -b:v '2M' -filter:v "yadif=1:-1:0" -pass 2 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-ratectl_x2a2m.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x2a2m.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x2a2m-2-mp4.ffmpeg.log 1>&2);
           # pass 2 done
         # passes done
       # ratectl_x2a2m done
     # ratectl_x2a2m for input/files/are/from/config done
-# NOTICE 16270:  bulk_video_converter.bash gets file names from config
+# NOTICE 16864:  bulk_video_converter.bash gets file names from config
     ratectl_x2c2m for input/files/are/from/config:
       ratectl_x2c2m:
         global input:
@@ -333,15 +334,15 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -maxrate '2M' -minrate '2M' -bufsize '4M' -filter:v "yadif=1:-1:0" -pass 1 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-ratectl_x2c2m.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x2c2m-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -maxrate '2M' -minrate '2M' -bufsize '4M' -filter:v "yadif=1:-1:0" -pass 1 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-ratectl_x2c2m.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x2c2m-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
           pass 2:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -maxrate '2M' -minrate '2M' -bufsize '4M' -filter:v "yadif=1:-1:0" -pass 2 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-ratectl_x2c2m.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x2c2m.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x2c2m-2-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -maxrate '2M' -minrate '2M' -bufsize '4M' -filter:v "yadif=1:-1:0" -pass 2 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-ratectl_x2c2m.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x2c2m.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x2c2m-2-mp4.ffmpeg.log 1>&2);
           # pass 2 done
         # passes done
       # ratectl_x2c2m done
     # ratectl_x2c2m for input/files/are/from/config done
-# NOTICE 17927:  bulk_video_converter.bash gets file names from config
+# NOTICE 18590:  bulk_video_converter.bash gets file names from config
     ratectl_x2v2ma2m for input/files/are/from/config:
       ratectl_x2v2ma2m:
         global input:
@@ -358,15 +359,15 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -b:v '2M' -maxrate '2M' -bufsize '4M' -filter:v "yadif=1:-1:0" -pass 1 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-ratectl_x2v2ma2m.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x2v2ma2m-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -b:v '2M' -maxrate '2M' -bufsize '4M' -filter:v "yadif=1:-1:0" -pass 1 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-ratectl_x2v2ma2m.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x2v2ma2m-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
           pass 2:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -b:v '2M' -maxrate '2M' -bufsize '4M' -filter:v "yadif=1:-1:0" -pass 2 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-ratectl_x2v2ma2m.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x2v2ma2m.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x2v2ma2m-2-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -b:v '2M' -maxrate '2M' -bufsize '4M' -filter:v "yadif=1:-1:0" -pass 2 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-ratectl_x2v2ma2m.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x2v2ma2m.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x2v2ma2m-2-mp4.ffmpeg.log 1>&2);
           # pass 2 done
         # passes done
       # ratectl_x2v2ma2m done
     # ratectl_x2v2ma2m for input/files/are/from/config done
-# NOTICE 19541:  bulk_video_converter.bash gets file names from config
+# NOTICE 20289:  bulk_video_converter.bash gets file names from config
     ratectl_x2a1m for input/files/are/from/config:
       ratectl_x2a1m:
         global input:
@@ -383,15 +384,15 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -b:v '1M' -filter:v "yadif=1:-1:0" -pass 1 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-ratectl_x2a1m.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x2a1m-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -b:v '1M' -filter:v "yadif=1:-1:0" -pass 1 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-ratectl_x2a1m.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x2a1m-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
           pass 2:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -b:v '1M' -filter:v "yadif=1:-1:0" -pass 2 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-ratectl_x2a1m.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x2a1m.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x2a1m-2-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -b:v '1M' -filter:v "yadif=1:-1:0" -pass 2 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-ratectl_x2a1m.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x2a1m.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x2a1m-2-mp4.ffmpeg.log 1>&2);
           # pass 2 done
         # passes done
       # ratectl_x2a1m done
     # ratectl_x2a1m for input/files/are/from/config done
-# NOTICE 20855:  bulk_video_converter.bash gets file names from config
+# NOTICE 21653:  bulk_video_converter.bash gets file names from config
     ratectl_x2c1m for input/files/are/from/config:
       ratectl_x2c1m:
         global input:
@@ -408,15 +409,15 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -maxrate '2M' -minrate '1M' -bufsize '4M' -filter:v "yadif=1:-1:0" -pass 1 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-ratectl_x2c1m.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x2c1m-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -maxrate '2M' -minrate '1M' -bufsize '4M' -filter:v "yadif=1:-1:0" -pass 1 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-ratectl_x2c1m.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x2c1m-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
           pass 2:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -maxrate '2M' -minrate '1M' -bufsize '4M' -filter:v "yadif=1:-1:0" -pass 2 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-ratectl_x2c1m.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x2c1m.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x2c1m-2-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -maxrate '2M' -minrate '1M' -bufsize '4M' -filter:v "yadif=1:-1:0" -pass 2 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-ratectl_x2c1m.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x2c1m.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x2c1m-2-mp4.ffmpeg.log 1>&2);
           # pass 2 done
         # passes done
       # ratectl_x2c1m done
     # ratectl_x2c1m for input/files/are/from/config done
-# NOTICE 22453:  bulk_video_converter.bash gets file names from config
+# NOTICE 23418:  bulk_video_converter.bash gets file names from config
     ratectl_x2v1ma1m for input/files/are/from/config:
       ratectl_x2v1ma1m:
         global input:
@@ -433,15 +434,15 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -b:v '1M' -maxrate '1M' -bufsize '2M' -filter:v "yadif=1:-1:0" -pass 1 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-ratectl_x2v1ma1m.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x2v1ma1m-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -b:v '1M' -maxrate '1M' -bufsize '2M' -filter:v "yadif=1:-1:0" -pass 1 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-ratectl_x2v1ma1m.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x2v1ma1m-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
           pass 2:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -b:v '1M' -maxrate '1M' -bufsize '2M' -filter:v "yadif=1:-1:0" -pass 2 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-ratectl_x2v1ma1m.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x2v1ma1m.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x2v1ma1m-2-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -b:v '1M' -maxrate '1M' -bufsize '2M' -filter:v "yadif=1:-1:0" -pass 2 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-ratectl_x2v1ma1m.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x2v1ma1m.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x2v1ma1m-2-mp4.ffmpeg.log 1>&2);
           # pass 2 done
         # passes done
       # ratectl_x2v1ma1m done
     # ratectl_x2v1ma1m for input/files/are/from/config done
-# NOTICE 24139:  bulk_video_converter.bash gets file names from config
+# NOTICE 25123:  bulk_video_converter.bash gets file names from config
     ratectl_x1qp00 for input/files/are/from/config:
       ratectl_x1qp00:
         global input:
@@ -458,12 +459,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -qp '0' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1qp00.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1qp00-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -qp '0' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1qp00.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1qp00-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1qp00 done
     # ratectl_x1qp00 for input/files/are/from/config done
-# NOTICE 25057:  bulk_video_converter.bash gets file names from config
+# NOTICE 26023:  bulk_video_converter.bash gets file names from config
     ratectl_x1qp10 for input/files/are/from/config:
       ratectl_x1qp10:
         global input:
@@ -480,12 +481,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -qp '10' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1qp10.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1qp10-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -qp '10' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1qp10.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1qp10-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1qp10 done
     # ratectl_x1qp10 for input/files/are/from/config done
-# NOTICE 25957:  bulk_video_converter.bash gets file names from config
+# NOTICE 26925:  bulk_video_converter.bash gets file names from config
     ratectl_x1qp23 for input/files/are/from/config:
       ratectl_x1qp23:
         global input:
@@ -502,12 +503,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -qp '23' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1qp23.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1qp23-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -qp '23' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1qp23.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1qp23-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1qp23 done
     # ratectl_x1qp23 for input/files/are/from/config done
-# NOTICE 26850:  bulk_video_converter.bash gets file names from config
+# NOTICE 27828:  bulk_video_converter.bash gets file names from config
     ratectl_x1qp28 for input/files/are/from/config:
       ratectl_x1qp28:
         global input:
@@ -524,12 +525,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -qp '28' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1qp28.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1qp28-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -qp '28' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1qp28.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1qp28-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1qp28 done
     # ratectl_x1qp28 for input/files/are/from/config done
-# NOTICE 27743:  bulk_video_converter.bash gets file names from config
+# NOTICE 28735:  bulk_video_converter.bash gets file names from config
     ratectl_x1qp40 for input/files/are/from/config:
       ratectl_x1qp40:
         global input:
@@ -546,12 +547,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -qp '40' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1qp40.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1qp40-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -qp '40' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1qp40.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1qp40-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1qp40 done
     # ratectl_x1qp40 for input/files/are/from/config done
-# NOTICE 28580:  bulk_video_converter.bash gets file names from config
+# NOTICE 29638:  bulk_video_converter.bash gets file names from config
     ratectl_x1qp50 for input/files/are/from/config:
       ratectl_x1qp50:
         global input:
@@ -568,12 +569,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -qp '50' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1qp50.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1qp50-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -qp '50' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1qp50.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1qp50-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1qp50 done
     # ratectl_x1qp50 for input/files/are/from/config done
-# NOTICE 29473:  bulk_video_converter.bash gets file names from config
+# NOTICE 30540:  bulk_video_converter.bash gets file names from config
     ratectl_x1rf00 for input/files/are/from/config:
       ratectl_x1rf00:
         global input:
@@ -590,12 +591,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '0' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1rf00.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1rf00-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '0' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1rf00.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1rf00-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1rf00 done
     # ratectl_x1rf00 for input/files/are/from/config done
-# NOTICE 30377:  bulk_video_converter.bash gets file names from config
+# NOTICE 31440:  bulk_video_converter.bash gets file names from config
     ratectl_x1rf10 for input/files/are/from/config:
       ratectl_x1rf10:
         global input:
@@ -612,12 +613,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '10' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1rf10.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1rf10-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '10' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1rf10.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1rf10-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1rf10 done
     # ratectl_x1rf10 for input/files/are/from/config done
-# NOTICE 31269:  bulk_video_converter.bash gets file names from config
+# NOTICE 32351:  bulk_video_converter.bash gets file names from config
     ratectl_x1rf23 for input/files/are/from/config:
       ratectl_x1rf23:
         global input:
@@ -634,12 +635,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '23' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1rf23.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1rf23-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '23' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1rf23.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1rf23-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1rf23 done
     # ratectl_x1rf23 for input/files/are/from/config done
-# NOTICE 32156:  bulk_video_converter.bash gets file names from config
+# NOTICE 33251:  bulk_video_converter.bash gets file names from config
     ratectl_x1rf28 for input/files/are/from/config:
       ratectl_x1rf28:
         global input:
@@ -656,12 +657,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '28' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1rf28.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1rf28-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '28' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1rf28.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1rf28-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1rf28 done
     # ratectl_x1rf28 for input/files/are/from/config done
-# NOTICE 33041:  bulk_video_converter.bash gets file names from config
+# NOTICE 34136:  bulk_video_converter.bash gets file names from config
     ratectl_x1rf40 for input/files/are/from/config:
       ratectl_x1rf40:
         global input:
@@ -678,12 +679,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '40' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1rf40.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1rf40-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '40' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1rf40.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1rf40-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1rf40 done
     # ratectl_x1rf40 for input/files/are/from/config done
-# NOTICE 33936:  bulk_video_converter.bash gets file names from config
+# NOTICE 35041:  bulk_video_converter.bash gets file names from config
     ratectl_x1rf50 for input/files/are/from/config:
       ratectl_x1rf50:
         global input:
@@ -700,12 +701,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '50' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1rf50.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1rf50-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '50' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1rf50.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1rf50-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1rf50 done
     # ratectl_x1rf50 for input/files/are/from/config done
-# NOTICE 34850:  bulk_video_converter.bash gets file names from config
+# NOTICE 35959:  bulk_video_converter.bash gets file names from config
     ratectl_x1v4mrf00 for input/files/are/from/config:
       ratectl_x1v4mrf00:
         global input:
@@ -722,12 +723,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '0' -maxrate '4M' -bufsize '8M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1v4mrf00.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1v4mrf00-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '0' -maxrate '4M' -bufsize '8M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1v4mrf00.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1v4mrf00-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1v4mrf00 done
     # ratectl_x1v4mrf00 for input/files/are/from/config done
-# NOTICE 36094:  bulk_video_converter.bash gets file names from config
+# NOTICE 37224:  bulk_video_converter.bash gets file names from config
     ratectl_x1v4mrf10 for input/files/are/from/config:
       ratectl_x1v4mrf10:
         global input:
@@ -744,12 +745,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '10' -maxrate '4M' -bufsize '8M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1v4mrf10.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1v4mrf10-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '10' -maxrate '4M' -bufsize '8M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1v4mrf10.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1v4mrf10-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1v4mrf10 done
     # ratectl_x1v4mrf10 for input/files/are/from/config done
-# NOTICE 37298:  bulk_video_converter.bash gets file names from config
+# NOTICE 38494:  bulk_video_converter.bash gets file names from config
     ratectl_x1v4mrf23 for input/files/are/from/config:
       ratectl_x1v4mrf23:
         global input:
@@ -766,12 +767,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '23' -maxrate '4M' -bufsize '8M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1v4mrf23.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1v4mrf23-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '23' -maxrate '4M' -bufsize '8M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1v4mrf23.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1v4mrf23-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1v4mrf23 done
     # ratectl_x1v4mrf23 for input/files/are/from/config done
-# NOTICE 38532:  bulk_video_converter.bash gets file names from config
+# NOTICE 39747:  bulk_video_converter.bash gets file names from config
     ratectl_x1v4mrf28 for input/files/are/from/config:
       ratectl_x1v4mrf28:
         global input:
@@ -788,12 +789,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '28' -maxrate '4M' -bufsize '8M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1v4mrf28.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1v4mrf28-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '28' -maxrate '4M' -bufsize '8M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1v4mrf28.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1v4mrf28-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1v4mrf28 done
     # ratectl_x1v4mrf28 for input/files/are/from/config done
-# NOTICE 39761:  bulk_video_converter.bash gets file names from config
+# NOTICE 41067:  bulk_video_converter.bash gets file names from config
     ratectl_x1v4mrf40 for input/files/are/from/config:
       ratectl_x1v4mrf40:
         global input:
@@ -810,12 +811,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '40' -maxrate '4M' -bufsize '8M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1v4mrf40.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1v4mrf40-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '40' -maxrate '4M' -bufsize '8M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1v4mrf40.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1v4mrf40-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1v4mrf40 done
     # ratectl_x1v4mrf40 for input/files/are/from/config done
-# NOTICE 41021:  bulk_video_converter.bash gets file names from config
+# NOTICE 42357:  bulk_video_converter.bash gets file names from config
     ratectl_x1v4mrf50 for input/files/are/from/config:
       ratectl_x1v4mrf50:
         global input:
@@ -832,12 +833,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '50' -maxrate '4M' -bufsize '8M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1v4mrf50.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1v4mrf50-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '50' -maxrate '4M' -bufsize '8M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1v4mrf50.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1v4mrf50-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1v4mrf50 done
     # ratectl_x1v4mrf50 for input/files/are/from/config done
-# NOTICE 42255:  bulk_video_converter.bash gets file names from config
+# NOTICE 43614:  bulk_video_converter.bash gets file names from config
     ratectl_x1v2mrf00 for input/files/are/from/config:
       ratectl_x1v2mrf00:
         global input:
@@ -854,12 +855,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '0' -maxrate '2M' -bufsize '4M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1v2mrf00.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1v2mrf00-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '0' -maxrate '2M' -bufsize '4M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1v2mrf00.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1v2mrf00-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1v2mrf00 done
     # ratectl_x1v2mrf00 for input/files/are/from/config done
-# NOTICE 43452:  bulk_video_converter.bash gets file names from config
+# NOTICE 44883:  bulk_video_converter.bash gets file names from config
     ratectl_x1v2mrf10 for input/files/are/from/config:
       ratectl_x1v2mrf10:
         global input:
@@ -876,12 +877,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '10' -maxrate '2M' -bufsize '4M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1v2mrf10.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1v2mrf10-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '10' -maxrate '2M' -bufsize '4M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1v2mrf10.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1v2mrf10-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1v2mrf10 done
     # ratectl_x1v2mrf10 for input/files/are/from/config done
-# NOTICE 44625:  bulk_video_converter.bash gets file names from config
+# NOTICE 46134:  bulk_video_converter.bash gets file names from config
     ratectl_x1v2mrf23 for input/files/are/from/config:
       ratectl_x1v2mrf23:
         global input:
@@ -898,12 +899,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '23' -maxrate '2M' -bufsize '4M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1v2mrf23.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1v2mrf23-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '23' -maxrate '2M' -bufsize '4M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1v2mrf23.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1v2mrf23-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1v2mrf23 done
     # ratectl_x1v2mrf23 for input/files/are/from/config done
-# NOTICE 45795:  bulk_video_converter.bash gets file names from config
+# NOTICE 47399:  bulk_video_converter.bash gets file names from config
     ratectl_x1v2mrf28 for input/files/are/from/config:
       ratectl_x1v2mrf28:
         global input:
@@ -920,12 +921,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '28' -maxrate '2M' -bufsize '4M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1v2mrf28.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1v2mrf28-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '28' -maxrate '2M' -bufsize '4M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1v2mrf28.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1v2mrf28-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1v2mrf28 done
     # ratectl_x1v2mrf28 for input/files/are/from/config done
-# NOTICE 47032:  bulk_video_converter.bash gets file names from config
+# NOTICE 48670:  bulk_video_converter.bash gets file names from config
     ratectl_x1v2mrf40 for input/files/are/from/config:
       ratectl_x1v2mrf40:
         global input:
@@ -942,12 +943,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '40' -maxrate '2M' -bufsize '4M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1v2mrf40.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1v2mrf40-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '40' -maxrate '2M' -bufsize '4M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1v2mrf40.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1v2mrf40-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1v2mrf40 done
     # ratectl_x1v2mrf40 for input/files/are/from/config done
-# NOTICE 48237:  bulk_video_converter.bash gets file names from config
+# NOTICE 49943:  bulk_video_converter.bash gets file names from config
     ratectl_x1v2mrf50 for input/files/are/from/config:
       ratectl_x1v2mrf50:
         global input:
@@ -964,12 +965,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '50' -maxrate '2M' -bufsize '4M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1v2mrf50.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1v2mrf50-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '50' -maxrate '2M' -bufsize '4M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1v2mrf50.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1v2mrf50-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1v2mrf50 done
     # ratectl_x1v2mrf50 for input/files/are/from/config done
-# NOTICE 49480:  bulk_video_converter.bash gets file names from config
+# NOTICE 51223:  bulk_video_converter.bash gets file names from config
     ratectl_x1v1mrf00 for input/files/are/from/config:
       ratectl_x1v1mrf00:
         global input:
@@ -986,12 +987,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '0' -maxrate '1M' -bufsize '2M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1v1mrf00.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1v1mrf00-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '0' -maxrate '1M' -bufsize '2M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1v1mrf00.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1v1mrf00-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1v1mrf00 done
     # ratectl_x1v1mrf00 for input/files/are/from/config done
-# NOTICE 50752:  bulk_video_converter.bash gets file names from config
+# NOTICE 52483:  bulk_video_converter.bash gets file names from config
     ratectl_x1v1mrf10 for input/files/are/from/config:
       ratectl_x1v1mrf10:
         global input:
@@ -1008,12 +1009,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '10' -maxrate '1M' -bufsize '2M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1v1mrf10.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1v1mrf10-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '10' -maxrate '1M' -bufsize '2M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1v1mrf10.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1v1mrf10-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1v1mrf10 done
     # ratectl_x1v1mrf10 for input/files/are/from/config done
-# NOTICE 51959:  bulk_video_converter.bash gets file names from config
+# NOTICE 53780:  bulk_video_converter.bash gets file names from config
     ratectl_x1v1mrf23 for input/files/are/from/config:
       ratectl_x1v1mrf23:
         global input:
@@ -1030,12 +1031,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '23' -maxrate '1M' -bufsize '2M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1v1mrf23.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1v1mrf23-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '23' -maxrate '1M' -bufsize '2M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1v1mrf23.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1v1mrf23-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1v1mrf23 done
     # ratectl_x1v1mrf23 for input/files/are/from/config done
-# NOTICE 53168:  bulk_video_converter.bash gets file names from config
+# NOTICE 55044:  bulk_video_converter.bash gets file names from config
     ratectl_x1v1mrf28 for input/files/are/from/config:
       ratectl_x1v1mrf28:
         global input:
@@ -1052,12 +1053,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '28' -maxrate '1M' -bufsize '2M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1v1mrf28.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1v1mrf28-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '28' -maxrate '1M' -bufsize '2M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1v1mrf28.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1v1mrf28-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1v1mrf28 done
     # ratectl_x1v1mrf28 for input/files/are/from/config done
-# NOTICE 54416:  bulk_video_converter.bash gets file names from config
+# NOTICE 56321:  bulk_video_converter.bash gets file names from config
     ratectl_x1v1mrf40 for input/files/are/from/config:
       ratectl_x1v1mrf40:
         global input:
@@ -1074,12 +1075,12 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '40' -maxrate '1M' -bufsize '2M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1v1mrf40.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1v1mrf40-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '40' -maxrate '1M' -bufsize '2M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1v1mrf40.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1v1mrf40-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1v1mrf40 done
     # ratectl_x1v1mrf40 for input/files/are/from/config done
-# NOTICE 55683:  bulk_video_converter.bash gets file names from config
+# NOTICE 57599:  bulk_video_converter.bash gets file names from config
     ratectl_x1v1mrf50 for input/files/are/from/config:
       ratectl_x1v1mrf50:
         global input:
@@ -1096,7 +1097,7 @@ bulk_video_converter.bash:
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '50' -maxrate '1M' -bufsize '2M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '//tmp/config-ratectl_x1v1mrf50.mp4' 2> >(tee /var/log/bulk_video_converter.bash/1970-01-01_01-01-01-00/config-ratectl_x1v1mrf50-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '50' -maxrate '1M' -bufsize '2M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1v1mrf50.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1v1mrf50-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # ratectl_x1v1mrf50 done
