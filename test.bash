@@ -98,9 +98,9 @@ run_tests () {
         debug "actual/file   is '${ACTL_FPATH}';"
         debug 'to make diff empty use:';
         debug "cp '${ACTL_FPATH}' '${EXPCTD_FPATH}';"
-#         diff -u "${EXPCTD_FPATH}" "${ACTL_FPATH}" 1> "${DIFF_FPATH}"\
-#         && success "test '${TEST_NAME}' is ok"                      \
-#         || fail "test '${TEST_NAME}' is failed";
+        diff -u "${EXPCTD_FPATH}" "${ACTL_FPATH}" 1> "${DIFF_FPATH}"\
+        && success "test '${TEST_NAME}' is ok"                      \
+        || fail "test '${TEST_NAME}' is failed";
     
     done;
     happy_end "all tests (${TEST_COUINT}) is ok";
