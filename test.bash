@@ -97,7 +97,7 @@ main () {
         debug "expected/file is '${EXPCTD_FPATH}';"
         debug "actual/file   is '${ACTL_FPATH}';"
         debug 'to make diff empty use:';
-        debug "mv '${ACTL_FPATH}' '${EXPCTD_FPATH}';"
+        debug "cp '${ACTL_FPATH}' '${EXPCTD_FPATH}';"
         diff -u "${EXPCTD_FPATH}" "${ACTL_FPATH}" 1> "${DIFF_FPATH}"\
         && success "test '${TEST_NAME}' is ok"                      \
         || fail "test '${TEST_NAME}' is failed";
