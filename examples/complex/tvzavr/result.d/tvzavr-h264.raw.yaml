@@ -18,9 +18,9 @@ bulk_video_converter.bash:
     false
   # async_for_profiles done
 LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
-# NOTICE 109:  bulk_video_converter.bash gets file names from config
+# NOTICE 91:  bulk_video_converter.bash gets file names from config
   input/files/are/from/config:
-# NOTICE 184:  bulk_video_converter.bash gets file names from config
+# NOTICE 163:  bulk_video_converter.bash gets file names from config
     tvzavr_h264_x2_1080p_hd for input/files/are/from/config:
       tvzavr_h264_x2_1080p_hd:
         global input:
@@ -45,7 +45,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # tvzavr_h264_x2_1080p_hd done
     # tvzavr_h264_x2_1080p_hd for input/files/are/from/config done
-# NOTICE 1005:  bulk_video_converter.bash gets file names from config
+# NOTICE 959:  bulk_video_converter.bash gets file names from config
     tvzavr_h264_x2_0720p_hd for input/files/are/from/config:
       tvzavr_h264_x2_0720p_hd:
         global input:
@@ -70,7 +70,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # tvzavr_h264_x2_0720p_hd done
     # tvzavr_h264_x2_0720p_hd for input/files/are/from/config done
-# NOTICE 2116:  bulk_video_converter.bash gets file names from config
+# NOTICE 2104:  bulk_video_converter.bash gets file names from config
     tvzavr_h264_x2_0576p_hi for input/files/are/from/config:
       tvzavr_h264_x2_0576p_hi:
         global input:
@@ -95,7 +95,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # tvzavr_h264_x2_0576p_hi done
     # tvzavr_h264_x2_0576p_hi for input/files/are/from/config done
-# NOTICE 3535:  bulk_video_converter.bash gets file names from config
+# NOTICE 3611:  bulk_video_converter.bash gets file names from config
     tvzavr_h264_x2_0480p_hi for input/files/are/from/config:
       tvzavr_h264_x2_0480p_hi:
         global input:
@@ -120,7 +120,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # tvzavr_h264_x2_0480p_hi done
     # tvzavr_h264_x2_0480p_hi for input/files/are/from/config done
-# NOTICE 5368:  bulk_video_converter.bash gets file names from config
+# NOTICE 5780:  bulk_video_converter.bash gets file names from config
     tvzavr_h264_x2_0360p_nr for input/files/are/from/config:
       tvzavr_h264_x2_0360p_nr:
         global input:
@@ -145,7 +145,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # tvzavr_h264_x2_0360p_nr done
     # tvzavr_h264_x2_0360p_nr for input/files/are/from/config done
-# NOTICE 7591:  bulk_video_converter.bash gets file names from config
+# NOTICE 7957:  bulk_video_converter.bash gets file names from config
     tvzavr_h264_x2_0270p_lw for input/files/are/from/config:
       tvzavr_h264_x2_0270p_lw:
         global input:
@@ -170,7 +170,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # tvzavr_h264_x2_0270p_lw done
     # tvzavr_h264_x2_0270p_lw for input/files/are/from/config done
-# NOTICE 10191:  bulk_video_converter.bash gets file names from config
+# NOTICE 10506:  bulk_video_converter.bash gets file names from config
     tvzavr_h264_x2_0240p_lw for input/files/are/from/config:
       tvzavr_h264_x2_0240p_lw:
         global input:
@@ -195,7 +195,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # tvzavr_h264_x2_0240p_lw done
     # tvzavr_h264_x2_0240p_lw for input/files/are/from/config done
-# NOTICE 13310:  bulk_video_converter.bash gets file names from config
+# NOTICE 14203:  bulk_video_converter.bash gets file names from config
     tvzavr_h264_x2_0120p_lw for input/files/are/from/config:
       tvzavr_h264_x2_0120p_lw:
         global input:

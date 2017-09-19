@@ -95,3 +95,18 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         video:
           -codec:v 'libx264' -profile:v 'main' -weightp 'smart' -preset 'veryslow' -level:v '3.0' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -crf '23' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-2:480" 
         # video done
+        audio:
+          -strict 'experimental' -codec:a 'aac' -b:a '196k' -ac '2'
+        # audio done
+        format:
+          -movflags '+faststart' -f 'mp4' 
+        # format done
+        passes:
+          pass 1:
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'main' -weightp 'smart' -preset 'veryslow' -level:v '3.0' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -crf '23' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-2:480" -strict 'experimental' -codec:a 'aac' -b:a '196k' -ac '2' -movflags '+faststart' -f 'mp4' -y '//tmp/config-mai_vob_h264_crf_0480p_hi.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-mai_vob_h264_crf_0480p_hi-1-mp4.ffmpeg.log 1>&2);
+          # pass 1 done
+        # passes done
+      # mai_vob_h264_crf_0480p_hi done
+    # mai_vob_h264_crf_0480p_hi for input/files/are/from/config done
+  # input/files/are/from/config done
+# bulk_video_converter.bash done
