@@ -1,5 +1,9 @@
 # Bulk Video Converter (MTS-converter)
 
+
+[![Build Status](https://api.travis-ci.org/w495/bulk-video-converter.svg?branch=master)](https://api.travis-ci.org/w495/bulk-video-converter.svg)
+
+
 Simple configurable bulk ffmpeg-based video converter.
 
 It uses **YAML** configuration for generating several output files 
