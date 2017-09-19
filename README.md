@@ -1,7 +1,7 @@
 # Bulk Video Converter (MTS-converter)
 
 
-[![Build Status](https://api.travis-ci.org/w495/bulk-video-converter.svg?branch=master)](https://api.travis-ci.org/w495/bulk-video-converter.svg)
+[![Build Status](https://api.travis-ci.org/w495/bulk-video-converter.svg?branch=master)](https://travis-ci.org/w495/bulk-video-converter)
 
 
 Simple configurable bulk ffmpeg-based video converter.
