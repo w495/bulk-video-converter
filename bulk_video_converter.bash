@@ -58,11 +58,11 @@ readonly TMP_DIR_NAME="${TMP_DIR_BASE_NAME}/${RANDOM_STRING}";
 #       redefined via command line arguments.
 # ------------------------------------------------------------
 
-readonly LOG_DIR_BASE_NAME="/var/log/${SCRIPT_NAME}";
+readonly LOG_DIR_BASE_NAME="/tmp/var/log/${SCRIPT_NAME}";
 declare LOG_DIR_NAME="${LOG_DIR_BASE_NAME}/${START_TIME_STRING}"
 
-readonly FILE_LOG_PREFIX="${LOG_DIR_NAME}/file-log";
-readonly PROFILE_LOG_PREFIX="${LOG_DIR_NAME}/profile-log";
+declare FILE_LOG_PREFIX="${LOG_DIR_NAME}/file-log";
+declare PROFILE_LOG_PREFIX="${LOG_DIR_NAME}/profile-log";
 
 declare PASS_LOG_DIR_NAME="${TMP_DIR_NAME}/pass-log";
 
@@ -1875,6 +1875,7 @@ compute_if_empty (){
 }
 
 start_up (){
+    echo "LOG_DIR_NAME = ' ${LOG_DIR_NAME}" 1>&2;
     $(create_directory 'tmp' "${TMP_DIR_NAME}"    'at start up.');
     $(create_directory 'log' "${LOG_DIR_NAME}"    'at start up.');
     $(create_directory 'out' "${OUTPUT_DIR_NAME}" 'at start up.');
@@ -2114,6 +2115,11 @@ parse_options (){
         FROM_CONFIG_FLAG='true';
     fi;
     declare -rg INPUT_FILE_NAME_LIST;
+    
+        
+    declare -rg FILE_LOG_PREFIX="${LOG_DIR_NAME}/file-log";
+    declare -rg PROFILE_LOG_PREFIX="${LOG_DIR_NAME}/profile-log";
+
 }
 
 handle_config() {

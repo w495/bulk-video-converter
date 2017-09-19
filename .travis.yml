@@ -2,7 +2,7 @@ language: bash
 install: true
 sudo: false
 script:
-  - ./bulk_video_converter.bash -F /tmp -d
+  - ./bulk_video_converter.bash -d  
   - ./test.bash
 notifications:
   email: false
