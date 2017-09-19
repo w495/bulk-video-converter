@@ -31,7 +31,12 @@ web-compatible formats.
  
 ## Requirements
 
-It uses the latest version of standard ffmpeg pack.
+* `bash >= 4.3.11`
+* `ffmpeg >= 3.1.10`
+
+### FFmpeg
+
+The latest version of standard FFmpeg pack is preferable.
 This is my ffmpeg configuration.
 Check it if something's gone wrong.
     
@@ -507,7 +512,7 @@ It calls `bulk_video_converter.bash` with YAML-configurations from examples-fold
 It uses all files with suffix `.test-config.yaml` to generate script output
 and compare actual output with the expected result.
 Tests work without running real video handling. 
-Only generated FFMpeg options are tested.
+Only generated FFmpeg options are tested.
 
 Check source code of [test.bash](test.bash)  for more details.
 
@@ -515,7 +520,7 @@ Check source code of [test.bash](test.bash)  for more details.
 
 It has some special features.
 * Dry-run. You can run script without doing anything 
-  to check generated FFMpeg options.
+  to check generated FFmpeg options.
 * Extended profiles. Any profile can inherit and extend options
   from another profile. Nested option structures are overridden too.
 * Dependent profiles that are handles consequently when the result 
@@ -525,10 +530,10 @@ It has some special features.
   and [dependent encoding log](examples/featured/dependent-encoding/dependent-encoding.raw.yaml) 
   as a visual representation of processing sequence.
 * Configurable asynchronous handing for files and profiles.
-* Device capturing based on FFMpeg's device handling. 
+* Device capturing based on FFmpeg's device handling. 
   See [screen capturing test config](examples/featured/screen-capturing/screen-capturing.test-config.yaml) 
   and [screen capturing test output](examples/featured/screen-capturing/screen-capturing.expected.yaml).
-* Simple scene detection based on FFMpeg's filter `select='gt(scene,0.4)'`.
+* Simple scene detection based on FFmpeg's filter `select='gt(scene,0.4)'`.
   See [scene detection test config](examples/featured/scene-detection/scene-detection.test-config.yaml) 
   and [scene detection test output](examples/featured/scene-detection/scene-detection.expected.yaml).
 
