@@ -123,3 +123,13 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         global input:
           -threads '0' 
         # global input done
+        video:
+          -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '4.2' -bf '3' -coder '1' -g '96' -keyint_min '96' -flags '+cgop' -sc_threshold '0' -crf '23' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" 
+        # video done
+        audio:
+          -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '128k' -ac '2'
+        # audio done
+        format:
+          -movflags '+faststart' -f 'mp4' 
+        # format done
+        passes:
