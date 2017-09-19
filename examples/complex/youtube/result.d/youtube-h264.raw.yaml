@@ -4,11 +4,12 @@ bulk_video_converter.bash:
   # datetime done
   versions:
     bulk_video_converter.bash:
-      0.1505573195
+      0.1505859356
     # bulk_video_converter.bash done
     config:
       0.1505573195
     # config done
+# WARNING:  bulk_video_converter.bash version (0.1505859356) do not match config version (0.1505573195).
   # versions done
   async_for_files:
     false
@@ -17,9 +18,9 @@ bulk_video_converter.bash:
     false
   # async_for_profiles done
 LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
-# NOTICE 103:  bulk_video_converter.bash gets file names from config
+# NOTICE 95:  bulk_video_converter.bash gets file names from config
   input/files/are/from/config:
-# NOTICE 208:  bulk_video_converter.bash gets file names from config
+# NOTICE 194:  bulk_video_converter.bash gets file names from config
     youtube_x2_1080p_hd for input/files/are/from/config:
       youtube_x2_1080p_hd:
         global input:
@@ -44,7 +45,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # youtube_x2_1080p_hd done
     # youtube_x2_1080p_hd for input/files/are/from/config done
-# NOTICE 1848:  bulk_video_converter.bash gets file names from config
+# NOTICE 1652:  bulk_video_converter.bash gets file names from config
     youtube_720p for input/files/are/from/config:
       youtube_720p:
         global input:
@@ -66,7 +67,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # youtube_720p done
     # youtube_720p for input/files/are/from/config done
-# NOTICE 2989:  bulk_video_converter.bash gets file names from config
+# NOTICE 2693:  bulk_video_converter.bash gets file names from config
     youtube_480p for input/files/are/from/config:
       youtube_480p:
         global input:
@@ -88,7 +89,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # youtube_480p done
     # youtube_480p for input/files/are/from/config done
-# NOTICE 4124:  bulk_video_converter.bash gets file names from config
+# NOTICE 3734:  bulk_video_converter.bash gets file names from config
     youtube_360p for input/files/are/from/config:
       youtube_360p:
         global input:

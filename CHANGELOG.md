@@ -1,3 +1,9 @@
+# 0.1505859356
+
+1. Add `travis` support.
+2. Fix tests and configuration due to `travis` requirements.
+
+
 # 0.1505573195
 
 1. Add tests based on examples.

@@ -4,11 +4,12 @@ bulk_video_converter.bash:
   # datetime done
   versions:
     bulk_video_converter.bash:
-      0.1505573195
+      0.1505859356
     # bulk_video_converter.bash done
     config:
       0.1505573195
     # config done
+# WARNING:  bulk_video_converter.bash version (0.1505859356) do not match config version (0.1505573195).
   # versions done
   async_for_files:
     false
@@ -17,9 +18,9 @@ bulk_video_converter.bash:
     false
   # async_for_profiles done
 LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
-# NOTICE 98:  bulk_video_converter.bash gets file names from config
+# NOTICE 86:  bulk_video_converter.bash gets file names from config
   input/files/are/from/config:
-# NOTICE 128:  bulk_video_converter.bash gets file names from config
+# NOTICE 114:  bulk_video_converter.bash gets file names from config
     cutting for input/files/are/from/config:
       cutting:
         global input:

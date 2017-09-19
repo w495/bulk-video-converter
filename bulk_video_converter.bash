@@ -45,7 +45,7 @@ readonly START_TIME_NS=$(($(date +%s%N)));
 
 
 # Version for compatibility detection.
-readonly VERSION='0.1505573195';
+readonly VERSION='0.1505859356';
 
 # Internal constants.
 readonly TMP_DIR_BASE_NAME="/tmp/${SCRIPT_NAME}"

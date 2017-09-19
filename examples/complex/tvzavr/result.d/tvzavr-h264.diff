@@ -1,0 +1,11 @@
+--- /home/ndvr/Projects/bulk-video-converter/bulk_video_converter/examples/complex/tvzavr/tvzavr-h264.expected.yaml	2017-09-20 00:55:49.011322851 +0300
++++ /home/ndvr/Projects/bulk-video-converter/bulk_video_converter/examples/complex/tvzavr/result.d/tvzavr-h264.actual.yaml	2017-09-20 01:16:26.042486483 +0300
+@@ -3,7 +3,7 @@
+     1970-01-01_01-01-01-00
+   versions:
+     bulk_video_converter.bash:
+-      0.1505573195
++      0.1505859356
+     config:
+       0.1505573195
+   async_for_files:

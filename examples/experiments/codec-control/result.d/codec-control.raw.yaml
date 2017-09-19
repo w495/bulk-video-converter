@@ -4,12 +4,12 @@ bulk_video_converter.bash:
   # datetime done
   versions:
     bulk_video_converter.bash:
-      0.1505573195
+      0.1505859356
     # bulk_video_converter.bash done
     config:
       
     # config done
-# WARNING:  bulk_video_converter.bash version (0.1505573195) do not match config version ().
+# WARNING:  bulk_video_converter.bash version (0.1505859356) do not match config version ().
   # versions done
   async_for_files:
     false
@@ -18,9 +18,9 @@ bulk_video_converter.bash:
     false
   # async_for_profiles done
 LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
-# NOTICE 97:  bulk_video_converter.bash gets file names from config
+# NOTICE 96:  bulk_video_converter.bash gets file names from config
   input/files/are/from/config:
-# NOTICE 165:  bulk_video_converter.bash gets file names from config
+# NOTICE 164:  bulk_video_converter.bash gets file names from config
     h264_x1_pal_sd for input/files/are/from/config:
       h264_x1_pal_sd:
         global input:
@@ -42,7 +42,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # h264_x1_pal_sd done
     # h264_x1_pal_sd for input/files/are/from/config done
-# NOTICE 966:  bulk_video_converter.bash gets file names from config
+# NOTICE 965:  bulk_video_converter.bash gets file names from config
     webm_x1_pal_sd for input/files/are/from/config:
       webm_x1_pal_sd:
         global input:
@@ -64,7 +64,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # webm_x1_pal_sd done
     # webm_x1_pal_sd for input/files/are/from/config done
-# NOTICE 1567:  bulk_video_converter.bash gets file names from config
+# NOTICE 1557:  bulk_video_converter.bash gets file names from config
     h263_x1_pal_sd for input/files/are/from/config:
       h263_x1_pal_sd:
         global input:
@@ -86,7 +86,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # h263_x1_pal_sd done
     # h263_x1_pal_sd for input/files/are/from/config done
-# NOTICE 2165:  bulk_video_converter.bash gets file names from config
+# NOTICE 2157:  bulk_video_converter.bash gets file names from config
     dirac_x1_pal_sd for input/files/are/from/config:
       dirac_x1_pal_sd:
         global input:
@@ -108,7 +108,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # dirac_x1_pal_sd done
     # dirac_x1_pal_sd for input/files/are/from/config done
-# NOTICE 2783:  bulk_video_converter.bash gets file names from config
+# NOTICE 2794:  bulk_video_converter.bash gets file names from config
     hevc_x1_pal_gray_sd for input/files/are/from/config:
       hevc_x1_pal_gray_sd:
         global input:
@@ -130,7 +130,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # hevc_x1_pal_gray_sd done
     # hevc_x1_pal_gray_sd for input/files/are/from/config done
-# NOTICE 3439:  bulk_video_converter.bash gets file names from config
+# NOTICE 3425:  bulk_video_converter.bash gets file names from config
     xvid_x1_pal_gray_sd for input/files/are/from/config:
       xvid_x1_pal_gray_sd:
         global input:

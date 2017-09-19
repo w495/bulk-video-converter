@@ -4,11 +4,12 @@ bulk_video_converter.bash:
   # datetime done
   versions:
     bulk_video_converter.bash:
-      0.1505573195
+      0.1505859356
     # bulk_video_converter.bash done
     config:
       0.1505573195
     # config done
+# WARNING:  bulk_video_converter.bash version (0.1505859356) do not match config version (0.1505573195).
   # versions done
   async_for_files:
     false
@@ -17,9 +18,9 @@ bulk_video_converter.bash:
     false
   # async_for_profiles done
 LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
-# NOTICE 105:  bulk_video_converter.bash gets file names from config
+# NOTICE 109:  bulk_video_converter.bash gets file names from config
   input/files/are/from/config:
-# NOTICE 179:  bulk_video_converter.bash gets file names from config
+# NOTICE 184:  bulk_video_converter.bash gets file names from config
     tvzavr_h264_x2_1080p_hd for input/files/are/from/config:
       tvzavr_h264_x2_1080p_hd:
         global input:
@@ -44,7 +45,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # tvzavr_h264_x2_1080p_hd done
     # tvzavr_h264_x2_1080p_hd for input/files/are/from/config done
-# NOTICE 1027:  bulk_video_converter.bash gets file names from config
+# NOTICE 1005:  bulk_video_converter.bash gets file names from config
     tvzavr_h264_x2_0720p_hd for input/files/are/from/config:
       tvzavr_h264_x2_0720p_hd:
         global input:
@@ -69,7 +70,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # tvzavr_h264_x2_0720p_hd done
     # tvzavr_h264_x2_0720p_hd for input/files/are/from/config done
-# NOTICE 2237:  bulk_video_converter.bash gets file names from config
+# NOTICE 2116:  bulk_video_converter.bash gets file names from config
     tvzavr_h264_x2_0576p_hi for input/files/are/from/config:
       tvzavr_h264_x2_0576p_hi:
         global input:
@@ -94,7 +95,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # tvzavr_h264_x2_0576p_hi done
     # tvzavr_h264_x2_0576p_hi for input/files/are/from/config done
-# NOTICE 3804:  bulk_video_converter.bash gets file names from config
+# NOTICE 3535:  bulk_video_converter.bash gets file names from config
     tvzavr_h264_x2_0480p_hi for input/files/are/from/config:
       tvzavr_h264_x2_0480p_hi:
         global input:
@@ -119,7 +120,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # tvzavr_h264_x2_0480p_hi done
     # tvzavr_h264_x2_0480p_hi for input/files/are/from/config done
-# NOTICE 5868:  bulk_video_converter.bash gets file names from config
+# NOTICE 5368:  bulk_video_converter.bash gets file names from config
     tvzavr_h264_x2_0360p_nr for input/files/are/from/config:
       tvzavr_h264_x2_0360p_nr:
         global input:
@@ -144,7 +145,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # tvzavr_h264_x2_0360p_nr done
     # tvzavr_h264_x2_0360p_nr for input/files/are/from/config done
-# NOTICE 8205:  bulk_video_converter.bash gets file names from config
+# NOTICE 7591:  bulk_video_converter.bash gets file names from config
     tvzavr_h264_x2_0270p_lw for input/files/are/from/config:
       tvzavr_h264_x2_0270p_lw:
         global input:
@@ -169,7 +170,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # tvzavr_h264_x2_0270p_lw done
     # tvzavr_h264_x2_0270p_lw for input/files/are/from/config done
-# NOTICE 10927:  bulk_video_converter.bash gets file names from config
+# NOTICE 10191:  bulk_video_converter.bash gets file names from config
     tvzavr_h264_x2_0240p_lw for input/files/are/from/config:
       tvzavr_h264_x2_0240p_lw:
         global input:
@@ -194,7 +195,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # tvzavr_h264_x2_0240p_lw done
     # tvzavr_h264_x2_0240p_lw for input/files/are/from/config done
-# NOTICE 14031:  bulk_video_converter.bash gets file names from config
+# NOTICE 13310:  bulk_video_converter.bash gets file names from config
     tvzavr_h264_x2_0120p_lw for input/files/are/from/config:
       tvzavr_h264_x2_0120p_lw:
         global input:

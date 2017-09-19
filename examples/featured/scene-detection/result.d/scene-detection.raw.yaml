@@ -4,11 +4,12 @@ bulk_video_converter.bash:
   # datetime done
   versions:
     bulk_video_converter.bash:
-      0.1505573195
+      0.1505859356
     # bulk_video_converter.bash done
     config:
       0.1505573195
     # config done
+# WARNING:  bulk_video_converter.bash version (0.1505859356) do not match config version (0.1505573195).
   # versions done
   async_for_files:
     false
@@ -17,9 +18,9 @@ bulk_video_converter.bash:
     false
   # async_for_profiles done
 LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
-# NOTICE 97:  bulk_video_converter.bash gets file names from config
+# NOTICE 91:  bulk_video_converter.bash gets file names from config
   input/files/are/from/config:
-# NOTICE 148:  bulk_video_converter.bash gets file names from config
+# NOTICE 141:  bulk_video_converter.bash gets file names from config
     scene_04 for input/files/are/from/config:
       scene_04:
         global input:
@@ -38,14 +39,14 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
           -f 'null' 
         # format done
         passes:
-# NOTICE 555:  bulk_video_converter.bash callback = frame_info
+# NOTICE 541:  bulk_video_converter.bash callback = frame_info
           pass 1:
             /usr/bin/ffmpeg -threads '0' -ss '00:00:10' -i 'input/files/are/from/config' -filter:v "yadif=1:-1:0,select='gt(scene,0.4)',showinfo" -ss '00:00:10' -t '00:00:10' -to '00:00:30' -f 'null' -y 'qq' 2> >( grep --line-buffered 'pts_time' | sed -uE 's/.*n:\s*?([0-9]+).*pts:\s*?([0-9]+).*pts_time:\s*?([0-9\.]+).*pos:\s*?([0-9]+).*.*type:\s*?([IPB?]+).*.*mean:\s*?\[(.+)\].*.*stdev:\s*?\[(.+)\].*/n:\1\tpts:\2\tpts_time:\3\t\tpos:\4\ttype:\5\tmean:\6 std:\7/gi' | tee //tmp/config-scene_04-1-null.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # scene_04 done
     # scene_04 for input/files/are/from/config done
-# NOTICE 623:  bulk_video_converter.bash gets file names from config
+# NOTICE 613:  bulk_video_converter.bash gets file names from config
     scene_09 for input/files/are/from/config:
       scene_09:
         global input:
@@ -64,7 +65,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
           -f 'null' 
         # format done
         passes:
-# NOTICE 1041:  bulk_video_converter.bash callback = frame_info
+# NOTICE 1008:  bulk_video_converter.bash callback = frame_info
           pass 1:
             /usr/bin/ffmpeg -threads '0' -ss '00:00:10' -i 'input/files/are/from/config' -filter:v "yadif=1:-1:0,select='gt(scene,0.9)',showinfo" -ss '00:00:10' -t '00:00:10' -to '00:00:30' -f 'null' -y 'qq' 2> >( grep --line-buffered 'pts_time' | sed -uE 's/.*n:\s*?([0-9]+).*pts:\s*?([0-9]+).*pts_time:\s*?([0-9\.]+).*pos:\s*?([0-9]+).*.*type:\s*?([IPB?]+).*.*mean:\s*?\[(.+)\].*.*stdev:\s*?\[(.+)\].*/n:\1\tpts:\2\tpts_time:\3\t\tpos:\4\ttype:\5\tmean:\6 std:\7/gi' | tee //tmp/config-scene_09-1-null.ffmpeg.log 1>&2);
           # pass 1 done
