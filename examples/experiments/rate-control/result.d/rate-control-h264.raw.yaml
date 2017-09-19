@@ -713,3 +713,25 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         global input:
           -threads '0' 
         # global input done
+        video:
+          -codec:v 'libx264' -crf '0' -maxrate '4M' -bufsize '8M' -filter:v "yadif=1:-1:0" 
+        # video done
+        audio:
+          -strict 'experimental' -codec:a 'aac' 
+        # audio done
+        format:
+          -movflags '+faststart' -f 'mp4' 
+        # format done
+        passes:
+          pass 1:
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -crf '0' -maxrate '4M' -bufsize '8M' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-ratectl_x1v4mrf00.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-ratectl_x1v4mrf00-1-mp4.ffmpeg.log 1>&2);
+          # pass 1 done
+        # passes done
+      # ratectl_x1v4mrf00 done
+    # ratectl_x1v4mrf00 for input/files/are/from/config done
+# NOTICE 36786:  bulk_video_converter.bash gets file names from config
+    ratectl_x1v4mrf10 for input/files/are/from/config:
+      ratectl_x1v4mrf10:
+        global input:
+          -threads '0' 
+        # global input done
