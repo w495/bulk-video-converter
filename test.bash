@@ -32,7 +32,12 @@ readonly VIDEO_LOG_DIR_FIXTURE='/tmp/video/log/dir/fixture';
 
 run_tests () {
     print_help "test script ${SCRIPT_PATH};";    
-    readonly CONFIG_PATH_LIST=$(find ./ -type f ${TEST_CONFIG_FIND_ARGS} );
+    
+    readonly CONFIG_PATH_LIST=$(                            \
+        find ${TESTS_FPATH}                                 \
+            -type f                                         \
+            ${TEST_CONFIG_FIND_ARGS}                        \
+    );
     readonly TEST_COUINT=$(echo ${CONFIG_PATH_LIST} | wc -w);
     
     for CONFIG_PATH in ${CONFIG_PATH_LIST}; do

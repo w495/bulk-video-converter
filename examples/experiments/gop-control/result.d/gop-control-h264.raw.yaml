@@ -18,9 +18,9 @@ bulk_video_converter.bash:
     false
   # async_for_profiles done
 LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
-# NOTICE 97:  bulk_video_converter.bash gets file names from config
+# NOTICE 96:  bulk_video_converter.bash gets file names from config
   input/files/are/from/config:
-# NOTICE 247:  bulk_video_converter.bash gets file names from config
+# NOTICE 243:  bulk_video_converter.bash gets file names from config
     gopctl_o96rf23 for input/files/are/from/config:
       gopctl_o96rf23:
         global input:
@@ -42,7 +42,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # gopctl_o96rf23 done
     # gopctl_o96rf23 for input/files/are/from/config done
-# NOTICE 2052:  bulk_video_converter.bash gets file names from config
+# NOTICE 2055:  bulk_video_converter.bash gets file names from config
     gopctl_o96a4 for input/files/are/from/config:
       gopctl_o96a4:
         global input:
@@ -67,7 +67,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # gopctl_o96a4 done
     # gopctl_o96a4 for input/files/are/from/config done
-# NOTICE 3920:  bulk_video_converter.bash gets file names from config
+# NOTICE 4026:  bulk_video_converter.bash gets file names from config
     gopctl_o96b4 for input/files/are/from/config:
       gopctl_o96b4:
         global input:
@@ -92,7 +92,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # gopctl_o96b4 done
     # gopctl_o96b4 for input/files/are/from/config done
-# NOTICE 6270:  bulk_video_converter.bash gets file names from config
+# NOTICE 6464:  bulk_video_converter.bash gets file names from config
     gopctl_o96c4 for input/files/are/from/config:
       gopctl_o96c4:
         global input:
@@ -117,7 +117,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # gopctl_o96c4 done
     # gopctl_o96c4 for input/files/are/from/config done
-# NOTICE 8750:  bulk_video_converter.bash gets file names from config
+# NOTICE 8962:  bulk_video_converter.bash gets file names from config
     gopctl_g96rf23 for input/files/are/from/config:
       gopctl_g96rf23:
         global input:
@@ -139,7 +139,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # gopctl_g96rf23 done
     # gopctl_g96rf23 for input/files/are/from/config done
-# NOTICE 10442:  bulk_video_converter.bash gets file names from config
+# NOTICE 10860:  bulk_video_converter.bash gets file names from config
     gopctl_g96a4 for input/files/are/from/config:
       gopctl_g96a4:
         global input:
@@ -164,7 +164,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # gopctl_g96a4 done
     # gopctl_g96a4 for input/files/are/from/config done
-# NOTICE 12405:  bulk_video_converter.bash gets file names from config
+# NOTICE 12870:  bulk_video_converter.bash gets file names from config
     gopctl_g96b4 for input/files/are/from/config:
       gopctl_g96b4:
         global input:
@@ -189,7 +189,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # passes done
       # gopctl_g96b4 done
     # gopctl_g96b4 for input/files/are/from/config done
-# NOTICE 14714:  bulk_video_converter.bash gets file names from config
+# NOTICE 15179:  bulk_video_converter.bash gets file names from config
     gopctl_g96c4 for input/files/are/from/config:
       gopctl_g96c4:
         global input:

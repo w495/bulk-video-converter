@@ -12,10 +12,17 @@ readonly TEST_CONFIG_PATTERN='*.test-config.yaml';
 readonly TESTS_FPATH=$(readlink -f "${TESTS_PATH}");
 readonly TEST_CONFIG_FIND_ARGS="-name ${TEST_CONFIG_PATTERN}" ;
 
-readonly CONFIG_PATH_LIST=$(find ./ -type f ${TEST_CONFIG_FIND_ARGS} );
-readonly TEST_COUINT=$(echo ${CONFIG_PATH_LIST} | wc -w);
+
 
 tests_dirty_fix () {
+
+    readonly CONFIG_PATH_LIST=$(                            \
+        find ${TESTS_FPATH}                                 \
+            -type f                                         \
+            ${TEST_CONFIG_FIND_ARGS}                        \
+    );
+    readonly TEST_COUINT=$(echo ${CONFIG_PATH_LIST} | wc -w);
+    
     for CONFIG_PATH in ${CONFIG_PATH_LIST}; do
         echo "dirty fix '${CONFIG_PATH}';";
         local CONFIG_FPATH=$(readlink -f "${CONFIG_PATH}");
