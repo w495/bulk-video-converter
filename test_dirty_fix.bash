@@ -12,8 +12,8 @@ readonly TEST_CONFIG_PATTERN='*.test-config.yaml';
 readonly TESTS_FPATH=$(readlink -f "${TESTS_PATH}");
 readonly TEST_CONFIG_FIND_ARGS="-name ${TEST_CONFIG_PATTERN}" ;
 
-readonly EXP_EXT="expected";
-readonly ACT_EXT="actual";
+readonly EXP_EXT='expected';
+readonly ACT_EXT='actual';
 readonly RSLT_DNAME='test-results';
 
 

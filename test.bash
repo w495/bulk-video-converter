@@ -32,8 +32,8 @@ readonly FFMPEG_LOG_DIR_FIXTURE='/tmp/ffmpeg/log/dir/fixture';
 readonly PASS_LOG_DIR_FIXTURE='/tmp/pass/log/dir/fixture';
 
 
-readonly RAW_EXT='tmp.raw.actual'
-readonly DIFF_EXT='tmp.e2a'
+readonly RAW_EXT='actual-raw'
+readonly DIFF_EXT='expected-to-actual'
 readonly EXP_EXT='expected';
 readonly ACT_EXT='actual';
 readonly RSLT_DNAME='test-results';
