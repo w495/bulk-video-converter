@@ -1,0 +1,44 @@
+bulk_video_converter.bash:
+  datetime:
+    1970-01-01_01-01-01-00
+  # datetime done
+  versions:
+    bulk_video_converter.bash:
+      0.1505859356
+    # bulk_video_converter.bash done
+    config:
+      0.1505859356
+    # config done
+  # versions done
+  async_for_files:
+    false
+  # async_for_files done
+  async_for_profiles:
+    false
+  # async_for_profiles done
+# NOTICE 92:  bulk_video_converter.bash gets file names from config
+  input/files/are/from/config:
+# NOTICE 123:  bulk_video_converter.bash gets file names from config
+    defult for input/files/are/from/config:
+      defult:
+        global input:
+          -threads '1' 
+        # global input done
+        video:
+          -codec:v 'libx264' -filter:v "yadif=1:-1:0" 
+        # video done
+        audio:
+          -strict 'experimental' -codec:a 'aac' 
+        # audio done
+        format:
+          -movflags '+faststart' -f 'mp4' 
+        # format done
+        passes:
+          pass 1:
+            /usr/bin/ffmpeg -threads '1' -i 'input/files/are/from/config' -codec:v 'libx264' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-defult.mp4' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-defult-1-mp4.ffmpeg.log 1>&2);
+          # pass 1 done
+        # passes done
+      # defult done
+    # defult for input/files/are/from/config done
+  # input/files/are/from/config done
+# bulk_video_converter.bash done

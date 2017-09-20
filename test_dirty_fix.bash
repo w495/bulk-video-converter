@@ -20,6 +20,7 @@ tests_dirty_fix () {
         find ${TESTS_FPATH}                                 \
             -type f                                         \
             ${TEST_CONFIG_FIND_ARGS}                        \
+        | sort                                              \
     );
     readonly TEST_COUINT=$(echo ${CONFIG_PATH_LIST} | wc -w);
     

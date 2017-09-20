@@ -1,0 +1,122 @@
+bulk_video_converter.bash:
+  datetime:
+    1970-01-01_01-01-01-00
+  # datetime done
+  versions:
+    bulk_video_converter.bash:
+      0.1505859356
+    # bulk_video_converter.bash done
+    config:
+      0.1505859356
+    # config done
+  # versions done
+  async_for_files:
+    false
+  # async_for_files done
+  async_for_profiles:
+    false
+  # async_for_profiles done
+# NOTICE 88:  bulk_video_converter.bash gets file names from config
+  input/files/are/from/config:
+# NOTICE 130:  bulk_video_converter.bash gets file names from config
+    original for input/files/are/from/config:
+      original:
+        global input:
+          -threads '1' 
+        # global input done
+        video:
+          -codec:v 'libx264' -filter:v "yadif=1:-1:0" 
+        # video done
+        audio:
+          -strict 'experimental' -codec:a 'aac' 
+        # audio done
+        format:
+          -movflags '+faststart' -f 'mp4' 
+        # format done
+        passes:
+          pass 1:
+            /usr/bin/ffmpeg -threads '1' -i 'input/files/are/from/config' -codec:v 'libx264' -filter:v "yadif=1:-1:0" -pass 1 -passlogfile /tmp/test/pass/log/dir/name/from/config/config-original.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/test/log/dir/name/from/config/config-original-1-mp4.ffmpeg.log 1>&2);
+          # pass 1 done
+          pass 2:
+            /usr/bin/ffmpeg -threads '1' -i 'input/files/are/from/config' -codec:v 'libx264' -filter:v "yadif=1:-1:0" -pass 2 -passlogfile /tmp/test/pass/log/dir/name/from/config/config-original.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/test/output/dir/name/from/config/config-original.mp4' 2> >(tee /tmp/test/log/dir/name/from/config/config-original-2-mp4.ffmpeg.log 1>&2);
+          # pass 2 done
+        # passes done
+      # original done
+    # original for input/files/are/from/config done
+# NOTICE 690:  bulk_video_converter.bash gets file names from config
+    output_overload for input/files/are/from/config:
+      output_overload:
+        global input:
+          -threads '1' 
+        # global input done
+        video:
+          -codec:v 'libx264' -filter:v "yadif=1:-1:0" 
+        # video done
+        audio:
+          -strict 'experimental' -codec:a 'aac' 
+        # audio done
+        format:
+          -movflags '+faststart' -f 'mp4' 
+        # format done
+        passes:
+          pass 1:
+            /usr/bin/ffmpeg -threads '1' -i 'input/files/are/from/config' -codec:v 'libx264' -filter:v "yadif=1:-1:0" -pass 1 -passlogfile /tmp/test/pass/log/dir/name/from/config/config-output_overload.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/test/log/dir/name/from/config/config-output_overload-1-mp4.ffmpeg.log 1>&2);
+          # pass 1 done
+          pass 2:
+            /usr/bin/ffmpeg -threads '1' -i 'input/files/are/from/config' -codec:v 'libx264' -filter:v "yadif=1:-1:0" -pass 2 -passlogfile /tmp/test/pass/log/dir/name/from/config/config-output_overload.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/test/output/overload/config-output_overload.mp4' 2> >(tee /tmp/test/log/dir/name/from/config/config-output_overload-2-mp4.ffmpeg.log 1>&2);
+          # pass 2 done
+        # passes done
+      # output_overload done
+    # output_overload for input/files/are/from/config done
+# NOTICE 1585:  bulk_video_converter.bash gets file names from config
+    log_overload for input/files/are/from/config:
+      log_overload:
+        global input:
+          -threads '1' 
+        # global input done
+        video:
+          -codec:v 'libx264' -filter:v "yadif=1:-1:0" 
+        # video done
+        audio:
+          -strict 'experimental' -codec:a 'aac' 
+        # audio done
+        format:
+          -movflags '+faststart' -f 'mp4' 
+        # format done
+        passes:
+          pass 1:
+            /usr/bin/ffmpeg -threads '1' -i 'input/files/are/from/config' -codec:v 'libx264' -filter:v "yadif=1:-1:0" -pass 1 -passlogfile /tmp/test/pass/log/dir/name/from/config/config-log_overload.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/test/log/overload/config-log_overload-1-mp4.ffmpeg.log 1>&2);
+          # pass 1 done
+          pass 2:
+            /usr/bin/ffmpeg -threads '1' -i 'input/files/are/from/config' -codec:v 'libx264' -filter:v "yadif=1:-1:0" -pass 2 -passlogfile /tmp/test/pass/log/dir/name/from/config/config-log_overload.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/test/output/dir/name/from/config/config-log_overload.mp4' 2> >(tee /tmp/test/log/overload/config-log_overload-2-mp4.ffmpeg.log 1>&2);
+          # pass 2 done
+        # passes done
+      # log_overload done
+    # log_overload for input/files/are/from/config done
+# NOTICE 2481:  bulk_video_converter.bash gets file names from config
+    passlog_overload for input/files/are/from/config:
+      passlog_overload:
+        global input:
+          -threads '1' 
+        # global input done
+        video:
+          -codec:v 'libx264' -filter:v "yadif=1:-1:0" 
+        # video done
+        audio:
+          -strict 'experimental' -codec:a 'aac' 
+        # audio done
+        format:
+          -movflags '+faststart' -f 'mp4' 
+        # format done
+        passes:
+          pass 1:
+            /usr/bin/ffmpeg -threads '1' -i 'input/files/are/from/config' -codec:v 'libx264' -filter:v "yadif=1:-1:0" -pass 1 -passlogfile /tmp/test/pass/log/dir/name/from/config/config-passlog_overload.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/test/pass/log/overload/config-passlog_overload-1-mp4.ffmpeg.log 1>&2);
+          # pass 1 done
+          pass 2:
+            /usr/bin/ffmpeg -threads '1' -i 'input/files/are/from/config' -codec:v 'libx264' -filter:v "yadif=1:-1:0" -pass 2 -passlogfile /tmp/test/pass/log/dir/name/from/config/config-passlog_overload.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/test/output/dir/name/from/config/config-passlog_overload.mp4' 2> >(tee /tmp/test/pass/log/overload/config-passlog_overload-2-mp4.ffmpeg.log 1>&2);
+          # pass 2 done
+        # passes done
+      # passlog_overload done
+    # passlog_overload for input/files/are/from/config done
+  # input/files/are/from/config done
+# bulk_video_converter.bash done

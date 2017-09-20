@@ -1,0 +1,210 @@
+bulk_video_converter.bash:
+  datetime:
+    1970-01-01_01-01-01-00
+  # datetime done
+  versions:
+    bulk_video_converter.bash:
+      0.1505859356
+    # bulk_video_converter.bash done
+    config:
+      0.1505859356
+    # config done
+  # versions done
+  async_for_files:
+    false
+  # async_for_files done
+  async_for_profiles:
+    false
+  # async_for_profiles done
+# NOTICE 93:  bulk_video_converter.bash gets file names from config
+  input/files/are/from/config:
+# NOTICE 146:  bulk_video_converter.bash gets file names from config
+    test_empty_p1 for input/files/are/from/config:
+      test_empty_p1:
+        global input:
+          -threads '1' 
+        # global input done
+        video:
+          -codec:v 'libx264' -filter:v "yadif=1:-1:0" 
+        # video done
+        audio:
+          -strict 'experimental' -codec:a 'aac' 
+        # audio done
+        format:
+          -movflags '+faststart' -f 'mp4' 
+        # format done
+        passes:
+          pass 1:
+            /usr/bin/ffmpeg -threads '1' -i 'input/files/are/from/config' -codec:v 'libx264' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-test_empty_p1.mp4' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-test_empty_p1-1-mp4.ffmpeg.log 1>&2);
+          # pass 1 done
+        # passes done
+      # test_empty_p1 done
+    # test_empty_p1 for input/files/are/from/config done
+# NOTICE 664:  bulk_video_converter.bash gets file names from config
+    test_empty_p2 for input/files/are/from/config:
+      test_empty_p2:
+        global input:
+          -threads '1' 
+        # global input done
+        video:
+          -codec:v 'libx264' -filter:v "yadif=1:-1:0" 
+        # video done
+        audio:
+          -strict 'experimental' -codec:a 'aac' 
+        # audio done
+        format:
+          -movflags '+faststart' -f 'mp4' 
+        # format done
+        passes:
+          pass 1:
+            /usr/bin/ffmpeg -threads '1' -i 'input/files/are/from/config' -codec:v 'libx264' -filter:v "yadif=1:-1:0" -pass 1 -passlogfile /tmp/pass/log/dir/fixture/config-test_empty_p2.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-test_empty_p2-1-mp4.ffmpeg.log 1>&2);
+          # pass 1 done
+          pass 2:
+            /usr/bin/ffmpeg -threads '1' -i 'input/files/are/from/config' -codec:v 'libx264' -filter:v "yadif=1:-1:0" -pass 2 -passlogfile /tmp/pass/log/dir/fixture/config-test_empty_p2.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-test_empty_p2.mp4' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-test_empty_p2-2-mp4.ffmpeg.log 1>&2);
+          # pass 2 done
+        # passes done
+      # test_empty_p2 done
+    # test_empty_p2 for input/files/are/from/config done
+# NOTICE 1226:  bulk_video_converter.bash gets file names from config
+    test_output_p1 for input/files/are/from/config:
+      test_output_p1:
+        global input:
+          -threads '1' 
+        # global input done
+        video:
+          -codec:v 'libx264' -filter:v "yadif=1:-1:0" 
+        # video done
+        audio:
+          -strict 'experimental' -codec:a 'aac' 
+        # audio done
+        format:
+          -movflags '+faststart' -f 'mp4' 
+        # format done
+        passes:
+          pass 1:
+            /usr/bin/ffmpeg -threads '1' -i 'input/files/are/from/config' -codec:v 'libx264' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/test/output/dir/name/from/config/config-test_output_p1.mp4' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-test_output_p1-1-mp4.ffmpeg.log 1>&2);
+          # pass 1 done
+        # passes done
+      # test_output_p1 done
+    # test_output_p1 for input/files/are/from/config done
+# NOTICE 1744:  bulk_video_converter.bash gets file names from config
+    test_output_p2 for input/files/are/from/config:
+      test_output_p2:
+        global input:
+          -threads '1' 
+        # global input done
+        video:
+          -codec:v 'libx264' -filter:v "yadif=1:-1:0" 
+        # video done
+        audio:
+          -strict 'experimental' -codec:a 'aac' 
+        # audio done
+        format:
+          -movflags '+faststart' -f 'mp4' 
+        # format done
+        passes:
+          pass 1:
+            /usr/bin/ffmpeg -threads '1' -i 'input/files/are/from/config' -codec:v 'libx264' -filter:v "yadif=1:-1:0" -pass 1 -passlogfile /tmp/test/output/dir/name/from/config/config-test_output_p2.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-test_output_p2-1-mp4.ffmpeg.log 1>&2);
+          # pass 1 done
+          pass 2:
+            /usr/bin/ffmpeg -threads '1' -i 'input/files/are/from/config' -codec:v 'libx264' -filter:v "yadif=1:-1:0" -pass 2 -passlogfile /tmp/test/output/dir/name/from/config/config-test_output_p2.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-test_output_p2.mp4' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-test_output_p2-2-mp4.ffmpeg.log 1>&2);
+          # pass 2 done
+        # passes done
+      # test_output_p2 done
+    # test_output_p2 for input/files/are/from/config done
+# NOTICE 2304:  bulk_video_converter.bash gets file names from config
+    test_log_p1 for input/files/are/from/config:
+      test_log_p1:
+        global input:
+          -threads '1' 
+        # global input done
+        video:
+          -codec:v 'libx264' -filter:v "yadif=1:-1:0" 
+        # video done
+        audio:
+          -strict 'experimental' -codec:a 'aac' 
+        # audio done
+        format:
+          -movflags '+faststart' -f 'mp4' 
+        # format done
+        passes:
+          pass 1:
+            /usr/bin/ffmpeg -threads '1' -i 'input/files/are/from/config' -codec:v 'libx264' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-test_log_p1.mp4' 2> >(tee /tmp/test/log/dir/name/from/config/config-test_log_p1-1-mp4.ffmpeg.log 1>&2);
+          # pass 1 done
+        # passes done
+      # test_log_p1 done
+    # test_log_p1 for input/files/are/from/config done
+# NOTICE 2812:  bulk_video_converter.bash gets file names from config
+    test_log_p2 for input/files/are/from/config:
+      test_log_p2:
+        global input:
+          -threads '1' 
+        # global input done
+        video:
+          -codec:v 'libx264' -filter:v "yadif=1:-1:0" 
+        # video done
+        audio:
+          -strict 'experimental' -codec:a 'aac' 
+        # audio done
+        format:
+          -movflags '+faststart' -f 'mp4' 
+        # format done
+        passes:
+          pass 1:
+            /usr/bin/ffmpeg -threads '1' -i 'input/files/are/from/config' -codec:v 'libx264' -filter:v "yadif=1:-1:0" -pass 1 -passlogfile /tmp/pass/log/dir/fixture/config-test_log_p2.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/test/log/dir/name/from/config/config-test_log_p2-1-mp4.ffmpeg.log 1>&2);
+          # pass 1 done
+          pass 2:
+            /usr/bin/ffmpeg -threads '1' -i 'input/files/are/from/config' -codec:v 'libx264' -filter:v "yadif=1:-1:0" -pass 2 -passlogfile /tmp/pass/log/dir/fixture/config-test_log_p2.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-test_log_p2.mp4' 2> >(tee /tmp/test/log/dir/name/from/config/config-test_log_p2-2-mp4.ffmpeg.log 1>&2);
+          # pass 2 done
+        # passes done
+      # test_log_p2 done
+    # test_log_p2 for input/files/are/from/config done
+# NOTICE 3371:  bulk_video_converter.bash gets file names from config
+    test_passlog_p1 for input/files/are/from/config:
+      test_passlog_p1:
+        global input:
+          -threads '1' 
+        # global input done
+        video:
+          -codec:v 'libx264' -filter:v "yadif=1:-1:0" 
+        # video done
+        audio:
+          -strict 'experimental' -codec:a 'aac' 
+        # audio done
+        format:
+          -movflags '+faststart' -f 'mp4' 
+        # format done
+        passes:
+          pass 1:
+            /usr/bin/ffmpeg -threads '1' -i 'input/files/are/from/config' -codec:v 'libx264' -filter:v "yadif=1:-1:0" -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/test/pass/log/dir/name/from/config/config-test_passlog_p1.mp4' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-test_passlog_p1-1-mp4.ffmpeg.log 1>&2);
+          # pass 1 done
+        # passes done
+      # test_passlog_p1 done
+    # test_passlog_p1 for input/files/are/from/config done
+# NOTICE 3886:  bulk_video_converter.bash gets file names from config
+    test_passlog_p2 for input/files/are/from/config:
+      test_passlog_p2:
+        global input:
+          -threads '1' 
+        # global input done
+        video:
+          -codec:v 'libx264' -filter:v "yadif=1:-1:0" 
+        # video done
+        audio:
+          -strict 'experimental' -codec:a 'aac' 
+        # audio done
+        format:
+          -movflags '+faststart' -f 'mp4' 
+        # format done
+        passes:
+          pass 1:
+            /usr/bin/ffmpeg -threads '1' -i 'input/files/are/from/config' -codec:v 'libx264' -filter:v "yadif=1:-1:0" -pass 1 -passlogfile /tmp/test/pass/log/dir/name/from/config/config-test_passlog_p2.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-test_passlog_p2-1-mp4.ffmpeg.log 1>&2);
+          # pass 1 done
+          pass 2:
+            /usr/bin/ffmpeg -threads '1' -i 'input/files/are/from/config' -codec:v 'libx264' -filter:v "yadif=1:-1:0" -pass 2 -passlogfile /tmp/test/pass/log/dir/name/from/config/config-test_passlog_p2.config -strict 'experimental' -codec:a 'aac' -movflags '+faststart' -f 'mp4' -y '/tmp/video/output/dir/fixture/config-test_passlog_p2.mp4' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-test_passlog_p2-2-mp4.ffmpeg.log 1>&2);
+          # pass 2 done
+        # passes done
+      # test_passlog_p2 done
+    # test_passlog_p2 for input/files/are/from/config done
+  # input/files/are/from/config done
+# bulk_video_converter.bash done

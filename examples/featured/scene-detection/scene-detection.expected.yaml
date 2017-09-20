@@ -10,7 +10,6 @@ bulk_video_converter.bash:
     false
   async_for_profiles:
     false
-LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
   input/files/are/from/config:
     scene_04 for input/files/are/from/config:
       scene_04:

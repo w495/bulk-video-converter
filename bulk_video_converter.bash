@@ -285,24 +285,39 @@ ${COLOR_REVERSE} Authors:${C0}
 
 default_config() {
     handle_config <<EOF
+self:
+  no_async: true
+  compatibility:
+    from: 0.01
 ffmpeg:
   bin: /usr/bin/ffmpeg
   threads: 0
-  start: 00:00:05
-  duration: 00:00:10
 profile:
   base:
     # you can mark profile as is_abstract
     # and it will be used only for inheritance.
     is_abstract: 1
+    start: 00:00:00
+    stop: 00:00:20
+    duration: 00:00:10
+    output:
+      dir_name: /tmp/bulk_video_converter/default_config/output
+    log:
+      dir_name: /tmp/bulk_video_converter/default_config/log
+    pass_log:
+      dir_name: /tmp/bulk_video_converter/default_config/pass_log
     passes: 2
     video:
+      framerate: 25 
       codec:
         preset: veryfast
         name : h264
         weightp: smart
         bframes: 3
-        opts: "keyint=96:min-keyint=96:no-scenecut"
+        opts:
+          keyint: 96
+          min_keyint: 96
+          no_scenecut: true
     audio:
       codec:
         name: aac
@@ -1875,10 +1890,9 @@ compute_if_empty (){
 }
 
 start_up (){
-    echo "LOG_DIR_NAME = ' ${LOG_DIR_NAME}" 1>&2;
     $(create_directory 'tmp' "${TMP_DIR_NAME}"    'at start up.');
-    $(create_directory 'log' "${LOG_DIR_NAME}"    'at start up.');
-    $(create_directory 'out' "${OUTPUT_DIR_NAME}" 'at start up.');
+    #$(create_directory 'log' "${LOG_DIR_NAME}"    'at start up.');
+    #$(create_directory 'out' "${OUTPUT_DIR_NAME}" 'at start up.');
 }
 
 create_directory() {

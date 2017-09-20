@@ -28,7 +28,9 @@ readonly INPUT_FILE_PATH_FIXTURE='input/files/are/from/config';
 readonly START_TIME_STRING_FIXTURE="1970-01-01_01-01-01-00";
 readonly RANDOM_STRING_FIXTURE="R1Nd0m";  
 readonly VIDEO_OUTPUT_DIR_FIXTURE='/tmp/video/output/dir/fixture';
-readonly VIDEO_LOG_DIR_FIXTURE='/tmp/video/log/dir/fixture';
+readonly FFMPEG_LOG_DIR_FIXTURE='/tmp/ffmpeg/log/dir/fixture';
+readonly PASS_LOG_DIR_FIXTURE='/tmp/pass/log/dir/fixture';
+
 
 run_tests () {
     print_help "test script ${SCRIPT_PATH};";    
@@ -37,11 +39,17 @@ run_tests () {
         find ${TESTS_FPATH}                                 \
             -type f                                         \
             ${TEST_CONFIG_FIND_ARGS}                        \
+        | sort                                              \
     );
-    readonly TEST_COUINT=$(echo ${CONFIG_PATH_LIST} | wc -w);
+    readonly TEST_CNT=$(echo ${CONFIG_PATH_LIST} | wc -w);
+    
+    notice "${TEST_CNT} tests found;";
+    
+    local -i TEST_NUM=1;
     
     for CONFIG_PATH in ${CONFIG_PATH_LIST}; do
-        notice "prepare test with '${CONFIG_PATH}';";
+        local TEST_ITER="${TEST_NUM} from ${TEST_CNT}";
+        notice "prepare test ${TEST_ITER} with '${CONFIG_PATH}';";
         debug "use config file path '${CONFIG_PATH}';";
         local CONFIG_FPATH=$(readlink -f "${CONFIG_PATH}");
         debug "with config file full path '${CONFIG_FPATH}';";
@@ -50,7 +58,8 @@ run_tests () {
         local TEST_DPATH=$(dirname "${CONFIG_FPATH}");
         debug "with test path'${TEST_DPATH}';";
         local TEST_NAME="${TEST_BASE_NAME%.*.*}"
-        action "run test ${TEST_NAME};";
+        local TEST_ID="'${TEST_NAME}' (${TEST_ITER})";
+        action "run test ${TEST_ID};";
         local RESULT_DPATH="${TEST_DPATH}/result.d";
         debug "with result path '${RESULT_DPATH}';";
         debug "=> so create dir '${RESULT_DPATH}';";
@@ -73,7 +82,8 @@ run_tests () {
         debug "use --input='${INPUT_FILE_PATH_FIXTURE}';";
         debug "use --config='${CONFIG_FPATH}';";
         debug "use --output-dir='${VIDEO_OUTPUT_DIR_FIXTURE}';";
-        debug "use --ffmpeg-log-dir='${VIDEO_LOG_DIR_FIXTURE}';";
+        debug "use --ffmpeg-log-dir='${FFMPEG_LOG_DIR_FIXTURE}';";
+        debug "use --pass-log-dir='${PASS_LOG_DIR_FIXTURE}';";
         debug "use --dry-run;";
         debug "use --no-async;";        
         debug "and store script result to ${RAW_FPATH}";
@@ -85,7 +95,8 @@ run_tests () {
             --config "${CONFIG_FPATH}"                      \
             --input "${INPUT_FILE_PATH_FIXTURE}"            \
             --output-dir "${VIDEO_OUTPUT_DIR_FIXTURE}"      \
-            --ffmpeg-log-dir "${VIDEO_LOG_DIR_FIXTURE}"     \
+            --ffmpeg-log-dir "${FFMPEG_LOG_DIR_FIXTURE}"     \
+            --pass-log-dir "${PASS_LOG_DIR_FIXTURE}"        \
             --dry-run                                       \
             --no-async                                      \
             2> "${RAW_FPATH}";
@@ -95,7 +106,7 @@ run_tests () {
         debug "delete commnet from '${RAW_FPATH}';";
         debug "and store result to '${ACTL_FPATH}';";
         grep -v '#' "${RAW_FPATH}" > "${ACTL_FPATH}";
-        notice 'yaml is ok';
+        notice 'yaml is built';
     
         notice 'build test diff ...';
         debug 'use diff -u expected/file actual/file;';
@@ -104,11 +115,12 @@ run_tests () {
         debug 'to make diff empty use:';
         debug "cp '${ACTL_FPATH}' '${EXPCTD_FPATH}';"
         diff -u "${EXPCTD_FPATH}" "${ACTL_FPATH}" 1> "${DIFF_FPATH}"\
-        && success "test '${TEST_NAME}' is ok"                      \
-        || fail "test '${TEST_NAME}' is failed";
+        && success "test ${TEST_ID} is ok"     \
+        || fail "test ${TEST_ID} is failed";
     
+        TEST_NUM+=1;
     done;
-    happy_end "all tests (${TEST_COUINT}) is ok";
+    happy_end "all tests (${TEST_CNT}) is ok";
 }
 
 ## Utils:

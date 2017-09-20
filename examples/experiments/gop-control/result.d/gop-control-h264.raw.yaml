@@ -17,10 +17,9 @@ bulk_video_converter.bash:
   async_for_profiles:
     false
   # async_for_profiles done
-LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
-# NOTICE 96:  bulk_video_converter.bash gets file names from config
+# NOTICE 98:  bulk_video_converter.bash gets file names from config
   input/files/are/from/config:
-# NOTICE 243:  bulk_video_converter.bash gets file names from config
+# NOTICE 248:  bulk_video_converter.bash gets file names from config
     gopctl_o96rf23 for input/files/are/from/config:
       gopctl_o96rf23:
         global input:
@@ -37,12 +36,12 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '4.2' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -crf '23' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '128k' -ac '2' -movflags '+faststart' -f 'mp4' -y '//tmp/config-gopctl_o96rf23.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-gopctl_o96rf23-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '4.2' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -crf '23' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '128k' -ac '2' -movflags '+faststart' -f 'mp4' -y '//tmp/config-gopctl_o96rf23.mp4' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-gopctl_o96rf23-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # gopctl_o96rf23 done
     # gopctl_o96rf23 for input/files/are/from/config done
-# NOTICE 2055:  bulk_video_converter.bash gets file names from config
+# NOTICE 2093:  bulk_video_converter.bash gets file names from config
     gopctl_o96a4 for input/files/are/from/config:
       gopctl_o96a4:
         global input:
@@ -59,15 +58,15 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '4.2' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '4M' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -pass 1 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-gopctl_o96a4.config -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '128k' -ac '2' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/video/log/dir/fixture/config-gopctl_o96a4-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '4.2' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '4M' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -pass 1 -passlogfile /tmp/pass/log/dir/fixture/config-gopctl_o96a4.config -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '128k' -ac '2' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-gopctl_o96a4-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
           pass 2:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '4.2' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '4M' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -pass 2 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-gopctl_o96a4.config -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '128k' -ac '2' -movflags '+faststart' -f 'mp4' -y '//tmp/config-gopctl_o96a4.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-gopctl_o96a4-2-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '4.2' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '4M' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -pass 2 -passlogfile /tmp/pass/log/dir/fixture/config-gopctl_o96a4.config -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '128k' -ac '2' -movflags '+faststart' -f 'mp4' -y '//tmp/config-gopctl_o96a4.mp4' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-gopctl_o96a4-2-mp4.ffmpeg.log 1>&2);
           # pass 2 done
         # passes done
       # gopctl_o96a4 done
     # gopctl_o96a4 for input/files/are/from/config done
-# NOTICE 4026:  bulk_video_converter.bash gets file names from config
+# NOTICE 3936:  bulk_video_converter.bash gets file names from config
     gopctl_o96b4 for input/files/are/from/config:
       gopctl_o96b4:
         global input:
@@ -84,15 +83,15 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '4.2' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '4M' -maxrate '4M' -bufsize '8M' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -pass 1 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-gopctl_o96b4.config -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '128k' -ac '2' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/video/log/dir/fixture/config-gopctl_o96b4-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '4.2' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '4M' -maxrate '4M' -bufsize '8M' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -pass 1 -passlogfile /tmp/pass/log/dir/fixture/config-gopctl_o96b4.config -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '128k' -ac '2' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-gopctl_o96b4-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
           pass 2:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '4.2' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '4M' -maxrate '4M' -bufsize '8M' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -pass 2 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-gopctl_o96b4.config -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '128k' -ac '2' -movflags '+faststart' -f 'mp4' -y '//tmp/config-gopctl_o96b4.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-gopctl_o96b4-2-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '4.2' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '4M' -maxrate '4M' -bufsize '8M' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -pass 2 -passlogfile /tmp/pass/log/dir/fixture/config-gopctl_o96b4.config -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '128k' -ac '2' -movflags '+faststart' -f 'mp4' -y '//tmp/config-gopctl_o96b4.mp4' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-gopctl_o96b4-2-mp4.ffmpeg.log 1>&2);
           # pass 2 done
         # passes done
       # gopctl_o96b4 done
     # gopctl_o96b4 for input/files/are/from/config done
-# NOTICE 6464:  bulk_video_converter.bash gets file names from config
+# NOTICE 6171:  bulk_video_converter.bash gets file names from config
     gopctl_o96c4 for input/files/are/from/config:
       gopctl_o96c4:
         global input:
@@ -109,15 +108,15 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '4.2' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -maxrate '4M' -minrate '4M' -bufsize '8M' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -pass 1 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-gopctl_o96c4.config -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '128k' -ac '2' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/video/log/dir/fixture/config-gopctl_o96c4-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '4.2' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -maxrate '4M' -minrate '4M' -bufsize '8M' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -pass 1 -passlogfile /tmp/pass/log/dir/fixture/config-gopctl_o96c4.config -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '128k' -ac '2' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-gopctl_o96c4-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
           pass 2:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '4.2' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -maxrate '4M' -minrate '4M' -bufsize '8M' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -pass 2 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-gopctl_o96c4.config -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '128k' -ac '2' -movflags '+faststart' -f 'mp4' -y '//tmp/config-gopctl_o96c4.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-gopctl_o96c4-2-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '4.2' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -maxrate '4M' -minrate '4M' -bufsize '8M' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -pass 2 -passlogfile /tmp/pass/log/dir/fixture/config-gopctl_o96c4.config -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '128k' -ac '2' -movflags '+faststart' -f 'mp4' -y '//tmp/config-gopctl_o96c4.mp4' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-gopctl_o96c4-2-mp4.ffmpeg.log 1>&2);
           # pass 2 done
         # passes done
       # gopctl_o96c4 done
     # gopctl_o96c4 for input/files/are/from/config done
-# NOTICE 8962:  bulk_video_converter.bash gets file names from config
+# NOTICE 8449:  bulk_video_converter.bash gets file names from config
     gopctl_g96rf23 for input/files/are/from/config:
       gopctl_g96rf23:
         global input:
@@ -134,12 +133,12 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '4.2' -bf '3' -coder '1' -g '96' -keyint_min '96' -flags '+cgop' -sc_threshold '0' -crf '23' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '128k' -ac '2' -movflags '+faststart' -f 'mp4' -y '//tmp/config-gopctl_g96rf23.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-gopctl_g96rf23-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '4.2' -bf '3' -coder '1' -g '96' -keyint_min '96' -flags '+cgop' -sc_threshold '0' -crf '23' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '128k' -ac '2' -movflags '+faststart' -f 'mp4' -y '//tmp/config-gopctl_g96rf23.mp4' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-gopctl_g96rf23-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
         # passes done
       # gopctl_g96rf23 done
     # gopctl_g96rf23 for input/files/are/from/config done
-# NOTICE 10860:  bulk_video_converter.bash gets file names from config
+# NOTICE 10258:  bulk_video_converter.bash gets file names from config
     gopctl_g96a4 for input/files/are/from/config:
       gopctl_g96a4:
         global input:
@@ -156,15 +155,15 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '4.2' -bf '3' -coder '1' -g '96' -keyint_min '96' -flags '+cgop' -sc_threshold '0' -b:v '4M' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -pass 1 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-gopctl_g96a4.config -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '128k' -ac '2' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/video/log/dir/fixture/config-gopctl_g96a4-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '4.2' -bf '3' -coder '1' -g '96' -keyint_min '96' -flags '+cgop' -sc_threshold '0' -b:v '4M' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -pass 1 -passlogfile /tmp/pass/log/dir/fixture/config-gopctl_g96a4.config -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '128k' -ac '2' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-gopctl_g96a4-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
           pass 2:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '4.2' -bf '3' -coder '1' -g '96' -keyint_min '96' -flags '+cgop' -sc_threshold '0' -b:v '4M' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -pass 2 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-gopctl_g96a4.config -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '128k' -ac '2' -movflags '+faststart' -f 'mp4' -y '//tmp/config-gopctl_g96a4.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-gopctl_g96a4-2-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '4.2' -bf '3' -coder '1' -g '96' -keyint_min '96' -flags '+cgop' -sc_threshold '0' -b:v '4M' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -pass 2 -passlogfile /tmp/pass/log/dir/fixture/config-gopctl_g96a4.config -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '128k' -ac '2' -movflags '+faststart' -f 'mp4' -y '//tmp/config-gopctl_g96a4.mp4' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-gopctl_g96a4-2-mp4.ffmpeg.log 1>&2);
           # pass 2 done
         # passes done
       # gopctl_g96a4 done
     # gopctl_g96a4 for input/files/are/from/config done
-# NOTICE 12870:  bulk_video_converter.bash gets file names from config
+# NOTICE 12242:  bulk_video_converter.bash gets file names from config
     gopctl_g96b4 for input/files/are/from/config:
       gopctl_g96b4:
         global input:
@@ -181,15 +180,15 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '4.2' -bf '3' -coder '1' -g '96' -keyint_min '96' -flags '+cgop' -sc_threshold '0' -b:v '4M' -maxrate '4M' -bufsize '8M' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -pass 1 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-gopctl_g96b4.config -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '128k' -ac '2' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/video/log/dir/fixture/config-gopctl_g96b4-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '4.2' -bf '3' -coder '1' -g '96' -keyint_min '96' -flags '+cgop' -sc_threshold '0' -b:v '4M' -maxrate '4M' -bufsize '8M' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -pass 1 -passlogfile /tmp/pass/log/dir/fixture/config-gopctl_g96b4.config -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '128k' -ac '2' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-gopctl_g96b4-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
           pass 2:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '4.2' -bf '3' -coder '1' -g '96' -keyint_min '96' -flags '+cgop' -sc_threshold '0' -b:v '4M' -maxrate '4M' -bufsize '8M' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -pass 2 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-gopctl_g96b4.config -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '128k' -ac '2' -movflags '+faststart' -f 'mp4' -y '//tmp/config-gopctl_g96b4.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-gopctl_g96b4-2-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '4.2' -bf '3' -coder '1' -g '96' -keyint_min '96' -flags '+cgop' -sc_threshold '0' -b:v '4M' -maxrate '4M' -bufsize '8M' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -pass 2 -passlogfile /tmp/pass/log/dir/fixture/config-gopctl_g96b4.config -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '128k' -ac '2' -movflags '+faststart' -f 'mp4' -y '//tmp/config-gopctl_g96b4.mp4' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-gopctl_g96b4-2-mp4.ffmpeg.log 1>&2);
           # pass 2 done
         # passes done
       # gopctl_g96b4 done
     # gopctl_g96b4 for input/files/are/from/config done
-# NOTICE 15179:  bulk_video_converter.bash gets file names from config
+# NOTICE 14551:  bulk_video_converter.bash gets file names from config
     gopctl_g96c4 for input/files/are/from/config:
       gopctl_g96c4:
         global input:
@@ -206,10 +205,10 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '4.2' -bf '3' -coder '1' -g '96' -keyint_min '96' -flags '+cgop' -sc_threshold '0' -maxrate '4M' -minrate '4M' -bufsize '8M' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -pass 1 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-gopctl_g96c4.config -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '128k' -ac '2' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/video/log/dir/fixture/config-gopctl_g96c4-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '4.2' -bf '3' -coder '1' -g '96' -keyint_min '96' -flags '+cgop' -sc_threshold '0' -maxrate '4M' -minrate '4M' -bufsize '8M' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -pass 1 -passlogfile /tmp/pass/log/dir/fixture/config-gopctl_g96c4.config -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '128k' -ac '2' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-gopctl_g96c4-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
           pass 2:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '4.2' -bf '3' -coder '1' -g '96' -keyint_min '96' -flags '+cgop' -sc_threshold '0' -maxrate '4M' -minrate '4M' -bufsize '8M' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -pass 2 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-gopctl_g96c4.config -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '128k' -ac '2' -movflags '+faststart' -f 'mp4' -y '//tmp/config-gopctl_g96c4.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-gopctl_g96c4-2-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '4.2' -bf '3' -coder '1' -g '96' -keyint_min '96' -flags '+cgop' -sc_threshold '0' -maxrate '4M' -minrate '4M' -bufsize '8M' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -pass 2 -passlogfile /tmp/pass/log/dir/fixture/config-gopctl_g96c4.config -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '128k' -ac '2' -movflags '+faststart' -f 'mp4' -y '//tmp/config-gopctl_g96c4.mp4' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-gopctl_g96c4-2-mp4.ffmpeg.log 1>&2);
           # pass 2 done
         # passes done
       # gopctl_g96c4 done

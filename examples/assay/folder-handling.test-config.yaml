@@ -1,0 +1,43 @@
+self:
+  compatibility:
+    from: 0.1505859356
+profile:
+
+  # Tests empty profiles.
+  # All folders are from command line or default config.
+  test_empty_p1:
+  test_empty_p2:
+    passes: 2
+
+  # Tests video output directory passing.
+  # Log and Pass_log folders are from command line or default config.
+  # Output folders is from profiles.
+  test_output_p1:
+    output:
+      dir_name:   /tmp/test/output/dir/name/from/config
+  test_output_p2:
+    passes: 2
+    pass_log:
+      dir_name:   /tmp/test/output/dir/name/from/config
+  
+  # Tests script log directory passing.
+  # Output and Pass_log folders are from command line or default config.
+  # Log folders is from profiles.
+  test_log_p1:
+    log:
+      dir_name:   /tmp/test/log/dir/name/from/config
+  test_log_p2:
+    passes: 2
+    log:
+      dir_name:   /tmp/test/log/dir/name/from/config
+      
+  # Tests ffmpeg-passlog directory passing.
+  # Output and Log folders are from command line or default config.
+  # Passlog folders is from profiles.
+  test_passlog_p1:
+    output:
+      dir_name:   /tmp/test/pass/log/dir/name/from/config
+  test_passlog_p2:
+    passes: 2
+    pass_log:
+      dir_name:   /tmp/test/pass/log/dir/name/from/config

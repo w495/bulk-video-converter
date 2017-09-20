@@ -17,10 +17,9 @@ bulk_video_converter.bash:
   async_for_profiles:
     false
   # async_for_profiles done
-LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
-# NOTICE 91:  bulk_video_converter.bash gets file names from config
+# NOTICE 120:  bulk_video_converter.bash gets file names from config
   input/files/are/from/config:
-# NOTICE 163:  bulk_video_converter.bash gets file names from config
+# NOTICE 193:  bulk_video_converter.bash gets file names from config
     tvzavr_h264_x2_1080p_hd for input/files/are/from/config:
       tvzavr_h264_x2_1080p_hd:
         global input:
@@ -37,15 +36,15 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '4.0' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '4000k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -pass 1 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-tvzavr_h264_x2_1080p_hd.config -strict 'experimental' -codec:a 'aac' -b:a '128k' -ac '6' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/video/log/dir/fixture/config-tvzavr_h264_x2_1080p_hd-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '4.0' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '4000k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -pass 1 -passlogfile /tmp/pass/log/dir/fixture/config-tvzavr_h264_x2_1080p_hd.config -strict 'experimental' -codec:a 'aac' -b:a '128k' -ac '6' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-tvzavr_h264_x2_1080p_hd-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
           pass 2:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '4.0' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '4000k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -pass 2 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-tvzavr_h264_x2_1080p_hd.config -strict 'experimental' -codec:a 'aac' -b:a '128k' -ac '6' -movflags '+faststart' -f 'mp4' -y '//tmp/config-tvzavr_h264_x2_1080p_hd.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-tvzavr_h264_x2_1080p_hd-2-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '4.0' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '4000k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -pass 2 -passlogfile /tmp/pass/log/dir/fixture/config-tvzavr_h264_x2_1080p_hd.config -strict 'experimental' -codec:a 'aac' -b:a '128k' -ac '6' -movflags '+faststart' -f 'mp4' -y '//tmp/config-tvzavr_h264_x2_1080p_hd.mp4' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-tvzavr_h264_x2_1080p_hd-2-mp4.ffmpeg.log 1>&2);
           # pass 2 done
         # passes done
       # tvzavr_h264_x2_1080p_hd done
     # tvzavr_h264_x2_1080p_hd for input/files/are/from/config done
-# NOTICE 959:  bulk_video_converter.bash gets file names from config
+# NOTICE 1022:  bulk_video_converter.bash gets file names from config
     tvzavr_h264_x2_0720p_hd for input/files/are/from/config:
       tvzavr_h264_x2_0720p_hd:
         global input:
@@ -62,15 +61,15 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '3.1' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '2000k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:720" -pass 1 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-tvzavr_h264_x2_0720p_hd.config -strict 'experimental' -codec:a 'aac' -b:a '128k' -ac '6' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/video/log/dir/fixture/config-tvzavr_h264_x2_0720p_hd-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '3.1' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '2000k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:720" -pass 1 -passlogfile /tmp/pass/log/dir/fixture/config-tvzavr_h264_x2_0720p_hd.config -strict 'experimental' -codec:a 'aac' -b:a '128k' -ac '6' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-tvzavr_h264_x2_0720p_hd-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
           pass 2:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '3.1' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '2000k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:720" -pass 2 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-tvzavr_h264_x2_0720p_hd.config -strict 'experimental' -codec:a 'aac' -b:a '128k' -ac '6' -movflags '+faststart' -f 'mp4' -y '//tmp/config-tvzavr_h264_x2_0720p_hd.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-tvzavr_h264_x2_0720p_hd-2-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -weightp 'smart' -preset 'veryslow' -level:v '3.1' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '2000k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:720" -pass 2 -passlogfile /tmp/pass/log/dir/fixture/config-tvzavr_h264_x2_0720p_hd.config -strict 'experimental' -codec:a 'aac' -b:a '128k' -ac '6' -movflags '+faststart' -f 'mp4' -y '//tmp/config-tvzavr_h264_x2_0720p_hd.mp4' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-tvzavr_h264_x2_0720p_hd-2-mp4.ffmpeg.log 1>&2);
           # pass 2 done
         # passes done
       # tvzavr_h264_x2_0720p_hd done
     # tvzavr_h264_x2_0720p_hd for input/files/are/from/config done
-# NOTICE 2104:  bulk_video_converter.bash gets file names from config
+# NOTICE 2217:  bulk_video_converter.bash gets file names from config
     tvzavr_h264_x2_0576p_hi for input/files/are/from/config:
       tvzavr_h264_x2_0576p_hi:
         global input:
@@ -87,15 +86,15 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'main' -weightp 'smart' -preset 'veryslow' -level:v '3.0' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '1000k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:576" -pass 1 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-tvzavr_h264_x2_0576p_hi.config -strict 'experimental' -codec:a 'aac' -b:a '196k' -ac '2' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/video/log/dir/fixture/config-tvzavr_h264_x2_0576p_hi-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'main' -weightp 'smart' -preset 'veryslow' -level:v '3.0' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '1000k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:576" -pass 1 -passlogfile /tmp/pass/log/dir/fixture/config-tvzavr_h264_x2_0576p_hi.config -strict 'experimental' -codec:a 'aac' -b:a '196k' -ac '2' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-tvzavr_h264_x2_0576p_hi-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
           pass 2:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'main' -weightp 'smart' -preset 'veryslow' -level:v '3.0' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '1000k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:576" -pass 2 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-tvzavr_h264_x2_0576p_hi.config -strict 'experimental' -codec:a 'aac' -b:a '196k' -ac '2' -movflags '+faststart' -f 'mp4' -y '//tmp/config-tvzavr_h264_x2_0576p_hi.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-tvzavr_h264_x2_0576p_hi-2-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'main' -weightp 'smart' -preset 'veryslow' -level:v '3.0' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '1000k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:576" -pass 2 -passlogfile /tmp/pass/log/dir/fixture/config-tvzavr_h264_x2_0576p_hi.config -strict 'experimental' -codec:a 'aac' -b:a '196k' -ac '2' -movflags '+faststart' -f 'mp4' -y '//tmp/config-tvzavr_h264_x2_0576p_hi.mp4' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-tvzavr_h264_x2_0576p_hi-2-mp4.ffmpeg.log 1>&2);
           # pass 2 done
         # passes done
       # tvzavr_h264_x2_0576p_hi done
     # tvzavr_h264_x2_0576p_hi for input/files/are/from/config done
-# NOTICE 3611:  bulk_video_converter.bash gets file names from config
+# NOTICE 3734:  bulk_video_converter.bash gets file names from config
     tvzavr_h264_x2_0480p_hi for input/files/are/from/config:
       tvzavr_h264_x2_0480p_hi:
         global input:
@@ -112,15 +111,15 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'main' -weightp 'smart' -preset 'veryslow' -level:v '3.0' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '1000k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-2:480" -pass 1 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-tvzavr_h264_x2_0480p_hi.config -strict 'experimental' -codec:a 'aac' -b:a '196k' -ac '2' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/video/log/dir/fixture/config-tvzavr_h264_x2_0480p_hi-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'main' -weightp 'smart' -preset 'veryslow' -level:v '3.0' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '1000k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-2:480" -pass 1 -passlogfile /tmp/pass/log/dir/fixture/config-tvzavr_h264_x2_0480p_hi.config -strict 'experimental' -codec:a 'aac' -b:a '196k' -ac '2' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-tvzavr_h264_x2_0480p_hi-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
           pass 2:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'main' -weightp 'smart' -preset 'veryslow' -level:v '3.0' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '1000k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-2:480" -pass 2 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-tvzavr_h264_x2_0480p_hi.config -strict 'experimental' -codec:a 'aac' -b:a '196k' -ac '2' -movflags '+faststart' -f 'mp4' -y '//tmp/config-tvzavr_h264_x2_0480p_hi.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-tvzavr_h264_x2_0480p_hi-2-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'main' -weightp 'smart' -preset 'veryslow' -level:v '3.0' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '1000k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-2:480" -pass 2 -passlogfile /tmp/pass/log/dir/fixture/config-tvzavr_h264_x2_0480p_hi.config -strict 'experimental' -codec:a 'aac' -b:a '196k' -ac '2' -movflags '+faststart' -f 'mp4' -y '//tmp/config-tvzavr_h264_x2_0480p_hi.mp4' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-tvzavr_h264_x2_0480p_hi-2-mp4.ffmpeg.log 1>&2);
           # pass 2 done
         # passes done
       # tvzavr_h264_x2_0480p_hi done
     # tvzavr_h264_x2_0480p_hi for input/files/are/from/config done
-# NOTICE 5780:  bulk_video_converter.bash gets file names from config
+# NOTICE 5626:  bulk_video_converter.bash gets file names from config
     tvzavr_h264_x2_0360p_nr for input/files/are/from/config:
       tvzavr_h264_x2_0360p_nr:
         global input:
@@ -137,15 +136,15 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'main' -weightp 'smart' -preset 'veryslow' -level:v '3.0' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '600k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:360" -pass 1 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-tvzavr_h264_x2_0360p_nr.config -strict 'experimental' -codec:a 'aac' -b:a '128k' -ac '2' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/video/log/dir/fixture/config-tvzavr_h264_x2_0360p_nr-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'main' -weightp 'smart' -preset 'veryslow' -level:v '3.0' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '600k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:360" -pass 1 -passlogfile /tmp/pass/log/dir/fixture/config-tvzavr_h264_x2_0360p_nr.config -strict 'experimental' -codec:a 'aac' -b:a '128k' -ac '2' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-tvzavr_h264_x2_0360p_nr-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
           pass 2:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'main' -weightp 'smart' -preset 'veryslow' -level:v '3.0' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '600k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:360" -pass 2 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-tvzavr_h264_x2_0360p_nr.config -strict 'experimental' -codec:a 'aac' -b:a '128k' -ac '2' -movflags '+faststart' -f 'mp4' -y '//tmp/config-tvzavr_h264_x2_0360p_nr.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-tvzavr_h264_x2_0360p_nr-2-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'main' -weightp 'smart' -preset 'veryslow' -level:v '3.0' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '600k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:360" -pass 2 -passlogfile /tmp/pass/log/dir/fixture/config-tvzavr_h264_x2_0360p_nr.config -strict 'experimental' -codec:a 'aac' -b:a '128k' -ac '2' -movflags '+faststart' -f 'mp4' -y '//tmp/config-tvzavr_h264_x2_0360p_nr.mp4' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-tvzavr_h264_x2_0360p_nr-2-mp4.ffmpeg.log 1>&2);
           # pass 2 done
         # passes done
       # tvzavr_h264_x2_0360p_nr done
     # tvzavr_h264_x2_0360p_nr for input/files/are/from/config done
-# NOTICE 7957:  bulk_video_converter.bash gets file names from config
+# NOTICE 7824:  bulk_video_converter.bash gets file names from config
     tvzavr_h264_x2_0270p_lw for input/files/are/from/config:
       tvzavr_h264_x2_0270p_lw:
         global input:
@@ -162,15 +161,15 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'baseline' -weightp 'smart' -preset 'veryslow' -level:v '3.0' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '250k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:270" -pass 1 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-tvzavr_h264_x2_0270p_lw.config -strict 'experimental' -codec:a 'aac' -b:a '64k' -ac '1' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/video/log/dir/fixture/config-tvzavr_h264_x2_0270p_lw-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'baseline' -weightp 'smart' -preset 'veryslow' -level:v '3.0' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '250k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:270" -pass 1 -passlogfile /tmp/pass/log/dir/fixture/config-tvzavr_h264_x2_0270p_lw.config -strict 'experimental' -codec:a 'aac' -b:a '64k' -ac '1' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-tvzavr_h264_x2_0270p_lw-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
           pass 2:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'baseline' -weightp 'smart' -preset 'veryslow' -level:v '3.0' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '250k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:270" -pass 2 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-tvzavr_h264_x2_0270p_lw.config -strict 'experimental' -codec:a 'aac' -b:a '64k' -ac '1' -movflags '+faststart' -f 'mp4' -y '//tmp/config-tvzavr_h264_x2_0270p_lw.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-tvzavr_h264_x2_0270p_lw-2-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'baseline' -weightp 'smart' -preset 'veryslow' -level:v '3.0' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '250k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:270" -pass 2 -passlogfile /tmp/pass/log/dir/fixture/config-tvzavr_h264_x2_0270p_lw.config -strict 'experimental' -codec:a 'aac' -b:a '64k' -ac '1' -movflags '+faststart' -f 'mp4' -y '//tmp/config-tvzavr_h264_x2_0270p_lw.mp4' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-tvzavr_h264_x2_0270p_lw-2-mp4.ffmpeg.log 1>&2);
           # pass 2 done
         # passes done
       # tvzavr_h264_x2_0270p_lw done
     # tvzavr_h264_x2_0270p_lw for input/files/are/from/config done
-# NOTICE 10506:  bulk_video_converter.bash gets file names from config
+# NOTICE 10464:  bulk_video_converter.bash gets file names from config
     tvzavr_h264_x2_0240p_lw for input/files/are/from/config:
       tvzavr_h264_x2_0240p_lw:
         global input:
@@ -187,15 +186,15 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'baseline' -weightp 'smart' -preset 'veryslow' -level:v '3.0' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '200k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:240" -pass 1 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-tvzavr_h264_x2_0240p_lw.config -strict 'experimental' -codec:a 'aac' -b:a '64k' -ac '1' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/video/log/dir/fixture/config-tvzavr_h264_x2_0240p_lw-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'baseline' -weightp 'smart' -preset 'veryslow' -level:v '3.0' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '200k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:240" -pass 1 -passlogfile /tmp/pass/log/dir/fixture/config-tvzavr_h264_x2_0240p_lw.config -strict 'experimental' -codec:a 'aac' -b:a '64k' -ac '1' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-tvzavr_h264_x2_0240p_lw-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
           pass 2:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'baseline' -weightp 'smart' -preset 'veryslow' -level:v '3.0' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '200k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:240" -pass 2 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-tvzavr_h264_x2_0240p_lw.config -strict 'experimental' -codec:a 'aac' -b:a '64k' -ac '1' -movflags '+faststart' -f 'mp4' -y '//tmp/config-tvzavr_h264_x2_0240p_lw.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-tvzavr_h264_x2_0240p_lw-2-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'baseline' -weightp 'smart' -preset 'veryslow' -level:v '3.0' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '200k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:240" -pass 2 -passlogfile /tmp/pass/log/dir/fixture/config-tvzavr_h264_x2_0240p_lw.config -strict 'experimental' -codec:a 'aac' -b:a '64k' -ac '1' -movflags '+faststart' -f 'mp4' -y '//tmp/config-tvzavr_h264_x2_0240p_lw.mp4' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-tvzavr_h264_x2_0240p_lw-2-mp4.ffmpeg.log 1>&2);
           # pass 2 done
         # passes done
       # tvzavr_h264_x2_0240p_lw done
     # tvzavr_h264_x2_0240p_lw for input/files/are/from/config done
-# NOTICE 14203:  bulk_video_converter.bash gets file names from config
+# NOTICE 13463:  bulk_video_converter.bash gets file names from config
     tvzavr_h264_x2_0120p_lw for input/files/are/from/config:
       tvzavr_h264_x2_0120p_lw:
         global input:
@@ -212,10 +211,10 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
         # format done
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'baseline' -weightp 'smart' -preset 'veryslow' -level:v '3.0' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '100k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:120" -pass 1 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-tvzavr_h264_x2_0120p_lw.config -strict 'experimental' -codec:a 'aac' -b:a '32k' -ac '1' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/video/log/dir/fixture/config-tvzavr_h264_x2_0120p_lw-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'baseline' -weightp 'smart' -preset 'veryslow' -level:v '3.0' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '100k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:120" -pass 1 -passlogfile /tmp/pass/log/dir/fixture/config-tvzavr_h264_x2_0120p_lw.config -strict 'experimental' -codec:a 'aac' -b:a '32k' -ac '1' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-tvzavr_h264_x2_0120p_lw-1-mp4.ffmpeg.log 1>&2);
           # pass 1 done
           pass 2:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'baseline' -weightp 'smart' -preset 'veryslow' -level:v '3.0' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '100k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:120" -pass 2 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-tvzavr_h264_x2_0120p_lw.config -strict 'experimental' -codec:a 'aac' -b:a '32k' -ac '1' -movflags '+faststart' -f 'mp4' -y '//tmp/config-tvzavr_h264_x2_0120p_lw.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-tvzavr_h264_x2_0120p_lw-2-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'baseline' -weightp 'smart' -preset 'veryslow' -level:v '3.0' -bf '3' -coder '1' -x264opts 'keyint=96:min-keyint=96:no-scenecut' -flags '+cgop' -sc_threshold '0' -b:v '100k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:120" -pass 2 -passlogfile /tmp/pass/log/dir/fixture/config-tvzavr_h264_x2_0120p_lw.config -strict 'experimental' -codec:a 'aac' -b:a '32k' -ac '1' -movflags '+faststart' -f 'mp4' -y '//tmp/config-tvzavr_h264_x2_0120p_lw.mp4' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-tvzavr_h264_x2_0120p_lw-2-mp4.ffmpeg.log 1>&2);
           # pass 2 done
         # passes done
       # tvzavr_h264_x2_0120p_lw done

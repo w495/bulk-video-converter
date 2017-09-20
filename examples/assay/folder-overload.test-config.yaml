@@ -1,0 +1,29 @@
+self:
+  compatibility:
+    from: 0.1505859356
+profile:
+
+  original:
+    passes: 2
+    output:
+      dir_name:   /tmp/test/output/dir/name/from/config
+    log:
+      dir_name:   /tmp/test/log/dir/name/from/config
+    pass_log:
+      dir_name:   /tmp/test/pass/log/dir/name/from/config
+
+      
+  output_overload:
+    extends: original
+    output:
+      dir_name:   /tmp/test/output/overload
+
+  log_overload:
+    extends: original
+    log:
+      dir_name:   /tmp/test/log/overload
+      
+  passlog_overload:
+    extends: original
+    log:
+      dir_name:   /tmp/test/pass/log/overload

@@ -1,0 +1,24 @@
+self:
+  compatibility:
+    from: 0.1505859356
+profile:
+  cutting_b10:
+    start:              00:00:10
+  cutting_e20:
+    duration:           00:00:20
+  cutting_d20:
+    duration:           00:00:30
+  cutting_b10_e20:
+    start:              00:00:10
+    stop:               00:00:20
+  cutting_b10_d30:
+    start:              00:00:10
+    duration:           00:00:30
+  cutting_e20_d30:
+    stop:               00:00:20
+    duration:           00:00:30
+  cutting_b10_e20_d30:
+    start:              00:00:10
+    stop:               00:00:20
+    duration:           00:00:30
+    

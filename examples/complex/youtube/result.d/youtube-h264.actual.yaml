@@ -10,7 +10,6 @@ bulk_video_converter.bash:
     false
   async_for_profiles:
     false
-LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
   input/files/are/from/config:
     youtube_x2_1080p_hd for input/files/are/from/config:
       youtube_x2_1080p_hd:
@@ -24,9 +23,9 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
           -movflags '+faststart' -f 'mp4' 
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -level:v '4.2' -bf '2' -coder '1' -g '13' -keyint_min '13' -flags '+cgop' -sc_threshold '0' -b:v '8192k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -pass 1 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-youtube_x2_1080p_hd.config -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '512k' -ac '6' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/video/log/dir/fixture/config-youtube_x2_1080p_hd-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -level:v '4.2' -bf '2' -coder '1' -g '13' -keyint_min '13' -flags '+cgop' -sc_threshold '0' -b:v '8192k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -pass 1 -passlogfile /tmp/pass/log/dir/fixture/config-youtube_x2_1080p_hd.config -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '512k' -ac '6' -movflags '+faststart' -f 'mp4' -y '/dev/null' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-youtube_x2_1080p_hd-1-mp4.ffmpeg.log 1>&2);
           pass 2:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -level:v '4.2' -bf '2' -coder '1' -g '13' -keyint_min '13' -flags '+cgop' -sc_threshold '0' -b:v '8192k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -pass 2 -passlogfile /tmp/bulk_video_converter.bash/R1Nd0m/pass-log/config-youtube_x2_1080p_hd.config -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '512k' -ac '6' -movflags '+faststart' -f 'mp4' -y '//tmp/config-youtube_x2_1080p_hd.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-youtube_x2_1080p_hd-2-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -level:v '4.2' -bf '2' -coder '1' -g '13' -keyint_min '13' -flags '+cgop' -sc_threshold '0' -b:v '8192k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:1080" -pass 2 -passlogfile /tmp/pass/log/dir/fixture/config-youtube_x2_1080p_hd.config -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '512k' -ac '6' -movflags '+faststart' -f 'mp4' -y '//tmp/config-youtube_x2_1080p_hd.mp4' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-youtube_x2_1080p_hd-2-mp4.ffmpeg.log 1>&2);
     youtube_720p for input/files/are/from/config:
       youtube_720p:
         global input:
@@ -39,7 +38,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
           -movflags '+faststart' -f 'mp4' 
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -level:v '3.2' -bf '2' -coder '1' -g '13' -keyint_min '13' -flags '+cgop' -sc_threshold '0' -b:v '5120k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:720" -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '384k' -ac '2' -movflags '+faststart' -f 'mp4' -y '//tmp/config-youtube_720p.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-youtube_720p-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -level:v '3.2' -bf '2' -coder '1' -g '13' -keyint_min '13' -flags '+cgop' -sc_threshold '0' -b:v '5120k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:720" -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '384k' -ac '2' -movflags '+faststart' -f 'mp4' -y '//tmp/config-youtube_720p.mp4' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-youtube_720p-1-mp4.ffmpeg.log 1>&2);
     youtube_480p for input/files/are/from/config:
       youtube_480p:
         global input:
@@ -52,7 +51,7 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
           -movflags '+faststart' -f 'mp4' 
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -level:v '3.1' -bf '2' -coder '1' -g '13' -keyint_min '13' -flags '+cgop' -sc_threshold '0' -b:v '2560k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-2:480" -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '128k' -ac '1' -movflags '+faststart' -f 'mp4' -y '//tmp/config-youtube_480p.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-youtube_480p-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -level:v '3.1' -bf '2' -coder '1' -g '13' -keyint_min '13' -flags '+cgop' -sc_threshold '0' -b:v '2560k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-2:480" -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '128k' -ac '1' -movflags '+faststart' -f 'mp4' -y '//tmp/config-youtube_480p.mp4' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-youtube_480p-1-mp4.ffmpeg.log 1>&2);
     youtube_360p for input/files/are/from/config:
       youtube_360p:
         global input:
@@ -65,4 +64,4 @@ LOG_DIR_NAME = ' /tmp/video/log/dir/fixture
           -movflags '+faststart' -f 'mp4' 
         passes:
           pass 1:
-            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -level:v '3.1' -bf '2' -coder '1' -g '13' -keyint_min '13' -flags '+cgop' -sc_threshold '0' -b:v '1024k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:360" -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '128k' -ac '1' -movflags '+faststart' -f 'mp4' -y '//tmp/config-youtube_360p.mp4' 2> >(tee /tmp/video/log/dir/fixture/config-youtube_360p-1-mp4.ffmpeg.log 1>&2);
+            /usr/bin/ffmpeg -threads '0' -i 'input/files/are/from/config' -codec:v 'libx264' -profile:v 'high' -level:v '3.1' -bf '2' -coder '1' -g '13' -keyint_min '13' -flags '+cgop' -sc_threshold '0' -b:v '1024k' -r:v '25' -pix_fmt 'yuv420p' -filter:v "yadif=1:-1:0,scale=-1:360" -strict 'experimental' -codec:a 'aac' -ar '48000' -b:a '128k' -ac '1' -movflags '+faststart' -f 'mp4' -y '//tmp/config-youtube_360p.mp4' 2> >(tee /tmp/ffmpeg/log/dir/fixture/config-youtube_360p-1-mp4.ffmpeg.log 1>&2);
