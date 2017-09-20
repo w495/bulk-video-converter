@@ -32,6 +32,12 @@ readonly FFMPEG_LOG_DIR_FIXTURE='/tmp/ffmpeg/log/dir/fixture';
 readonly PASS_LOG_DIR_FIXTURE='/tmp/pass/log/dir/fixture';
 
 
+readonly RAW_EXT='tmp.raw.actual'
+readonly DIFF_EXT='tmp.e2a'
+readonly EXP_EXT='expected';
+readonly ACT_EXT='actual';
+readonly RSLT_DNAME='test-results';
+
 run_tests () {
     print_help "test script ${SCRIPT_PATH};";    
     
@@ -60,19 +66,19 @@ run_tests () {
         local TEST_NAME="${TEST_BASE_NAME%.*.*}"
         local TEST_ID="'${TEST_NAME}' (${TEST_ITER})";
         action "run test ${TEST_ID};";
-        local RESULT_DPATH="${TEST_DPATH}/result.d";
-        debug "with result path '${RESULT_DPATH}';";
-        debug "=> so create dir '${RESULT_DPATH}';";
-        mkdir -p "${RESULT_DPATH}";
+        local RSLT_DPATH="${TEST_DPATH}/${RSLT_DNAME}";
+        debug "with result path '${RSLT_DPATH}';";
+        debug "=> so create dir '${RSLT_DPATH}';";
+        mkdir -p "${RSLT_DPATH}";
         
         # Set paths for files.
-        local EXPCTD_FPATH="${TEST_DPATH}/${TEST_NAME}.expected.yaml";
-        debug "where expected result file path is '${EXPCTD_FPATH}';";
-        local RAW_FPATH="${RESULT_DPATH}/${TEST_NAME}.raw.yaml";
+        local EXP_FPATH="${TEST_DPATH}/${TEST_NAME}.${EXP_EXT}.yaml";
+        debug "where expected result file path is '${EXP_FPATH}';";
+        local RAW_FPATH="${RSLT_DPATH}/${TEST_NAME}.${RAW_EXT}.yaml";
         debug "where raw result file path is '${RAW_FPATH}';";
-        local ACTL_FPATH="${RESULT_DPATH}/${TEST_NAME}.actual.yaml";
-        debug "where actual result file path is '${ACTL_FPATH}';";
-        local DIFF_FPATH="${RESULT_DPATH}/${TEST_NAME}.diff";
+        local ACT_FPATH="${RSLT_DPATH}/${TEST_NAME}.${ACT_EXT}.yaml";
+        debug "where actual result file path is '${ACT_FPATH}';";
+        local DIFF_FPATH="${RSLT_DPATH}/${TEST_NAME}.${DIFF_EXT}.diff";
         debug "where diff file path is '${DIFF_FPATH}';";
 
         notice 'set $ENV and run script ...';
@@ -104,17 +110,17 @@ run_tests () {
         
         notice 'build fine yaml ... ';
         debug "delete commnet from '${RAW_FPATH}';";
-        debug "and store result to '${ACTL_FPATH}';";
-        grep -v '#' "${RAW_FPATH}" > "${ACTL_FPATH}";
+        debug "and store result to '${ACT_FPATH}';";
+        grep -v '#' "${RAW_FPATH}" > "${ACT_FPATH}";
         notice 'yaml is built';
     
         notice 'build test diff ...';
         debug 'use diff -u expected/file actual/file;';
-        debug "expected/file is '${EXPCTD_FPATH}';"
-        debug "actual/file   is '${ACTL_FPATH}';"
+        debug "expected/file is '${EXP_FPATH}';"
+        debug "actual/file   is '${ACT_FPATH}';"
         debug 'to make diff empty use:';
-        debug "cp '${ACTL_FPATH}' '${EXPCTD_FPATH}';"
-        diff -u "${EXPCTD_FPATH}" "${ACTL_FPATH}" 1> "${DIFF_FPATH}"\
+        debug "cp '${ACT_FPATH}' '${EXP_FPATH}';"
+        diff -u "${EXP_FPATH}" "${ACT_FPATH}" 1> "${DIFF_FPATH}"\
         && success "test ${TEST_ID} is ok"     \
         || fail "test ${TEST_ID} is failed";
     

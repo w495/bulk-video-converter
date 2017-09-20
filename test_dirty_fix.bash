@@ -12,6 +12,9 @@ readonly TEST_CONFIG_PATTERN='*.test-config.yaml';
 readonly TESTS_FPATH=$(readlink -f "${TESTS_PATH}");
 readonly TEST_CONFIG_FIND_ARGS="-name ${TEST_CONFIG_PATTERN}" ;
 
+readonly EXP_EXT="expected";
+readonly ACT_EXT="actual";
+readonly RSLT_DNAME='test-results';
 
 
 tests_dirty_fix () {
@@ -30,13 +33,14 @@ tests_dirty_fix () {
         local TEST_BASE_NAME=$(basename "${CONFIG_FPATH}");
         local TEST_DPATH=$(dirname "${CONFIG_FPATH}");
         local TEST_NAME="${TEST_BASE_NAME%.*.*}";
-        local RESULT_DPATH="${TEST_DPATH}/result.d";
+        local RSLT_DPATH="${TEST_DPATH}/${RSLT_DNAME}";
 
-        local EXPCTD_FPATH="${TEST_DPATH}/${TEST_NAME}.expected.yaml";
-        local RAW_FPATH="${RESULT_DPATH}/${TEST_NAME}.raw.yaml";
-        local ACTL_FPATH="${RESULT_DPATH}/${TEST_NAME}.actual.yaml";
+        # Set paths for files.
+        local EXP_FPATH="${TEST_DPATH}/${TEST_NAME}.${EXP_EXT}.yaml";
+        local ACT_FPATH="${RSLT_DPATH}/${TEST_NAME}.${ACT_EXT}.yaml";
 
-        cp "${ACTL_FPATH}" "${EXPCTD_FPATH}";
+        
+        cp "${ACT_FPATH}" "${EXPCTD_FPATH}";
 
     done;
     echo "dirty fix ok";
