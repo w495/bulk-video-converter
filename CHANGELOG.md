@@ -2,8 +2,8 @@
 
 1. Add simple tests to `./examples/assay` folder.
 2. Make default config more pleasant.
-3. Make test.sh more predictable: add sort to test search.
-
+3. Make test framework more predictable: add sort to test search.
+4. Add test numbering to test framework.
 
 # 0.1505859356
 
