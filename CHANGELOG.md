@@ -1,3 +1,10 @@
+# 0.1505870726
+
+1. Add simple tests to `./examples/assay` folder.
+2. Make default config more pleasant.
+3. Make test.sh more predictable: add sort to test search.
+
+
 # 0.1505859356
 
 1. Add `travis` support.

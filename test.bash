@@ -95,7 +95,7 @@ run_tests () {
             --config "${CONFIG_FPATH}"                      \
             --input "${INPUT_FILE_PATH_FIXTURE}"            \
             --output-dir "${VIDEO_OUTPUT_DIR_FIXTURE}"      \
-            --ffmpeg-log-dir "${FFMPEG_LOG_DIR_FIXTURE}"     \
+            --ffmpeg-log-dir "${FFMPEG_LOG_DIR_FIXTURE}"    \
             --pass-log-dir "${PASS_LOG_DIR_FIXTURE}"        \
             --dry-run                                       \
             --no-async                                      \

@@ -17,9 +17,9 @@ bulk_video_converter.bash:
   async_for_profiles:
     false
   # async_for_profiles done
-# NOTICE 90:  bulk_video_converter.bash gets file names from config
+# NOTICE 92:  bulk_video_converter.bash gets file names from config
   input/files/are/from/config:
-# NOTICE 124:  bulk_video_converter.bash uses display ':0.0' as a file name
+# NOTICE 130:  bulk_video_converter.bash uses display ':0.0' as a file name
     screen_hd for :0.0:
       screen_hd:
         global input:
@@ -41,7 +41,7 @@ bulk_video_converter.bash:
         # passes done
       # screen_hd done
     # screen_hd for :0.0 done
-# NOTICE 671:  bulk_video_converter.bash uses display ':0.0' as a file name
+# NOTICE 677:  bulk_video_converter.bash uses display ':0.0' as a file name
     screen_lw for :0.0:
       screen_lw:
         global input:

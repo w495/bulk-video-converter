@@ -18,7 +18,7 @@ bulk_video_converter.bash:
   # async_for_profiles done
 # NOTICE 88:  bulk_video_converter.bash gets file names from config
   input/files/are/from/config:
-# NOTICE 130:  bulk_video_converter.bash gets file names from config
+# NOTICE 127:  bulk_video_converter.bash gets file names from config
     original for input/files/are/from/config:
       original:
         global input:
@@ -43,7 +43,7 @@ bulk_video_converter.bash:
         # passes done
       # original done
     # original for input/files/are/from/config done
-# NOTICE 690:  bulk_video_converter.bash gets file names from config
+# NOTICE 671:  bulk_video_converter.bash gets file names from config
     output_overload for input/files/are/from/config:
       output_overload:
         global input:
@@ -68,7 +68,7 @@ bulk_video_converter.bash:
         # passes done
       # output_overload done
     # output_overload for input/files/are/from/config done
-# NOTICE 1585:  bulk_video_converter.bash gets file names from config
+# NOTICE 1613:  bulk_video_converter.bash gets file names from config
     log_overload for input/files/are/from/config:
       log_overload:
         global input:
@@ -93,7 +93,7 @@ bulk_video_converter.bash:
         # passes done
       # log_overload done
     # log_overload for input/files/are/from/config done
-# NOTICE 2481:  bulk_video_converter.bash gets file names from config
+# NOTICE 2533:  bulk_video_converter.bash gets file names from config
     passlog_overload for input/files/are/from/config:
       passlog_overload:
         global input:
