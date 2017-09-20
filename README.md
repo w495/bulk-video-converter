@@ -36,7 +36,7 @@ web-compatible formats.
 ## Requirements
 
 * `bash >= 4.3.11`
-* `ffmpeg >= 3.1.10`
+* `ffmpeg >= 2.8.6`
 
 ### FFmpeg
 
