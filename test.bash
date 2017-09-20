@@ -31,6 +31,7 @@ readonly VIDEO_OUTPUT_DIR_FIXTURE='/tmp/video/output/dir/fixture';
 readonly FFMPEG_LOG_DIR_FIXTURE='/tmp/ffmpeg/log/dir/fixture';
 readonly PASS_LOG_DIR_FIXTURE='/tmp/pass/log/dir/fixture';
 
+## Internal constants
 
 readonly RAW_EXT='actual-raw'
 readonly DIFF_EXT='expected-to-actual'

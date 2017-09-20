@@ -12,10 +12,11 @@ readonly TEST_CONFIG_PATTERN='*.test-config.yaml';
 readonly TESTS_FPATH=$(readlink -f "${TESTS_PATH}");
 readonly TEST_CONFIG_FIND_ARGS="-name ${TEST_CONFIG_PATTERN}" ;
 
+## Internal constants
+
 readonly EXP_EXT='expected';
 readonly ACT_EXT='actual';
 readonly RSLT_DNAME='test-results';
-
 
 tests_dirty_fix () {
 
@@ -39,7 +40,6 @@ tests_dirty_fix () {
         local EXP_FPATH="${TEST_DPATH}/${TEST_NAME}.${EXP_EXT}.yaml";
         local ACT_FPATH="${RSLT_DPATH}/${TEST_NAME}.${ACT_EXT}.yaml";
 
-        
         cp "${ACT_FPATH}" "${EXPCTD_FPATH}";
 
     done;
