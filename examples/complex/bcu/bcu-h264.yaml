@@ -1,0 +1,63 @@
+self: ## Bulk video converter options.
+  no_async: true              # Work in synchronous way.
+  compatibility:              # For backward compatibility warnings.
+    from: 0.1470294456        # Recommended version of bulk video converter,
+
+ffmpeg: ## System FFMpeg options.
+  bin: /usr/bin/ffmpeg        # Path to ffmpeg
+  threads: 1                  # Number of threads
+    # If set number of threads to `0`
+    # it will use number of processors.
+
+profile: ## List of conversion profiles.
+
+  base:                       # Base profile — only for inheritance
+    is_abstract: true         # Dummy profile:
+      # You can mark profile as is_abstract
+      # and it will be used only for inheritance.
+    source: /media/w495/S1_6-TB.Ext4/home/mts-video/*         # Input video path mask
+    output:                   # Output options
+      dir_name: /media/w495/Shared-work/from-mts/ffest-2017    # Place for result files
+    format: mp4               # Container: MP4
+
+  bcu_crf_base:
+    extends: base           # This profile extends `base`.
+    is_abstract: true       # Dummy profile:
+    passes: 1               # Two passes for ffmpeg
+    video:                  # Video Settings
+      rate_factor: 23
+      framerate: 25       #     Set framerate to 25
+      width:   -1           #   1920 # for 16:9
+      height:  1080         #   1080p — Full HD
+      codec:                #   Video Codec Settings:
+        name : h264         #     Video codec: H.264
+        preset: veryslow    #     Codec options preset
+        level: 4.0          #     For decoding restrictions
+        profile: high       #     High Profile
+        weightp: smart      #     Effective fade handling
+        bframes: 3          #     Three consecutive B frames
+        use_cabac: true     #     CABAC (default entropy encoder)
+      progressive: true     # Progressive scan (no interlacing).
+      pixel_format: yuv420p # Chroma subsampling: 4:2:0
+    audio:                  # Audio Settings
+      codec_name: aac       #   Audio codec: AAC-LC
+      channels:  stereo     #   Channels: mono, stereo, 3.1, 5.1
+      bitrate: 384k         #   Recommended for stereo
+      samplerate: 48000     #   Sample rate 48khz
+
+  bcu_crf_base_12x12_gop:
+    extends: bcu_crf_base
+    is_abstract: true       # Dummy profile
+    video:                  # Video Settings
+      codec:                #   Video Codec Settings:
+        gop:                #     Group of pictures Settings.
+          closed: true      #       Closed GOP
+          no_scenecut: true #       Disable scenecut detecting
+          size: 12          #       GOP of half the frame rate
+          min: 12           #       Minimal GOP size.
+
+  h264bcu1080p12crf:
+    extends: bcu_crf_base_12x12_gop
+
+
+    
