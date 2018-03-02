@@ -1,0 +1,57 @@
+self:
+  no_async: true
+  compatibility:
+    from: 0.1505573195
+
+ffmpeg:
+  bin: /usr/bin/ffmpeg
+  threads: 0
+
+profile:
+
+  base:
+    # you can mark profile as is_abstract
+    # and it will be used only for inheritance.
+    is_abstract: true
+
+  youtube_recommended_upload_encoding_settings:
+    # from https://support.google.com/youtube/answer/1722171
+    is_abstract: true       # Dummy profile
+    extends: base           #   that extends `base`.
+    format: mp4             # Container: MP4
+    video:                  # Video Settings
+      codec:                #   Video Codec Settings
+        name : h264         #     Video codec: H.264
+        profile: high       #     High Profile
+        bframes: 2          #     2 consecutive B frames
+        gop:                #     Group of pictures Settings.
+          size: 13          #       GOP of half the frame rate
+          min: 13           #       Minimal GOP size.
+          closed: true      #       Closed GOP
+          no_scenecut: true #       Disable scenecut detecting
+        use_cabac: true     #     CABAC (default entropy encoder)
+      progressive: true     # Progressive scan (no interlacing).
+      pixel_format: yuv420p # Chroma subsampling: 4:2:0
+      framerate: 25         #     Set framerate to 25.
+    audio:                  # Audio Settings
+      codec:                #   Audio Codec Settings
+        name: aac           #     Audio codec: AAC-LC
+      samplerate: 48000     #   Sample rate 96khz or 48khz
+
+  youtube_1080p:
+    is_abstract: true   # Dummy profile
+    extends: youtube_recommended_upload_encoding_settings
+    video:              # Video Settings
+      codec_level: 4.2  #   For decoding restrictions
+      width:   -1       #   1920 # for 16:9
+      height:  1080     #   1080p
+    audio:              # Audio Settings
+      channels: 5.1     #   Channels: Stereo or Stereo + 5.1
+      bitrate: 512k     #   Recommended for 5.1
+
+  youtube_x2_1080p_hd:
+    extends: youtube_1080p
+    passes: 2           # Use two encoding passes.
+    video:              # Use semi-constant bitrate.
+      bitrate: 8192k       # 8.0 Mbps is recommended for 1080p
+
