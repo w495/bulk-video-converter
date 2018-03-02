@@ -1,0 +1,50 @@
+self:
+  no_async: true
+  compatibility:
+    from: 0.1505573195
+
+ffmpeg:
+  bin: /usr/bin/ffmpeg
+  threads: 0
+
+profile:
+
+  base:
+    # you can mark profile as is_abstract
+    # and it will be used only for inheritance.
+    is_abstract: true
+    
+  ## Semi-TVzavr's profile for HDTV devices.
+  ## Check in the player on the https://www.tvzavr.ru/
+  tvzavr_h264_x2_1080p_hd:
+    # Other options are inherited from `base`
+    extends: base
+    passes: 2
+    video:
+      width:   -1  # 1920 # for 16:9
+      height:  1080
+      bitrate: 4000k
+      framerate: 25       #     Set framerate to 25.
+      codec:
+        name : h264
+        level: 4.0
+        preset: veryslow
+        profile: high
+        weightp: smart
+        bframes: 3
+        opts:
+          keyint: 96
+          min_keyint: 96
+          no_scenecut: true
+        gop:
+          closed: true      #       Closed GOP
+          no_scenecut: true #       Disable scenecut detecting
+        use_cabac: true     #     CABAC (default entropy encoder)
+      progressive: true     # Progressive scan (no interlacing).
+      pixel_format: yuv420p # Chroma subsampling: 4:2:0
+    audio:
+      codec:
+        name: aac
+      channels:  5.1      #   Channels: Stereo or Stereo + 5.1
+      bitrate: 128k       #   Recommended for 5.1
+
