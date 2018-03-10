@@ -46,5 +46,5 @@ profile:
       codec:
         name: aac
       channels:  5.1      #   Channels: Stereo or Stereo + 5.1
-      bitrate: 128k       #   Recommended for 5.1
+      bitrate: 256k       #   Recommended for 5.1
 
