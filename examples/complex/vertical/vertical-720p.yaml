@@ -1,0 +1,182 @@
+self:
+  no_async: true
+  compatibility:
+    from: 0.1505859356
+
+ffmpeg:
+  bin: /usr/bin/ffmpeg
+  threads: 0
+
+profile:
+
+  base:
+    # you can mark profile as is_abstract
+    # and it will be used only for inheritance.
+    is_abstract: true
+
+  vertical_h264_x2_0720p_hd:
+    # Other options are inherited from `base`
+    extends: base
+    is_abstract: true
+    passes: 2
+    video:
+      width:   720
+      height:  -1 # 1280 # for 9:16
+      bitrate: 2000k
+      framerate: 25       #     Set framerate to 25.
+      codec:
+        name : x264
+        level: 3.1
+        preset: veryslow
+        profile: high
+        weightp: smart
+        bframes: 3
+        opts:
+          keyint: 96
+          min_keyint: 96
+          no_scenecut: true
+        gop:
+          closed: true      #       Closed GOP
+          no_scenecut: true #       Disable scenecut detecting
+        use_cabac: true     #     CABAC (default entropy encoder)
+      progressive: true     # Progressive scan (no interlacing).
+      pixel_format: yuv420p # Chroma subsampling: 4:2:0
+    audio:
+      codec:
+        name: aac
+      channels:  5.1      #   Channels: Stereo or Stereo + 5.1
+      bitrate: 256k       #   Recommended for 5.1
+
+
+  vertical_h264_x2_0576p_hi:
+    is_abstract: true
+    extends: vertical_h264_x2_0720p_hd
+    video:
+      width:  576 # SD
+      height: -1 # 1024 # for 16:9
+      bitrate: 1000k
+      codec:
+        profile: main
+        level: 3.0
+    audio:
+      channels: stereo
+      bitrate: 196k
+
+  vertical_h264_x2_0480p_hi:
+    is_abstract: true
+    extends: vertical_h264_x2_0576p_hi
+    video:
+      width:   480
+      height:  -2 # 854 # for 16:9
+
+
+  vertical_h264_x2_0360p_nr:
+    is_abstract: true
+    extends: vertical_h264_x2_0480p_hi
+    video:
+      width:   360
+      height:  -1 # 640 # for 16:9
+      bitrate: 600k
+    audio:
+      channels: stereo
+      bitrate: 128k
+
+
+  vertical_h264_x2_0270p_lw:
+    extends: vertical_h264_x2_0360p_nr
+    video:
+      width:   270
+      height:  -1 # 480 # for 16:9
+      bitrate: 250k
+      codec:
+        profile: baseline
+    audio:
+      channels: mono
+      bitrate: 64k
+
+  vertical_h264_x2_0240p_lw:
+    extends: vertical_h264_x2_0270p_lw
+    video:
+      width:   240
+      height:  -2
+      bitrate: 200k
+
+  ## Semi-TVzavr's profile for small devices
+  vertical_h264_x2_0120p_lw:
+    extends: vertical_h264_x2_0240p_lw
+    video:
+      width:   120
+      height:  -2
+      bitrate: 100k
+    audio:
+      bitrate: 32k
+
+
+  #
+  #
+  # vertical_hevc_x2_0720p_hd:
+  #   # Other options are inherited from `base`
+  #   extends: base
+  #   passes: 2
+  #   video:
+  #     width:   720
+  #     height:  -1 # 1280 # for 9:16
+  #     bitrate: 2000k
+  #     framerate: 25       #     Set framerate to 25.
+  #     codec:
+  #       name : x265
+  #       level: 3.1
+  #       preset: veryslow
+  #       profile: high
+  #       weightp: smart
+  #       bframes: 3
+  #       opts:
+  #         keyint: 96
+  #         min_keyint: 96
+  #         no_scenecut: true
+  #       gop:
+  #         closed: true      #       Closed GOP
+  #         no_scenecut: true #       Disable scenecut detecting
+  #       use_cabac: true     #     CABAC (default entropy encoder)
+  #     progressive: true     # Progressive scan (no interlacing).
+  #     pixel_format: yuv420p # Chroma subsampling: 4:2:0
+  #   audio:
+  #     codec:
+  #       name: aac
+  #     channels:  5.1      #   Channels: Stereo or Stereo + 5.1
+  #     bitrate: 256k       #   Recommended for 5.1
+  #
+  #
+  # vertical_hevc_x2_0576p_hi:
+  #   extends: vertical_hevc_x2_0720p_hd
+  #   video:
+  #     width:  576 # SD
+  #     height: -1 # 1024 # for 16:9
+  #     bitrate: 1000k
+  #     codec:
+  #       profile: main
+  #       level: 3.0
+  #   audio:
+  #     channels: stereo
+  #     bitrate: 196k
+  #
+  # vertical_hevc_x2_0480p_hi:
+  #   extends: vertical_hevc_x2_0576p_hi
+  #   video:
+  #     width:   480
+  #     height:  -2 # 854 # for 16:9
+  #
+  #
+  # vertical_hevc_x2_0360p_nr:
+  #   extends: vertical_hevc_x2_0480p_hi
+  #   video:
+  #     width:   360
+  #     height:  -1 # 640 # for 16:9
+  #     bitrate: 600k
+  #   audio:
+  #     channels: stereo
+  #     bitrate: 128k
+
+
+
+
