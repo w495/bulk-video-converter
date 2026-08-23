@@ -26,7 +26,7 @@ profile:
       bitrate: 4000k
       framerate: 25       #     Set framerate to 25.
       codec:
-        name : h264
+        name : x264
         level: 4.0
         preset: veryslow
         profile: high
